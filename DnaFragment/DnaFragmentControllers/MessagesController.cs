@@ -103,6 +103,7 @@
         [Authorize]
         public IActionResult All()
         {
+            string acho = "asdadadsa";
           var  userId = User.GetId();
             var messages = data.Messages.AsQueryable();            
 
