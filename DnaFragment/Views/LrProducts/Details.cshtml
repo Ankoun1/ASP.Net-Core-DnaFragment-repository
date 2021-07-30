@@ -1,0 +1,71 @@
+﻿@model LrProductDetailsServiceModel
+
+@{ ViewBag.Title = "Product"; }
+
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+<h1 class="text-center mt-2">@ViewBag.Title</h1>
+
+@if (Model != null)
+{   
+    <h1 class="text-center mt-2 text-white">▪</h1>   
+
+}
+else
+{    
+    <h1 class="text-center mt-2 text-secondary">▪</h1>
+}
+<form class="mx-auto w-50" size="3">
+ @if (Model == null)
+{
+    <img src="https://img5.goodfon.com/wallpaper/nbig/0/fb/devushka-shatenka-shliapa-priroda-lug-tsvety-peizazh.jpg"
+         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+         data-placement="bottom">
+    <ul class="list-group list-group-flush small">
+        <li class="list-group-item text-center  "><h class="text-danger">•</h> Моля заредете базата от данни с продукти по категории!</li>
+    </ul>
+}
+else
+{
+     <ul class="list-group list-group-flush ">
+         <li class="list-group-item text-center font-italic text-white">@Model.Model  @Model.PackagingVolume ml.</li>
+    </ul>
+    <img class="card-img-top" src="@Model.Image">
+   
+    <a class="btn btn-block btn--secondary text-white text-lg-center"
+       asp-controller="LrProducts"
+       asp-action="All">
+        @Model.Price lv.
+    </a>
+    <ul class="list-group list-group-flush ">
+                    <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example">
+                        <a asp-controller="LrProducts" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-light text-xl-center  text-break">favorit♥</a>
+                        <a class="btn btn-success text-xl-center text-break"
+                           asp-controller="LrProducts"
+                           asp-action="Favorits"
+                           asp-route-id="@Model.Id">
+                            количка
+                        </a>
+                    </li>
+                </ul>
+}
+<hr class="bg-primary w-100">
+@if (Model != null)
+{   
+<h class="text-xl-left text-primary">• ChemicalIngredients</h>
+}
+else
+{   
+<h1 class="text-secondary">• ChemicalIngredients</h1>
+}
+
+        <ul class="list-group list-group-flush ">
+            <li class="list-group-item text-left font-italic text-break ">@Model.ChemicalIngredients</li>
+        </ul> 
+        <hr class="bg-primary w-100">
+        <h class="text-primary">• Description</h>
+        <ul class="list-group list-group-flush ">
+            <li class="list-group-item text-left font-italic text-break"> @Model.Description</li>       
+        </ul>
+    <hr class="bg-primary w-100">
+</form>

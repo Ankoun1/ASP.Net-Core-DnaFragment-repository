@@ -1,0 +1,82 @@
+﻿@model List<QuestionListingViewModel>
+@{
+    ViewBag.Title = "My Questions";
+}
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+@if (Model.Count == 0)
+{
+<h1 class="text-center mt-2 text-secondary">@ViewBag.Title</h1>  
+    <h1 class="text-center mt-2 text-secondary">▪</h1>
+}
+else
+{
+    <h1 class="text-center mt-2 text-white">My Questions</h1>  
+    <h1 class="text-center mt-2 text-white">▪</h1>
+}
+
+<div class="form-group mx-auto w-75">
+    <img class="d-block w-100 " src="https://sfs.jobs/sfs-group/sfs-group-dna_basicteaserimagehighlightmobile.jpg " alt="Responsive image">
+
+</div>
+<div class="button-holder d-flex justify-content-center ">
+
+    <a href="/Questions/Questions" class="btn  btn-lg btn-primary  text-xl-center ">Ask question</a>
+</div> 
+<div class="button-holder d-flex justify-content-center ">
+    <a href="/Messages/SendMail" class="btn  btn-lg btn-primary  text-xl-center ">Ask question</a>
+</div>
+<h1 class="text-center mt-2 text-white">▪ ▪ ▪ ▪ ▪</h1>
+
+<form class="mx-auto w-75">
+
+    @foreach (var quest in Model)
+    {
+
+        <div class="form-group">
+            <ul class="list-group list-group-flush ">
+                <li class="list-group-item text-right mt-2 text-success">•</li>
+                <li class="list-group-item text-center ">Date : @quest.CreatedOn</li>
+                <li class="list-group-item text-center text-break">@quest.Name : @quest.Description</li>
+
+                @if (quest.AnswerId != null)
+                {
+                    <li class="list-group-item text-center text-break">Answer : @quest.AnswerDescription</li>
+                }
+
+                @if (quest.AnswerId == null)
+                {
+                    <li class="list-group-item text-center text-light">- Successfully sent! -</li>
+                }
+
+                <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
+                    <a class="btn btn-outline-primary "
+                        asp-controller="Questions"
+                        asp-action="Delete"
+                        asp-route-questId="@quest.QuestionId"
+                    >Delete Question</a>
+                    @if (quest.IsAdministrator)
+                    {
+                        <a class="btn btn-outline-primary "
+                            asp-controller="Answers"
+                            asp-action="AddAnswer"
+                            asp-route-questId="@quest.QuestionId"
+                        >Answer</a>
+                    }
+
+                    @if (quest.IsAdministrator)
+                    {
+                        <a  class="btn btn-outline-primary "
+                            asp-controller="Answers"
+                            asp-action="Delete"
+                            asp-route-answerId="@quest.AnswerId"
+                        >Delete Answer</a>
+                    }
+                </li>
+            </ul>
+
+        </div>
+    }
+
+</form>
+

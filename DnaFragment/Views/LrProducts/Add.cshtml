@@ -1,0 +1,76 @@
+﻿@model AddProductFormModel
+
+@{ ViewBag.Title = "Add Product"; }
+
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+<hr class="bg-primary w-25">
+<h1 class="text-center mt-2">@ViewBag.Title</h1>
+
+<div class="row mt-4 mb-4">
+
+    <form class="mx-auto w-75" method="post">
+        
+      
+        <div class="form-group mx-auto w-50">
+            <p1 class="text-success">▪▪▪▪</p1>
+            <img class="d-block w-100 " src="https://images.template.net/wp-content/uploads/2014/10/face-sketche18.jpg" alt="Responsive image">
+        </div>
+       
+      
+        <div class="form-group">
+            <label asp-for="Model">Brand</label>
+            <input asp-for="Model" type="text" class="form-control" id="model-input">
+            <span asp-validation-for="Model" class="small text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PackagingVolume">Packaging Volume</label>
+            <input asp-for="PackagingVolume" type="text" class="form-control" id="packagingVolume-input">
+            <span asp-validation-for="PackagingVolume" class="small text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ChemicalIngredients">Chemical Ingredients</label>
+            <input asp-for="ChemicalIngredients" type="text" class="form-control" id="chemicalIngredients-input">
+            <span asp-validation-for="ChemicalIngredients" class="small text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <textarea asp-for="Description" rows="4" type="text" class="form-control" id="description-input"></textarea>
+            <span asp-validation-for="Description" class="small text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price">Price</label>
+            <input asp-for="Price" type="text" class="form-control" id="price-input">
+            <span asp-validation-for="Price" class="small text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Year">Year</label>
+            <input asp-for="Year" type="number" class="form-control" id="year-input">
+            <span asp-validation-for="Year" class="small text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Image">Image URL</label>
+            <input asp-for="Image" type="text" class="form-control" id="image-input">
+            <span asp-validation-for="Image" class="small text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PlateNumber">Plate Number</label>
+            <input asp-for="PlateNumber" type="text" class="form-control" id="plateNumber-input">
+            <span asp-validation-for="PlateNumber" class="small text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CategoryId"></label>
+            <select asp-for="CategoryId" class="form-control">
+                @foreach (var category in Model.Categories)
+                {
+                   <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CategoryId" class="small text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-block btn-primary">Add LrProduct</button>
+    </form>
+</div>

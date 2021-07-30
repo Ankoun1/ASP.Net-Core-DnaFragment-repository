@@ -1,0 +1,36 @@
+﻿@model List<UserListingViewModel>
+@{ ViewBag.Title = "LR Users"; }
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+
+@if (!Model.Any(x => !x.IsAdministrator))
+{
+<h1 class="text-center mt-2 text-secondary">@ViewBag.Title</h1>
+    <h1 class="text-center mt-2 text-danger">▪</h1>
+}
+else
+{
+    <h1 class="text-center mt-2 text-white">LR Users</h1>
+    <h1 class="text-center mt-2 text-success">▪</h1>
+
+}
+<form class="mx-auto w-50">
+    <img class="d-block w-100 " src="https://chamlinlaw.com/wp-content/uploads/2016/01/Assault_CR.jpg" alt="Responsive image">
+    @foreach (var userLr in Model)
+    {
+        <div class="form-group">
+            <ul class="list-group list-group-flush ">
+                <li class="list-group-item text-center ">@userLr.Username : @userLr.Email</li>
+                <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
+                    <a class="btn btn-outline-primary "
+                       asp-controller="Messages"
+                       asp-action="Add"
+                       asp-route-lrUserId="@userLr.Id">Send message</a>
+                    
+
+                </li>
+            </ul>
+        </div>
+    }
+</form>
+

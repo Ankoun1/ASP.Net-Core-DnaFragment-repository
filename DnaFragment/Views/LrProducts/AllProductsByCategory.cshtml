@@ -1,0 +1,117 @@
+﻿@model List<LrProductServiceModel>
+
+@{ ViewBag.Title = "Products by category"; }
+
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+<h1 class="text-center mt-2">@ViewBag.Title</h1>
+
+@if (Model != null)
+{
+    <h1 class="text-center mt-2 text-success">▪</h1>
+    <h1 class="text-center mt-2 text-white">▪</h1>
+    <h1 class="text-center mt-2 text-white">▪</h1>
+    <h1 class="text-center mt-2 text-white">▪</h1>
+
+}
+else
+{
+    <h1 class="text-center mt-2 text-danger">▪</h1>
+    <h1 class="text-center mt-2 text-secondary">▪</h1>
+    <h1 class="text-center mt-2 text-secondary">▪</h1>
+    <h1 class="text-center mt-2 text-secondary">▪</h1>
+
+}
+<form class="mx-auto w-50" size="3">
+ @if (Model == null)
+{
+    <img src="https://img5.goodfon.com/wallpaper/nbig/0/fb/devushka-shatenka-shliapa-priroda-lug-tsvety-peizazh.jpg"
+         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+         data-placement="bottom">
+    <ul class="list-group list-group-flush small">
+        <li class="list-group-item text-center  "><h class="text-danger">•</h> Моля заредете базата от данни с продукти по категории!</li>
+    </ul>
+}
+else if (Model[0].CategoryId == 1)
+{
+    <img src="https://c4.wallpaperflare.com/wallpaper/74/530/410/sweet-girl-pic-3840x2160-wallpaper-preview.jpg"
+         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+         data-placement="bottom">
+}
+else if (Model[0].CategoryId == 2)
+{
+    <img src="https://media.gettyimages.com/photos/bikini-woman-napping-in-a-hammock-at-the-caribbean-beach-picture-id125145258?k=6&m=125145258&s=612x612&w=0&h=kyver0PULttVYsRqiFCCwQ66DySg3SJj7bodsSMG83A="
+         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+         data-placement="bottom">
+}
+else if (Model[0].CategoryId == 3)
+{
+    <img src="https://c4.wallpaperflare.com/wallpaper/577/412/12/hot-girl-pic-1920x1200-wallpaper-preview.jpg"
+         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+         data-placement="bottom">
+}
+else if (Model[0].CategoryId == 4)
+{
+    <img src="https://c4.wallpaperflare.com/wallpaper/869/515/658/pic-girl-2560x1600-wallpaper-preview.jpg"
+         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+         data-placement="bottom">
+}
+else if (Model[0].CategoryId == 5)
+{
+    <img src="https://wallup.net/wp-content/uploads/2019/09/473320-landscape-view-height-city-dal-beauty-wind-girl-sunset.jpg"
+         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+         data-placement="bottom">
+}
+ else if (Model[0].CategoryId == 6)
+{
+    <img src="https://c4.wallpaperflare.com/wallpaper/898/902/381/pic-girl-2560x1600-wallpaper-thumb.jpg"
+         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+         data-placement="bottom">
+} 
+ else if (Model[0].CategoryId == 7)
+{
+    <img src="https://c4.wallpaperflare.com/wallpaper/898/902/381/pic-girl-2560x1600-wallpaper-thumb.jpg"
+         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+         data-placement="bottom">
+}
+@if (Model != null)
+{
+    <h1 class="text-center mt-2 text-white">▪</h1>
+    <h1 class="text-center mt-2 text-white">▪</h1>
+    <h1 class="text-center mt-2 text-white">▪</h1>
+    <h1 class="text-center mt-2 text-white">▪</h1>
+
+}
+else
+{
+    <h1 class="text-center mt-2 text-secondary">▪</h1>
+    <h1 class="text-center mt-2 text-secondary">▪</h1>
+    <h1 class="text-center mt-2 text-secondary">▪</h1>
+    <h1 class="text-center mt-2 text-secondary">▪</h1>
+}
+@if (Model != null)
+{
+    @foreach (var product in Model)
+    {
+<div class="form-group col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+    <a class="btn btn-block btn-outline-warning btn-sm font-italic text-break"
+       asp-controller="LrProducts"
+       asp-action="All">
+        @product.Model
+    </a>   
+    <img src="@product.Image"
+         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+         data-placement="bottom" title="LR">
+    <a class="btn btn-block btn--secondary text-white text-lg-center"
+       asp-controller="LrProducts"
+       asp-action="All">
+        @product.Price lv.
+    </a>
+
+    <h1 class="text-center mt-2 text-success ">.</h1>
+    <h1 class="text-center mt-2 text-success ">.</h1>
+
+</div>
+    }
+}
+</form>

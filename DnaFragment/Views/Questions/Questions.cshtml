@@ -1,0 +1,24 @@
+﻿@model AddQuestionModel
+@{
+    ViewBag.Title = "Question";
+}
+    <hr class="bg-primary w-75">
+    <hr class="bg-primary w-50">
+    <h1 class="text-center mt-2">@ViewBag.Title</h1>
+<h1 class="text-center mt-2 text-white">▪</h1>
+<form class="mx-auto w-75" method="post">
+    <div class="form-group">
+        <div class="label-holder text-white d-flex justify-content-center">
+            <label asp-for="Description">Description</label>
+        </div>
+        <textarea asp-for="Description" rows="4" type="text" class="form-control" id="description-input"></textarea>
+        <span asp-validation-for="Description" class="small text-danger"></span>
+    </div>
+
+    <div class="button-holder d-flex justify-content-center">
+        <button type="submit" class="btn btn-block btn-primary text-white mb-3">Add Question</button>
+    </div>
+</form>
+
+
+

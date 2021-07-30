@@ -1,0 +1,65 @@
+﻿@model RegisterUser
+@{
+    ViewBag.Title = "Register";
+}
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+<h1 class="text-center mt-2"> @ViewBag.Title</h1>
+<h1 class="text-center mt-2 text-success">▪</h1>
+
+<form class="mx-auto w-50" method="post">
+    <div class="form-group">
+        <div class="label-holder textCol d-flex justify-content-center">
+            <label asp-for="Username" class="h4 mb-2 text-white">Username</label>
+        </div>
+        <input type="text" class="form-control" id="username" asp-for="Username" />
+        <span asp-validation-for="Username" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="label-holder text-white textCol d-flex justify-content-center">
+            <label asp-for="Email" class="h4 mb-2">Email</label>
+        </div>
+        <input type="email" class="form-control" id="email" asp-for="Email" />
+        <span asp-validation-for="Email" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="label-holder text-white textCol d-flex justify-content-center">
+            <label asp-for="PhoneNumber" class="h4 mb-2">Phone Number</label>
+        </div>
+        <input class="form-control" id="phoneNumber" asp-for="PhoneNumber" placeholder="+359-888-888-888"/>
+        <span asp-validation-for="PhoneNumber" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="label-holder text-white textCol d-flex justify-content-center">
+            <label asp-for="Password" class="h4 mb-2">Password</label>
+        </div>
+        <input type="password" autocomplete="on" class="form-control" id="password" asp-for="Password" />
+        <span asp-validation-for="Password" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="label-holder text-white textCol d-flex justify-content-center">
+            <label asp-for="ConfirmPassword" class="h4 mb-2">Confirm Password</label>
+        </div>
+        <input type="password" class="form-control" id="confirmPassword" asp-for="ConfirmPassword" />
+        <span asp-validation-for="ConfirmPassword" class="small text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <div class="text-white d-flex justify-content-center">
+            <label asp-for="UserType" class="h3 mb-2">Are you a mechanic or a client?</label>
+        </div>
+        <select class="custom-select" asp-for="UserType" id="userType">
+            <option value="Client">Client</option>
+            <option value="Mechanic">Mechanic</option>
+        </select>
+        <select class="custom-select" asp-for="UserPreoritet" id="userPreoritet">
+            <option value="Administrator">Administrator</option>
+            <option value="User">User</option>
+        </select>
+
+    </div>
+
+    <div class="button-holder d-flex justify-content-center">
+        <button type="submit" class="btn btn-block btn-primary text-white mb-3" value="Register">Register</button>
+    </div>
+</form>

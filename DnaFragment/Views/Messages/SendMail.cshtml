@@ -1,0 +1,44 @@
+﻿@model SendMailMessageModel
+
+
+<h1>Send Mail</h1>
+
+<h4>SendMailMessageModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form class="mx-auto w-75" method="post">
+            
+                <div class="form-group">
+                    <label asp-for="To">Email</label>
+                    <input asp-for="To" type="text"class="form-control" id="to-input">
+                    <span asp-validation-for="To" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" type="text"class="form-control" id="password-input">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Subject">Subject</label>
+                    <input asp-for="Subject" type="text"class="form-control" id="subject-input">
+                    <span asp-validation-for="Subject" class="text-danger"></span>
+                </div>
+                <div class="label-holder text-white d-flex justify-content-center">
+                    <label asp-for="Body" ></label>
+                    <textarea asp-for="Body" type="text" class="form-control" rows="3" cols="15"id="body-input"></textarea>
+                    <span asp-validation-for="Body" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Send Email" class="btn btn-primary" />
+                </div>
+                <h5>ViewBag.message</h5>
+            
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

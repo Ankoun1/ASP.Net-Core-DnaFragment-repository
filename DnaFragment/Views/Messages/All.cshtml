@@ -1,0 +1,44 @@
+﻿@model List<MessageListingViewModel>
+@{ ViewBag.Title = "Messages"; }
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+<h1 class="text-center mt-2">@ViewBag.Title</h1>
+@if (Model.Count == 0)
+{
+    <h1 class="text-center mt-2 text-secondary">▪</h1>
+}
+else
+{
+    <h1 class="text-center mt-2 text-white">▪</h1>
+}
+<form class="mx-auto w-75">
+    <img class="d-block w-100 " src="https://c4.wallpaperflare.com/wallpaper/930/129/181/allah-symbol-3d-1920x1080-wallpaper-preview.jpg" alt="Responsive image">
+    @if (Model.Count == 0)
+    {
+        <div class="form-group">
+            <ul class="list-group list-group-flush ">
+                <li class="list-group-item text-center">НЯМАТЕ НОВИ СЪОБЩЕНИЯ.</li>
+            </ul>
+        </div>
+    }
+    @foreach (var message in Model)
+    {
+        <div class="form-group">
+            <h1 class="text-center mt-2 text-success">_</h1>
+            <ul class="list-group list-group-flush ">
+                @if (message.IsAdministrator)
+                {
+                    <li class="list-group-item list-group-horizontal-sm text-center ">User : @message.Name</li>
+                }
+                <li class="list-group-item text-center  ">Date : @message.CreatedOn</li>
+                <li class="list-group-item text-center text-break"> @message.Description</li>
+                <li class="button-holder d-flex justify-content-center">
+                    <a href="/Messages/Delete?messageId=@message.Id" class="btn btn-sm btn-outline-danger w-auto ">Delete</a>
+                </li>
+            </ul>
+
+        </div>
+    }
+
+</form>
+
