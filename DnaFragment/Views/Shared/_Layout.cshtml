@@ -11,9 +11,12 @@
     <title>@ViewBag.Title - Dna Fragment</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/custom.css">
+ 
 </head>
+
 <body class="container">
     <header>
+       
         <nav class="navbar navbar-expand-lg navbar-light bg-dark">
             <div class="container">
                 <a class="navbar-brand text-warning font-italic" asp-area="" asp-controller="Home" asp-action="Index">
@@ -36,7 +39,8 @@
                                 </li>
                                 <li class="nav-item ml-auto">
                                     <a class="nav-link text-white active h5" asp-area="" asp-controller="LrProducts" asp-action="Add">Add✦Product</a>
-                                </li>  
+                                </li>
+
                                 <li class="nav-item ml-auto">
                                     <a class="nav-link text-white active h5" asp-area="" asp-controller="LrProducts" asp-action="All">All✦Products</a>
                                 </li>
@@ -68,11 +72,11 @@
                             <li class="nav-item ml-auto">
                                 <a class="nav-link text-white active h5" asp-area="" asp-controller="LrUsers" asp-action="Register">LRdb</a>
                             </li>
-
+                           
                         }
                         else
                         {
-                            
+
                             <li class="nav-item ml-auto">
                                 <a class="nav-link text-white active h5" asp-area="" asp-controller="Categories" asp-action="All">LR✦Shop</a>
                             </li>
@@ -87,12 +91,17 @@
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
+
             </div>
+
         </nav>
+
     </header>
+
     <main>
         @RenderBody()
     </main>
+   
     <style>
         .footer {
             position: fixed;

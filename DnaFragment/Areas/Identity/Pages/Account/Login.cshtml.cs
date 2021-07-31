@@ -16,8 +16,7 @@
         private readonly SignInManager<User> signInManager;
       
 
-        public LoginModel(SignInManager<User> signInManager 
-            )
+        public LoginModel(SignInManager<User> signInManager)             
         {           
             this.signInManager = signInManager;            
         }
@@ -62,7 +61,8 @@
         {
             returnUrl ??= Url.Content("~/");          
         
-            if (ModelState.IsValid)            {
+            if (ModelState.IsValid)            
+            {
                 
                 var result = await this.signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)

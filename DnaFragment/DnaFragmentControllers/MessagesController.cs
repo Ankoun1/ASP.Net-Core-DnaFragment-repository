@@ -10,14 +10,17 @@
     using DnaFragment.Data.Models;
     using System.Net.Mail;
     using System.Net;
-   
+    using DnaFragment.Services.Mail;
+
     public class MessagesController :Controller
     {      
         private readonly DnaFragmentDbContext data;
+        private readonly ISendMailService sendMail;
 
-        public MessagesController(DnaFragmentDbContext data)
+        public MessagesController(DnaFragmentDbContext data, ISendMailService sendMail)
         {         
             this.data = data;
+            this.sendMail = sendMail;
         }
 
 
@@ -68,6 +71,7 @@
         [Authorize(Roles = "Administrator")]
         public IActionResult SendMail(SendMailMessageModel mailModel)
         {
+            sendMail.SendEmailAsync("ankonikolchevpl@gmail.com", "New Login Demo", "<h1>Hay! From: DNAFragment-Asp.Net-Core-project</h1>").Wait();
             /*var to = mailModel.To;
             var password = mailModel.Password;
             var subject = mailModel.Subject;
@@ -95,9 +99,11 @@
           
            
             ViewBag.message = "The Mail Hass Been Send To Success!";*/
-            SendEmail("ankonikolchevpl@gmail.com", "test", "Hi it worked!!",
-           "azxczxczc@gmail.com", "azxczxczc@gmail.com", "xzczxc", "smtp.gmail.com", 587);
-            return View();
+            /* SendEmail("ankonikolchevpl@gmail.com", "test", "Hi it worked!!",
+            "azxczxczc@gmail.com", "azxczxczc@gmail.com", "xzczxc", "smtp.gmail.com", 587);
+             return View();*/
+            return Redirect("/Messages/All");
+
         }
 
         [Authorize]
@@ -150,10 +156,10 @@
             this.data.Messages.Remove(message);
             this.data.SaveChanges();
 
-            return this.Redirect("/Messages/All");
+            return Redirect("/Messages/All");
         }
 
-        public static void SendEmail(string address, string subject,
+        /*public static void SendEmail(string address, string subject,
                  string message, string email, string username, string password,
                  string smtp, int port)
         {
@@ -171,7 +177,7 @@
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = loginInfo;
             smtpClient.Send(msg);
-        }
+        }*/
 
     }
 }
