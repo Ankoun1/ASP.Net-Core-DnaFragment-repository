@@ -62,49 +62,35 @@
             return Redirect("/Messages/All");
         }
 
-        public IActionResult SendMail()
-        {           
-            return View();
+
+        [Authorize(Roles = "Administrator")]
+        public IActionResult SendMail(string userId)
+        {
+            var emailUser = sendMail.UserEmail(userId);
+            return View(new SendMailMessageModel { To = emailUser,Body = "<h1>Hay! From: DNAFragment-Asp.Net-Core-project</h1>" });
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public IActionResult SendMail(string userId,SendMailMessageModel mailModel)
-        {
-            var emailUser = data.LrUsers.Where(x => x.Id == userId).Select(x => x.Email).FirstOrDefault();
-            sendMail.SendEmailAsync(emailUser, "New Login Demo", "<h1>Hay! From: DNAFragment-Asp.Net-Core-project</h1>").Wait();
-            /*var to = mailModel.To;
-            var password = mailModel.Password;
-            var subject = mailModel.Subject;
-            var body = mailModel.Body;
-            MailMessage mail = new MailMessage();
-            mail.To.Add(to);
-            mail.Subject = subject;
-            mail.Body = body;
-            mail.From = new MailAddress("klimentinnik@gmail.com");
-            mail.Sender = new MailAddress("ankonikolchevpl@gmail.com");
-            mail.IsBodyHtml = true;
-            //mail.Priority = MailPriority.High;
-            SmtpClient smtp = new SmtpClient("smtp.gmail.com");
-            smtp.Port = 587;
-            smtp.UseDefaultCredentials = false;
-            //smtp.EnableSsl = true;
-            smtp.Credentials = new System.Net.NetworkCredential(to,"abc");
-            //smtp.Send(mail);
-            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtp.EnableSsl = true;
+        public IActionResult SendMail(string userId,SendMailMessageModel mailModel)        
+        {         
+            sendMail.SendEmailAsync(userId, mailModel.Subject,mailModel.Body).Wait();
 
-            smtp.Timeout = 30000;
+            /*DateTime nowTime = DateTime.Now;
+            
+           if (DateTime.Now.Second - nowTime.Second > 8)
+            {
+                ViewBag.message = null;
+            }
+            else
+            {
+                ViewBag.message = "sucsses";
+            }*/
            
-                smtp.Send(mail);
-          
-           
-            ViewBag.message = "The Mail Hass Been Send To Success!";*/
-            /* SendEmail("ankonikolchevpl@gmail.com", "test", "Hi it worked!!",
-            "azxczxczc@gmail.com", "azxczxczc@gmail.com", "xzczxc", "smtp.gmail.com", 587);
-             return View();*/
-            return Redirect("/Messages/All");
-
+            ViewBag.message = "sucsses";
+            var emailUser = sendMail.UserEmail(userId);
+            
+            return View(new SendMailMessageModel { To = emailUser,Subject = mailModel.Subject,Body = mailModel.Body });
         }
 
         [Authorize]
@@ -158,27 +144,7 @@
             this.data.SaveChanges();
 
             return Redirect("/Messages/All");
-        }
-
-        /*public static void SendEmail(string address, string subject,
-                 string message, string email, string username, string password,
-                 string smtp, int port)
-        {
-            var loginInfo = new NetworkCredential(username, password);
-            var msg = new MailMessage();
-            var smtpClient = new SmtpClient(smtp, port);
-
-            msg.From = new MailAddress(email);
-            msg.To.Add(new MailAddress(address));
-            msg.Subject = subject;
-            msg.Body = message;
-            msg.IsBodyHtml = true;
-
-            smtpClient.EnableSsl = true;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = loginInfo;
-            smtpClient.Send(msg);
-        }*/
+        }      
 
     }
 }

@@ -6,7 +6,8 @@ namespace DnaFragment.Services.Mail
 
     public interface ISendMailService
     {
-        Task SendEmailAsync(string toEmail, string subject, string content);
+        string UserEmail(string userId);
+        Task SendEmailAsync(string userId, string subject, string content);
 
 
     }
