@@ -26,6 +26,10 @@ else
                        asp-controller="Messages"
                        asp-action="Add"
                        asp-route-lrUserId="@userLr.Id">Send message</a>
+                     <a class="btn btn-outline-primary "
+                       asp-controller="Messages"
+                       asp-action="SendMail"
+                       asp-route-userId="@userLr.Id">Send Email</a>
                     
 
                 </li>

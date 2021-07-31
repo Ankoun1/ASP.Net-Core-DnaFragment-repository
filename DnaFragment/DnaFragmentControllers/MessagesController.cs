@@ -69,9 +69,10 @@
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public IActionResult SendMail(SendMailMessageModel mailModel)
+        public IActionResult SendMail(string userId,SendMailMessageModel mailModel)
         {
-            sendMail.SendEmailAsync("ankonikolchevpl@gmail.com", "New Login Demo", "<h1>Hay! From: DNAFragment-Asp.Net-Core-project</h1>").Wait();
+            var emailUser = data.LrUsers.Where(x => x.Id == userId).Select(x => x.Email).FirstOrDefault();
+            sendMail.SendEmailAsync(emailUser, "New Login Demo", "<h1>Hay! From: DNAFragment-Asp.Net-Core-project</h1>").Wait();
             /*var to = mailModel.To;
             var password = mailModel.Password;
             var subject = mailModel.Subject;
