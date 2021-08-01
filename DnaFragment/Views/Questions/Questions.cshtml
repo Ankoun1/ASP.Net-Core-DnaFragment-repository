@@ -1,10 +1,8 @@
 ﻿@model AddQuestionModel
-@{
-    ViewBag.Title = "Question";
-}
-    <hr class="bg-primary w-75">
-    <hr class="bg-primary w-50">
-    <h1 class="text-center mt-2">@ViewBag.Title</h1>
+@{ ViewBag.Title = "Question"; }
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+<h1 class="text-center mt-2">@ViewBag.Title</h1>
 <h1 class="text-center mt-2 text-white">▪</h1>
 <form class="mx-auto w-75" method="post">
     <div class="form-group">
@@ -19,6 +17,11 @@
         <button type="submit" class="btn btn-block btn-primary text-white mb-3">Add Question</button>
     </div>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
 
 
 

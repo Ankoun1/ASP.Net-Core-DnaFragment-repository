@@ -100,18 +100,19 @@
             data.SaveChanges();
             return Redirect("/LrUsers/Login");
         }
-        public IActionResult ForgotPasswordEmail()
+        public IActionResult ForgotPassword()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult ForgotPasswordEmail(ForgotPasswordUserModel resetPassword)
+        public IActionResult ForgotPassword(ForgotPasswordUserModel resetPassword)
         {
             var user = data.Users.Where(x => x.Email == resetPassword.Email).Select(x => new {UserName = x.UserName,Email = x.Email,Id = x.Id,ResetPasswordId = x.ResetPasswordId }).FirstOrDefault();
             
             sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {user.ResetPasswordId} Follow the link https://localhost:44350/LrUsers/ResetPassword to reset your password").Wait();
-            return Redirect("/LrUsers/ResetPassword");
+            ViewBag.message = "sucsses";
+            return View();
         }
 
         public IActionResult ResetPassword()
