@@ -12,6 +12,8 @@
 
         public DateTime CreatedOn { get; init; } = DateTime.Now;
 
+        public bool StopAutomaticDelete { get; set; }
+
         [Required]
         [MaxLength(DefaultDescriptionMaxLength)]
         public string Description { get; set; }

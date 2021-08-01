@@ -134,10 +134,14 @@
             return View(messageModels);
         }
 
-
+        [Authorize]
         public IActionResult Delete(string messageId)
         {
             var message = data.Messages.Find(messageId);
+            if(message == null)
+            {
+                return BadRequest();
+            }
             
 
             this.data.Messages.Remove(message);

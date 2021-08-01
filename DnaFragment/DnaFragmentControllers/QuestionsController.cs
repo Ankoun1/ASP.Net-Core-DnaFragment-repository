@@ -116,7 +116,7 @@
                     CreatedOn = quest.CreatedOn,
                     Description = quest.Description,
                     QuestionId = quest.Id,
-                    StopAtomaticDelete = quest.StopAutomaticDelite
+                    StopAtomaticDelete = quest.StopAutomaticDelete
                 };
 
 
@@ -171,6 +171,7 @@
             return lrUsername;
         }
 
+        [Authorize]
         public IActionResult Delete(string questId)
         {
             var quest = data.Questions.Find(questId);
@@ -194,11 +195,11 @@
             {
                 foreach (var answer in data.Answers.Where(x => x.QuestionId == questId).AsQueryable())
                 {
-                    answer.StopAutomaticDelite = true;
+                    answer.StopAutomaticDelete = true;
                 }                
             }
 
-            quest.StopAutomaticDelite = true;
+            quest.StopAutomaticDelete = true;
             this.data.SaveChanges();
             ViewBag.message = "sucsses";
             return this.Redirect("/Questions/All");

@@ -19,7 +19,7 @@
         public string Description { get; set; }
 
 
-        public bool StopAutomaticDelite { get; set; }
+        public bool StopAutomaticDelete { get; set; }
 
         public ICollection<QuestionUser> QuestionUsers { get; init; } = new List<QuestionUser>();        
 
