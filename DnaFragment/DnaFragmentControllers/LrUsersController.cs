@@ -112,8 +112,34 @@
         {
             var user = data.Users.Where(x => x.Email == resetPassword.Email).Select(x => new {UserName = x.UserName,Email = x.Email,Id = x.Id,ResetPasswordId = x.ResetPasswordId }).FirstOrDefault();
             
-            sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {user.ResetPasswordId} Follow the link  to reset your password").Wait();
-            return Redirect("/LrUsers/ForgotPasswordEmail");
+            sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {user.ResetPasswordId} Follow the link https://localhost:44350/LrUsers/ResetPassword to reset your password").Wait();
+            return Redirect("/LrUsers/ResetPassword");
+        }
+
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ResetPassword(ResetPasswordUserModel userModel)
+        {
+            if (!this.data.Users.Any(u => u.ResetPasswordId == userModel.RessetPasswordId))
+            {
+                this.ModelState.AddModelError(nameof(userModel.RessetPasswordId), $"User with '{userModel.RessetPasswordId}' not exists.");
+            }
+
+
+            if (!ModelState.IsValid || userModel.Password != userModel.ConfirmPassword)
+            {
+
+                return View(userModel);
+            }
+            var userId = data.Users.Where(x => x.ResetPasswordId == userModel.RessetPasswordId).Select(x => x.Id).FirstOrDefault();
+            var user = data.Users.Find(userId);
+            user.PasswordHash = userModel.Password;
+            data.SaveChanges();
+            return Redirect("/Identity/Account/Login");
         }
 
         public IActionResult Login() => View();

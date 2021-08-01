@@ -5,10 +5,7 @@
     {
         [Required]
         [EmailAddress]
-        public string Email { get; init; } 
-        
-        [Required]
-        [EmailAddress]
-        public string ConfirmEmail { get; init; }
+        public string Email { get; init; }        
+      
     }
 }

@@ -32,11 +32,8 @@
                         {
                             var userIsAdmin = User.IsAdmin();
 
-                            @if (userIsAdmin)
-                            {
-                                <li class="nav-item ml-auto">
-                                    <a class="nav-link text-white active h5" asp-area="" asp-controller="Messages" asp-action="SendMail">Send✦Mail</a>
-                                </li>
+                            @if (userIsAdmin)                            {
+                              
                                 <li class="nav-item ml-auto">
                                     <a class="nav-link text-white active h5" asp-area="" asp-controller="LrProducts" asp-action="Add">Add✦Product</a>
                                 </li>
