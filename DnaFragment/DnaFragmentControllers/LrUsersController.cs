@@ -168,11 +168,13 @@
         [Authorize]
         public IActionResult All()
         {
-            var questionsOld = data.Questions.Where(x => !x.StopAutomaticDelite && (DateTime.Now - x.CreatedOn).TotalDays > 30);
-            var answersOld = data.Answers.Where(x => !x.StopAutomaticDelite && (DateTime.Now - x.CreatedOn).TotalDays > 30);
+            var questionsOld = data.Questions.Where(x => !x.StopAutomaticDelete && (DateTime.Now - x.CreatedOn).TotalDays > 30);
+            var answersOld = data.Answers.Where(x => !x.StopAutomaticDelete && (DateTime.Now - x.CreatedOn).TotalDays > 30);
+            var messagesOld = data.Messages.Where(x => !x.StopAutomaticDelete && (DateTime.Now - x.CreatedOn).TotalDays > 360);
            
             data.Questions.RemoveRange(questionsOld);
             data.Answers.RemoveRange(answersOld);
+            data.Messages.RemoveRange(messagesOld);
             data.SaveChanges();
 
             var users = data.LrUsers.Where(x => !x.IsAdministrator).Select(x => new UserListingViewModel
