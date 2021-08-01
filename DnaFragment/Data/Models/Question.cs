@@ -18,6 +18,9 @@
         [MaxLength(DefaultDescriptionMaxLength)]
         public string Description { get; set; }
 
+
+        public bool StopAutomaticDelite { get; set; }
+
         public ICollection<QuestionUser> QuestionUsers { get; init; } = new List<QuestionUser>();        
 
         public IEnumerable<Answer> Answers { get; init; } = new List<Answer>();      

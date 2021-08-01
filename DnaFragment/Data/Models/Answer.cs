@@ -17,7 +17,8 @@
         [MaxLength(DefaultDescriptionMaxLength)]
         public string Description { get; set; }
 
-        
+        public bool StopAutomaticDelite { get; set; }
+
         [Required]
         public string QuestionId { get; set; }
 

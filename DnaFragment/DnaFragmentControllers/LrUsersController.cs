@@ -52,8 +52,7 @@
             
 
             if (!ModelState.IsValid || lrUser.Password != lrUser.ConfirmPassword)
-            {              
-
+            {            
                 return View(lrUser);
             }         
 
@@ -64,8 +63,7 @@
                 Password = lrUser.Password,
                 Email = lrUser.Email,
                 PhoneNumber = lrUser.PhoneNumber,
-                IsMechanic = lrUser.UserType == TypeMechanic,
-               
+                IsMechanic = lrUser.UserType == TypeMechanic,               
             };
 
 
@@ -132,7 +130,6 @@
 
             if (!ModelState.IsValid || userModel.Password != userModel.ConfirmPassword)
             {
-
                 return View(userModel);
             }
             var userId = data.Users.Where(x => x.ResetPasswordId == userModel.RessetPasswordId).Select(x => x.Id).FirstOrDefault();
@@ -153,7 +150,6 @@
                .Select(u => u.Id)
                .FirstOrDefault();
 
-
             if (userId == null)
             {
                 this.ModelState.AddModelError(nameof(userId), "Username and password combination is not valid.");
@@ -164,23 +160,21 @@
                 return View(model);
             }
 
-           // this.SignIn(userId);
-
-           
-          /*  var questionsOld = data.Questions.Where(x =>(DateTime.Now - x.CreatedOn).TotalDays > 30);
-            var answersOld = data.Answers.Where(x => (DateTime.Now - x.CreatedOn).TotalDays > 30);
-           
-            data.Questions.RemoveRange(questionsOld);
-            data.Answers.RemoveRange(answersOld);
-            data.SaveChanges();*/
-
+           // this.SignIn(userId);         
+          
             return Redirect("/Categories/All");
         }
 
         [Authorize]
         public IActionResult All()
         {
+            var questionsOld = data.Questions.Where(x => !x.StopAutomaticDelite && (DateTime.Now - x.CreatedOn).TotalDays > 30);
+            var answersOld = data.Answers.Where(x => !x.StopAutomaticDelite && (DateTime.Now - x.CreatedOn).TotalDays > 30);
            
+            data.Questions.RemoveRange(questionsOld);
+            data.Answers.RemoveRange(answersOld);
+            data.SaveChanges();
+
             var users = data.LrUsers.Where(x => !x.IsAdministrator).Select(x => new UserListingViewModel
             {
                 Id = x.Id,

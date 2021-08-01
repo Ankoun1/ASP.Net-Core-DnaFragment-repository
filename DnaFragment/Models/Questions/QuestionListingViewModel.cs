@@ -21,5 +21,8 @@
 
         public bool IsAdministrator { get; set; }
 
+        public bool StopAtomaticDelete { get; set; }
+
+
     }
 }

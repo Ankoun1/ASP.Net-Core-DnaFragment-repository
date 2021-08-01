@@ -85,7 +85,8 @@ namespace DnaFragment.Data.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    StopAutomaticDelite = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -258,6 +259,7 @@ namespace DnaFragment.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    StopAutomaticDelite = table.Column<bool>(type: "bit", nullable: false),
                     QuestionId = table.Column<string>(type: "nvarchar(40)", nullable: false)
                 },
                 constraints: table =>

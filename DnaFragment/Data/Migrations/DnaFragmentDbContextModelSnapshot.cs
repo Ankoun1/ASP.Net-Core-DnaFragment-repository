@@ -37,6 +37,9 @@ namespace DnaFragment.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(40)");
 
+                    b.Property<bool>("StopAutomaticDelite")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
@@ -192,6 +195,9 @@ namespace DnaFragment.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<bool>("StopAutomaticDelite")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

@@ -23,9 +23,7 @@ else
 
     <a href="/Questions/Questions" class="btn  btn-lg btn-primary  text-xl-center ">Ask question</a>
 </div> 
-<div class="button-holder d-flex justify-content-center ">
-    <a href="/Messages/SendMail" class="btn  btn-lg btn-primary  text-xl-center ">Ask question</a>
-</div>
+
 <h1 class="text-center mt-2 text-white">▪ ▪ ▪ ▪ ▪</h1>
 
 <form class="mx-auto w-75">
@@ -71,6 +69,14 @@ else
                             asp-action="Delete"
                             asp-route-answerId="@quest.AnswerId"
                         >Delete Answer</a>
+                    } 
+                    @if (!quest.IsAdministrator && !quest.StopAtomaticDelete)
+                    {
+                        <a  class="btn btn-outline-primary "
+                            asp-controller="Questions"
+                            asp-action="AutomaticDelete"
+                            asp-route-questId="@quest.QuestionId"
+                        >Stop Automatic Delete</a>
                     }
                 </li>
             </ul>

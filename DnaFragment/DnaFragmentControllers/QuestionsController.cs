@@ -48,17 +48,20 @@
                 new QuestionUser
                 {
                 QuestionId = question.Id,
-                LrUserId = userId
+                LrUserId = userId,
+                UserId = userId
                 },
                 new QuestionUser
                 {
                 QuestionId = question.Id,
-                LrUserId = users.Skip(1).FirstOrDefault()
+                LrUserId = users.Skip(1).FirstOrDefault(),
+                UserId = users.Skip(1).FirstOrDefault()
                 },
                 new QuestionUser
                 {
                 QuestionId = question.Id,
-                LrUserId = users.FirstOrDefault()
+                LrUserId = users.FirstOrDefault(),
+                UserId = users.FirstOrDefault()
                 }
             };
 
@@ -112,7 +115,8 @@
                     //Id = quest.Id,
                     CreatedOn = quest.CreatedOn,
                     Description = quest.Description,
-                    QuestionId = quest.Id
+                    QuestionId = quest.Id,
+                    StopAtomaticDelete = quest.StopAutomaticDelite
                 };
 
 
@@ -137,7 +141,8 @@
                             //Id = quest.Id,
                             CreatedOn = quest.CreatedOn,
                             Description = quest.Description,
-                            QuestionId = quest.QuestionId
+                            QuestionId = quest.QuestionId,
+                            StopAtomaticDelete = quest.StopAtomaticDelete
                         };
 
                        
@@ -156,7 +161,7 @@
                 }
 
             }
-            return View(answerModels);
+            return View(answerModels.OrderByDescending(x => x.CreatedOn).ThenBy(x => x.Name).ToList());
         }
 
         private string GetUserName(string lrQuestId)
@@ -178,6 +183,24 @@
             this.data.Questions.Remove(quest);
             this.data.SaveChanges();
 
+            return this.Redirect("/Questions/All");
+        }
+
+        [Authorize]
+        public IActionResult AutomaticDelete(string questId)
+        {
+            var quest = data.Questions.Find(questId);
+            if (data.Answers.Any(x => x.QuestionId == questId))
+            {
+                foreach (var answer in data.Answers.Where(x => x.QuestionId == questId).AsQueryable())
+                {
+                    answer.StopAutomaticDelite = true;
+                }                
+            }
+
+            quest.StopAutomaticDelite = true;
+            this.data.SaveChanges();
+            ViewBag.message = "sucsses";
             return this.Redirect("/Questions/All");
         }
       

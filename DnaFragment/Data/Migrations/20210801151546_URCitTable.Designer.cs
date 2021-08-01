@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnaFragment.Data.Migrations
 {
     [DbContext(typeof(DnaFragmentDbContext))]
-    [Migration("20210801110733_URCitTable")]
+    [Migration("20210801151546_URCitTable")]
     partial class URCitTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<string>("QuestionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(40)");
+
+                    b.Property<bool>("StopAutomaticDelite")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -194,6 +197,9 @@ namespace DnaFragment.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<bool>("StopAutomaticDelite")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
