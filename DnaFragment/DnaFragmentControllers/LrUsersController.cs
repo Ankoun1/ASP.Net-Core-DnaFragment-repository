@@ -10,15 +10,17 @@
     using DnaFragment.Infrastructure;
     using Microsoft.AspNetCore.Mvc;
     using static Data.DataConstants.LrUserConst;
+    using DnaFragment.Services.Mail;
 
     public class LrUsersController : Controller
-    {      
-       
+    {
+        private readonly ISendMailService sendMail;
         private readonly DnaFragmentDbContext data;
 
-        public LrUsersController( DnaFragmentDbContext data)
+        public LrUsersController( DnaFragmentDbContext data, ISendMailService sendMail)
         {         
-            this.data = data;           
+            this.data = data;
+            this.sendMail = sendMail;
         }
         
         public IActionResult Register() => View();
@@ -47,8 +49,9 @@
             {
                 this.ModelState.AddModelError(nameof(lrUser.Email), $"User with '{lrUser.Email}' e-mail already exists.");
             }
+            
 
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || lrUser.Password != lrUser.ConfirmPassword)
             {              
 
                 return View(lrUser);
@@ -65,6 +68,7 @@
                
             };
 
+
             if (((lrUser.Username == "Anko" && lrUser.Password == "1234567")
                 || (lrUser.Username == "Niki" && lrUser.Password == "12345678")) && lrUser.UserPreoritet == TypeAdministrator)
             {
@@ -76,7 +80,40 @@
 
             data.SaveChanges();
 
+            string resetPasswordId;
+            int i = 0;
+            foreach (var userResetPasswordId in data.Users.AsQueryable())
+            {
+                if (userResetPasswordId.ResetPasswordId == null)
+                {
+                    resetPasswordId = i.ToString();
+                    for (int j = 0; j < 4; j++)
+                    {
+                        resetPasswordId += (j + i).ToString();
+                        for (int c = 0; c < 3; c++)
+                        {
+                            resetPasswordId += (c + i).ToString();
+                        }
+                    }
+                    userResetPasswordId.ResetPasswordId = resetPasswordId;
+                }
+                i++;
+            }
+            data.SaveChanges();
             return Redirect("/LrUsers/Login");
+        }
+        public IActionResult ForgotPasswordEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgotPasswordEmail(ForgotPasswordUserModel resetPassword)
+        {
+            var user = data.Users.Where(x => x.Email == resetPassword.Email).Select(x => new {UserName = x.UserName,Email = x.Email,Id = x.Id,ResetPasswordId = x.ResetPasswordId }).FirstOrDefault();
+            
+            sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {user.ResetPasswordId} Follow the link  to reset your password").Wait();
+            return Redirect("/LrUsers/ForgotPasswordEmail");
         }
 
         public IActionResult Login() => View();

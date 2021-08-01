@@ -21,9 +21,10 @@
         {
             var emailUser = UserEmail(userId);
             var apiKey = configuration["SendGridApiKey"];
+            var apiUser = configuration["SendGridUser"];
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("ankonikolchevpl@gmail.com", "DNA demo");
-            var to = new EmailAddress(emailUser);
+            var from = new EmailAddress("ankonikolchevpl@gmail.com", apiUser);
+            var to = new EmailAddress("ankonikolchevpl@gmail.com");
             var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, content, content);
             var response = await client.SendEmailAsync(msg);
@@ -31,6 +32,6 @@
 
         public string UserEmail(string userId)
         => data.LrUsers.Where(x => x.Id == userId).Select(x => x.Email).FirstOrDefault();
-       
+
     }
 }

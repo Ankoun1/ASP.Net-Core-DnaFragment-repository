@@ -10,7 +10,10 @@
     {  
         
         [MaxLength(MaxLengthFullName)]
-        public string FullName { get; set; }      
+        public string FullName { get; set; }
+        
+       
+        public string ResetPasswordId { get; set; }      
                               
         public ICollection<QuestionUser> QuestionUsers { get; init; } = new List<QuestionUser>();
 

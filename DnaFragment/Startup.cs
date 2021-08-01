@@ -51,6 +51,7 @@ namespace DnaFragment
             services.AddTransient<ILrProductsService,LrProductsService>();
             services.AddTransient<IAdministratorService, AdministratorService>();
             services.AddTransient<ISendMailService, SendMailService>();
+           
         }
 
         
