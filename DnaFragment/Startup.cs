@@ -8,6 +8,7 @@ namespace DnaFragment
     using DnaFragment.Services.Administrators;
     using DnaFragment.Services.LrProducts;
     using DnaFragment.Services.Mail;
+    using DnaFragment.Services.Questions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -49,6 +50,7 @@ namespace DnaFragment
             });
 
             services.AddTransient<ILrProductsService,LrProductsService>();
+            services.AddTransient<IQuestionsService,QuestionsService>();
             services.AddTransient<IAdministratorService, AdministratorService>();
             services.AddTransient<ISendMailService, SendMailService>();
            

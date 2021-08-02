@@ -32,8 +32,9 @@
                         {
                             var userIsAdmin = User.IsAdmin();
 
-                            @if (userIsAdmin)                            {
-                              
+                            @if (userIsAdmin)
+                            {
+
                                 <li class="nav-item ml-auto">
                                     <a class="nav-link text-white active h5" asp-area="" asp-controller="LrProducts" asp-action="Add">Add✦Product</a>
                                 </li>
@@ -44,7 +45,9 @@
 
                                 <li class="nav-item ml-auto">
                                     <a class="nav-link text-white active h5" asp-area="" asp-controller="LrUsers" asp-action="All">All✦Users</a>
-                                </li>                                
+                                </li>
+
+
 
                             }
                             else
@@ -66,7 +69,7 @@
                             <li class="nav-item ml-auto">
                                 <a class="nav-link text-white active h5" asp-area="" asp-controller="LrUsers" asp-action="Register">LRdb</a>
                             </li>
-                           
+
                         }
                         else
                         {
@@ -76,8 +79,7 @@
                             </li>
                             <li class="nav-item ml-auto">
                                 <a class="nav-link text-white active h5" asp-area="" asp-controller="LrProducts" asp-action="Favorits">♥</a>
-                            </li>
-                           
+                            </li>                            
 
                         }
                     </ul>
