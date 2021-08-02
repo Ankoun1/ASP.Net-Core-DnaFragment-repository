@@ -8,20 +8,24 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using DnaFragment.Infrastructure;
+    using DnaFragment.Services.Answers;
+    using DnaFragment.Services.Administrators;
 
     public class AnswersController : Controller
-    {       
-        private readonly DnaFragmentDbContext data;     
+    {                
+        private readonly IAnswersService answersService;     
+        private readonly IAdministratorService adminService;     
 
-        public AnswersController(DnaFragmentDbContext data)
-        {       
-            this.data = data;            
+        public AnswersController(IAnswersService answersService, IAdministratorService adminService)
+        {                 
+            this.answersService = answersService;
+            this.adminService = adminService;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public IActionResult AddAnswer(string questId)
         {
-            if (!data.LrUsers.Any(x => x.Id == User.GetId() && x.IsAdministrator))
+            if (!adminService.UserIsRegister(User.GetId(), User.IsAdmin()))
             {
                 return Unauthorized();
             }
@@ -29,28 +33,17 @@
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public IActionResult AddAnswer(string questId, AddAnswerModel model)
         {
             //string input = questId;
             var userId = User.GetId();
-            if (!data.LrUsers.Any(x => x.Id == userId && x.IsAdministrator))
+            if (!adminService.UserIsRegister(User.GetId(), User.IsAdmin()))
             {
                 return Unauthorized();
             }
 
-            var quest = data.QuestionUsers.Where(x => x.LrUserId == userId && x.QuestionId == questId).FirstOrDefault();
-
-            var answer = new Answer
-            {            
-                Description = model.Description + ".",
-                //UserId = quest.UserId
-                QuestionId = quest.QuestionId
-            };
-
-            data.Answers.Add(answer);
-
-            data.SaveChanges();
+            answersService.AddAnswerDb(questId, userId, model.Description);
 
             return Redirect("/Questions/All");
         }
@@ -59,15 +52,12 @@
         [Authorize]
         public IActionResult Delete(string answerId)
         {
-            if (!data.LrUsers.Any(x => x.Id == User.GetId() && x.IsAdministrator))
+            if (!adminService.UserIsRegister(User.GetId(), User.IsAdmin()))
             {
                 return Unauthorized();
             }
 
-            var answers = data.Answers.Where(x => x.Id == answerId);
-
-            this.data.Answers.RemoveRange(answers);
-            this.data.SaveChanges();
+            answersService.DeleteAnswerDb(answerId);
 
             return this.Redirect("/Questions/All");
         }

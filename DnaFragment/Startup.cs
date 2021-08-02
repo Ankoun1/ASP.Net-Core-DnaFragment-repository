@@ -6,6 +6,7 @@ namespace DnaFragment
     using DnaFragment.DnaFragmentControllers;
     using DnaFragment.Infrastructure;
     using DnaFragment.Services.Administrators;
+    using DnaFragment.Services.Answers;
     using DnaFragment.Services.LrProducts;
     using DnaFragment.Services.Mail;
     using DnaFragment.Services.Questions;
@@ -51,6 +52,7 @@ namespace DnaFragment
 
             services.AddTransient<ILrProductsService,LrProductsService>();
             services.AddTransient<IQuestionsService,QuestionsService>();
+            services.AddTransient<IAnswersService,AnswersService>();
             services.AddTransient<IAdministratorService, AdministratorService>();
             services.AddTransient<ISendMailService, SendMailService>();
            
