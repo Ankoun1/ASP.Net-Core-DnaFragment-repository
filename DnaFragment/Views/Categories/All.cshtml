@@ -6,104 +6,131 @@
 
 <hr class="bg-primary w-75">
 <hr class="bg-primary w-50">
-<h1 class="text-center mt-2">@ViewBag.Title</h1>
+<h2 class="text-center mt-2">@ViewBag.Title</h2>
  
  @if (Model[0].CountCategoryProducts != 0)
-  {
+ {
 <h1 class="text-center mt-2 text-success">▪</h1>
-  }
-  else
-  {
+ }
+ else
+ {
      <h1 class="text-center mt-2 text-danger">▪</h1>
-  }
-
+ }
+@if (Model.Count > 1)
+ {
  @if (Model[1].CountCategoryProducts == 0)
-  {
+ {
 
 
 <h1 class="text-center mt-2 text-secondary">▪</h1>
-  }
-  else 
-  {
+ }
+ else
+ {
 <h1 class="text-center mt-2 text-white">▪</h1>
-  } 
+ } 
 @if (Model[2].CountCategoryProducts == 0)
-  {
+{
 <h1 class="text-center mt-2 text-secondary">▪</h1>
-  }
-  else 
-  {
+}
+else
+{
 <h1 class="text-center mt-2 text-white">▪</h1>
-  }
+}
 @if (Model[3].CountCategoryProducts == 0)
-  {
+{
 <h1 class="text-center mt-2 text-secondary">▪</h1>
-  }
-  else 
-  {
+}
+else
+{
 <h1 class="text-center mt-2 text-white">▪</h1>
-  }
+}
+
+}
+else
+{
+<h1 class="text-center mt-2 text-secondary">▪</h1>
+<h1 class="text-center mt-2 text-secondary">▪</h1>
+<h1 class="text-center mt-2 text-secondary">▪</h1>
+}
+
 
 <form class="mx-auto w-50" size="3">
     <img src="https://img5.goodfon.com/wallpaper/nbig/0/fb/devushka-shatenka-shliapa-priroda-lug-tsvety-peizazh.jpg"
          class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
         data-placement="bottom">
-    @if (Model[0].CountCategoryProducts != 0)
-    {         
-          <ul class="list-group list-group-flush small">
+@if (Model.Count == 1)
+{
+
+
+<ul class="list-group list-group-flush ">
               <li class="list-group-item text-center  "><h class="text-danger">•</h> Моля заредете базата от данни с продукти по категории!</li>
           </ul>
-    }
+
+
+<h1 class="text-center mt-2 text-secondary">▪</h1>
+
+
+<h1 class="text-center mt-2 text-secondary">▪</h1>
+
+
+<h1 class="text-center mt-2 text-secondary">▪</h1>
+
+
+<h1 class="text-center mt-2 text-secondary">▪</h1>
+
+}
+else
+{
  @if (Model[4].CountCategoryProducts == 0)
-  {
+ {
 
 
 <h1 class="text-center mt-2 text-secondary">▪</h1>
-  }
-  else 
-  {
+ }
+ else
+ {
 <h1 class="text-center mt-2 text-white">▪</h1>
-  } 
+ } 
 @if (Model[5].CountCategoryProducts == 0)
-  {
+{
 <h1 class="text-center mt-2 text-secondary">▪</h1>
-  }
-  else 
-  {
+}
+else
+{
 <h1 class="text-center mt-2 text-white">▪</h1>
-  }
+}
 @if (Model[6].CountCategoryProducts == 0)
-  {
+{
 <h1 class="text-center mt-2 text-secondary">▪</h1>
-  }
-  else 
-  {
+}
+else
+{
 <h1 class="text-center mt-2 text-white">▪</h1>
-  }
+}
 @if (Model[7].CountCategoryProducts == 0)
-  {
+{
 <h1 class="text-center mt-2 text-secondary">▪</h1>
-  }
-  else 
-  {
+}
+else
+{
 <h1 class="text-center mt-2 text-white">▪</h1>
-  }    
-   
+}    
+}
     @foreach (var category in Model)
     {
 <div class="form-group col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
     
      @if (category.Id == null)
-    {
+     {
          <a  class="btn btn-block btn--secondary text-white-50 text-lg-center font-italic"
            asp-controller="LrProducts"
            asp-action="All"         
          >
             продукти: @category.CountCategoryProducts
         </a>
-    }
-    else
-    {
+     }
+     else
+     {
         <a  class="btn btn-block btn--secondary text-white-50 text-lg-center font-italic"
            asp-controller="LrProducts"
            asp-action="AllProductsByCategory"
@@ -111,7 +138,7 @@
         >
          продукти: @category.CountCategoryProducts
         </a>
-    }
+     }
     <img src="@category.Image"
          class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
          data-placement="bottom" title="LR">
@@ -134,18 +161,18 @@
             @category.Name
         </a>
     }
-    @if(category.CountCategoryProducts == 0)
-     {
+    @if (category.CountCategoryProducts == 0)
+    {
 <h1 class="text-center mt-2 text-danger ">▪</h1>
 <h1 class="text-center mt-2 text-danger ">▪</h1>
-     }
-     else
-     {
+    }
+    else
+    {
 <h1 class="text-center mt-2 text-success ">▪</h1>
 <h1 class="text-center mt-2 text-success ">▪</h1>
-     }    
+    }    
 
 </div>
     }
-
+   
 </form>

@@ -249,19 +249,30 @@
 
                     await roleManager.CreateAsync(role);
 
-                    const string adminEmail = "ankonikolchevpl@gmail.com";
-                    const string adminPassword = "admin123";
+                    const string admin1Email = "ankonikolchevpl@gmail.com";
+                    const string admin1Password = "admin123";
 
-                    var user = new User
+                    var user1 = new User
                     {
-                        Email = adminEmail,
-                        UserName = adminEmail,
-                        FullName = "Admin"
+                        Email = admin1Email,
+                        UserName = admin1Email,
+                        FullName = "Admin1"
+                    }; 
+                    const string admin2Email = "niki@gmail.com";
+                    const string admin2Password = "admin1234";
+
+                    var user2 = new User
+                    {
+                        Email = admin2Email,
+                        UserName = admin2Email,
+                        FullName = "Admin2"
                     };
 
-                    await userManager.CreateAsync(user, adminPassword);
+                    await userManager.CreateAsync(user1, admin1Password);
+                    await userManager.AddToRoleAsync(user1, role.Name);
 
-                    await userManager.AddToRoleAsync(user, role.Name);
+                    await userManager.CreateAsync(user2, admin2Password);
+                    await userManager.AddToRoleAsync(user2, role.Name);
                 })
                 .GetAwaiter()
                 .GetResult();
