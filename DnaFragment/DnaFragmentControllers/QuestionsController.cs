@@ -12,15 +12,18 @@
     using DnaFragment.Infrastructure;
     using DnaFragment.Areas.Identity.Pages.Account;
     using DnaFragment.Services.Questions;
+    using DnaFragment.Services.Administrators;
 
     public class QuestionsController : Controller
     {
           
         private readonly IQuestionsService questionsService;     
+        private readonly IAdministratorService adminService;     
 
-        public QuestionsController(IQuestionsService questionsService)
+        public QuestionsController(IQuestionsService questionsService, IAdministratorService adminService)
         {                     
             this.questionsService = questionsService;
+            this.adminService = adminService;
         }
         
         [Authorize]
@@ -32,7 +35,7 @@
         {
             var userId = this.User.GetId();           
 
-            if (data.Users.Any(x => x.Id == userId && User.IsAdmin()))
+            if (adminService.UserIsRegister(userId,User.IsAdmin()))
             {
                 return Unauthorized();
             }            

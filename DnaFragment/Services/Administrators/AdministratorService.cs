@@ -12,17 +12,17 @@
             this.data = data;
         }
 
-        public string AdministratorId(string userId)
+        public string AdministratorId(string userId,bool isAdmin)
        => data
-              .LrUsers
-              .Where(x => x.Id == userId && x.IsAdministrator)
+              .Users
+              .Where(x => x.Id == userId && isAdmin)
               .Select(x => x.Id)
               .FirstOrDefault();
 
-        public bool UserIsRegister(string userId)
+        public bool UserIsRegister(string userId, bool isAdmin)
        => this.data
-                .LrUsers
-                .Any(d => d.Id == userId && d.IsAdministrator);
+                .Users
+                .Any(d => d.Id == userId && isAdmin);
 
     }
 }

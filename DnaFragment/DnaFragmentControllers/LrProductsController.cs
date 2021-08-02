@@ -10,23 +10,21 @@
     using System.Linq;
 
     public class LrProductsController : Controller
-    {     
-        
+    {    
         private readonly ILrProductsService lrProducts;
-        private readonly IAdministratorService administrator;
-        private readonly DnaFragmentDbContext data;
+        private readonly IAdministratorService administrator;      
 
         public LrProductsController(         
-               ILrProductsService lrProducts, IAdministratorService administrator, DnaFragmentDbContext data)
+               ILrProductsService lrProducts, IAdministratorService administrator)
         {           
             this.lrProducts = lrProducts;
-            this.administrator = administrator;
-            this.data = data;
+            this.administrator = administrator;           
         }
 
+        [Authorize(Roles = "Administrator")]
         public IActionResult Add()
         {
-            if (!administrator.UserIsRegister(User.GetId()))
+            if (!administrator.UserIsRegister(User.GetId(),User.IsAdmin()))
             {
                 return RedirectToAction(nameof(LrUsersController.Register), "LrUsers");
             }
@@ -39,10 +37,10 @@
        
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Add(AddProductFormModel lrProduct)
         {
-            var lrUserId = administrator.AdministratorId(User.GetId());
+            var lrUserId = administrator.AdministratorId(User.GetId(),User.IsAdmin());
 
             if (lrUserId == null)
             {
@@ -123,7 +121,7 @@
         public IActionResult Edit(string id)
         {
             string userId = User.GetId();
-            if (administrator.UserIsRegister(userId))
+            if (administrator.UserIsRegister(userId, User.IsAdmin()))
             {
                 return RedirectToAction(nameof(LrUsersController.Register), "LrUsers");
             }
@@ -141,7 +139,7 @@
         [Authorize]
         public IActionResult Favorits()
         {
-            if(administrator.UserIsRegister(User.GetId()))
+            if(administrator.UserIsRegister(User.GetId(), User.IsAdmin()))
             {
                 return Unauthorized();
             }
