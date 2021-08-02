@@ -5,15 +5,22 @@
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
-    {
+    {       
         <li class="nav-item ml-auto">
-            <a id="manage" class="nav-link text-white active h5" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            <a id="logout" class="nav-link text-white active h5" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action(" Index", "Home" , new { area="" })">Logout</a>
         </li>
-        <li class="nav-item">
-            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-white">Logout</button>
-            </form>
-        </li>
+        @if (User.IsAdmin())
+        {
+            <li class="nav-item ml-auto">
+                <h3 scope="col" class="text-danger">•</h3>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item ml-auto">
+                <a id="manage" class="nav-link text-white active h5" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+        }
     }
     else
     {

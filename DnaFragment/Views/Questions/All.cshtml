@@ -21,7 +21,8 @@ else
 </div>
 <div class="button-holder d-flex justify-content-center ">
 
-    <a href="/Questions/Questions" class="btn  btn-lg btn-primary  text-xl-center ">Ask question</a>
+    <a href="/Questions/Questions" class="btn  btn-lg btn-primary btn-rounded text-xl-center ">Ask question</a>
+    
 </div> 
 
 <h1 class="text-center mt-2 text-white">▪ ▪ ▪ ▪ ▪</h1>
@@ -72,7 +73,7 @@ else
                     } 
                     @if (!quest.IsAdministrator && !quest.StopAtomaticDelete)
                     {
-                        <a  class="btn btn-outline-primary "
+                        <a  class="btn btn-outline-primary " title="Stop the function to automatically delete your question. By default the question and the answers to it,will be deleted automatically after 30 days!"
                             asp-controller="Questions"
                             asp-action="AutomaticDelete"
                             asp-route-questId="@quest.QuestionId"

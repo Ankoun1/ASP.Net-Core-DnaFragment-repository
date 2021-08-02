@@ -7,8 +7,16 @@
         public string Username { get; init; }
 
         public string Email { get; init; }
+
+        public string PhoneNumber { get; init; }
         
-        public bool IsAdministrator { get; init; }    
+        public bool IsAdministrator { get; init; }
+        
+        public bool IsMechanic { get; init; }
+        
+        public int NumberMessages { get; set; }
+        
+        public int NumberQuestions { get; set; }    
                   
     }
 }

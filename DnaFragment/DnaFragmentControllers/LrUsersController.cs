@@ -11,6 +11,7 @@
     using Microsoft.AspNetCore.Mvc;
     using static Data.DataConstants.LrUserConst;
     using DnaFragment.Services.Mail;
+    using Microsoft.EntityFrameworkCore;
 
     public class LrUsersController : Controller
     {
@@ -166,12 +167,14 @@
             return Redirect("/Categories/All");
         }
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public IActionResult All()
         {
-            var questionsOld = data.Questions.Where(x => !x.StopAutomaticDelete && (DateTime.Now - x.CreatedOn).TotalDays > 30);
-            var answersOld = data.Answers.Where(x => !x.StopAutomaticDelete && (DateTime.Now - x.CreatedOn).TotalDays > 30);
-            var messagesOld = data.Messages.Where(x => !x.StopAutomaticDelete && (DateTime.Now - x.CreatedOn).TotalDays > 360);
+            DateTime curentdate = DateTime.UtcNow;
+            
+            var questionsOld = data.Questions.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30.0);
+            var answersOld = data.Answers.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30);
+            var messagesOld = data.Messages.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 360);
            
             data.Questions.RemoveRange(questionsOld);
             data.Answers.RemoveRange(answersOld);
@@ -183,9 +186,16 @@
                 Id = x.Id,
                 Username = x.Username,
                 Email = x.Email,
-                IsAdministrator = x.IsAdministrator
+                PhoneNumber = x.PhoneNumber,
+                IsMechanic = x.IsMechanic,
+                IsAdministrator = x.IsAdministrator,
+                
             }).ToList();
-
+            foreach (var user in users)
+            {
+                user.NumberMessages = data.Messages.Where(x => x.UserId == user.Id).Count();
+                user.NumberQuestions = data.QuestionUsers.Where(x => x.UserId == user.Id).Count();
+            }
             return View(users);
         }
 

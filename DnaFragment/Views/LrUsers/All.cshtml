@@ -5,34 +5,65 @@
 
 @if (!Model.Any(x => !x.IsAdministrator))
 {
-<h1 class="text-center mt-2 text-secondary">@ViewBag.Title</h1>
+    <h2 class="text-center mt-2 text-secondary">@ViewBag.Title</h2>
     <h1 class="text-center mt-2 text-danger">▪</h1>
 }
 else
 {
-    <h1 class="text-center mt-2 text-white">LR Users</h1>
+    <h2 class="text-center mt-2 text-white">@ViewBag.Title</h2>
     <h1 class="text-center mt-2 text-success">▪</h1>
 
 }
-<form class="mx-auto w-50">
+
+<form class="mx-auto w-75">
     <img class="d-block w-100 " src="https://chamlinlaw.com/wp-content/uploads/2016/01/Assault_CR.jpg" alt="Responsive image">
-    @foreach (var userLr in Model)
+
+    @for (int i = 0; i < Model.Count; i++)
     {
-        <div class="form-group">
+        <div class="table-responsive">
+            <table class="table  table-dark">
+                <thead>
+                    <tr>
+                        <th scope="row">@(i + 1)</th>
+                        <th scope="col">@Model[i].Username.</th>
+                        <th scope="col">@Model[i].Email</th>
+                        <th scope="col">Tel: @Model[i].PhoneNumber</th>
+                        <th scope="col">Nq: @Model[i].NumberQuestions</th>
+                        <th scope="col">Nm: @Model[i].NumberMessages</th>
+                        @if (@Model[i].IsMechanic)
+                        {
+                            <th scope="col" class="text-success">•</th>
+                        }
+                        else
+                        {
+                            <th scope="col" class="text-white">•</th>
+
+                        }
+                    </tr>
+                </thead>
+            </table>
             <ul class="list-group list-group-flush ">
-                <li class="list-group-item text-center ">@userLr.Username : @userLr.Email</li>
                 <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
                     <a class="btn btn-outline-primary "
                        asp-controller="Messages"
                        asp-action="Add"
-                       asp-route-lrUserId="@userLr.Id">Send message</a>
-                     <a class="btn btn-outline-primary "
+                       asp-route-lrUserId="@Model[i].Id">Message</a>
+                    <a class="btn btn-outline-primary "
                        asp-controller="Messages"
                        asp-action="SendMail"
-                       asp-route-userId="@userLr.Id">Send Email</a>                   
+                       asp-route-userId="@Model[i].Id">Email</a>
                 </li>
             </ul>
         </div>
+        <hr class="bg-primary w-75">
+        i++;
     }
+
+    
+
+
+
 </form>
+
+
 
