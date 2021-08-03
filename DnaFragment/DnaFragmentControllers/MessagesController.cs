@@ -1,27 +1,21 @@
 ﻿namespace Dnafragment.CarShopControllers
-{
-    using System;
-    using System.Linq;
-    using DnaFragment.Data;
+{    
+    using System.Linq;   
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using DnaFragment.Infrastructure;
-    using DnaFragment.Models.Messages;
-    using DnaFragment.Data.Models;
-    using System.Net.Mail;
-    using System.Net;
+    using DnaFragment.Models.Messages;   
     using DnaFragment.Services.Mail;
     using DnaFragment.Services.Messages;
 
     public class MessagesController :Controller
     {      
-        private readonly DnaFragmentDbContext data;
+     
         private readonly ISendMailService sendMail;
-        private readonly MessagesService messageService;
+        private readonly IMessagesService messageService;
 
-        public MessagesController(DnaFragmentDbContext data, ISendMailService sendMail, MessagesService messageService)
-        {         
-            this.data = data;
+        public MessagesController(ISendMailService sendMail, IMessagesService messageService)
+        {    
             this.sendMail = sendMail;
             this.messageService = messageService;
         }
@@ -41,10 +35,7 @@
         [HttpPost]
         [Authorize(Roles = "Administrator")]
         public IActionResult Add(string lrUserId, AddMessagesModel model)
-        {
-            Random generator = new Random();
-            int r = generator.Next(100000, 1000000);
-
+        {           
             if (!User.IsAdmin())
             {
                 return Unauthorized();
@@ -77,28 +68,19 @@
 
         [Authorize]
         public IActionResult All()
-        {
-          
+        {          
           var  userId = User.GetId();
           bool  isAdmin = User.IsAdmin();
 
-            var messageModels = messageService.AllMessageDb(userId, isAdmin);
+          var messageModels = messageService.AllMessageDb(userId, isAdmin);
 
-            return View(messageModels);
+          return View(messageModels);
         }
 
         [Authorize]
         public IActionResult Delete(string messageId)
-        {
-            var message = data.Messages.Find(messageId);
-            if(message == null)
-            {
-                return BadRequest();
-            }
-            
-
-            this.data.Messages.Remove(message);
-            this.data.SaveChanges();
+        {            
+            messageService.DeleteMessageDb(messageId);
 
             return Redirect("/Messages/All");
         }      

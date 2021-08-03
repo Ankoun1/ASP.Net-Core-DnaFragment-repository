@@ -24,64 +24,7 @@
             this.sendMail = sendMail;
         }
         
-        public IActionResult Register() => View();
-
        
-        [HttpPost]
-        public IActionResult Register(RegisterUser lrUser)
-        {
-            var userId = this.User.GetId();
-
-            var userIdAlreadyRegister = this.data
-                .LrUsers
-                .Any(d => d.Id == userId);
-
-            if (userIdAlreadyRegister)
-            {
-                return BadRequest();
-            }
-
-            if (this.data.LrUsers.Any(u => u.Username == lrUser.Username))
-            {
-                this.ModelState.AddModelError(nameof(lrUser.Username), $"User with '{lrUser.Username}' username already exists.");
-            }
-
-            if (this.data.LrUsers.Any(u => u.Email == lrUser.Email))
-            {
-                this.ModelState.AddModelError(nameof(lrUser.Email), $"User with '{lrUser.Email}' e-mail already exists.");
-            }
-            
-
-            if (!ModelState.IsValid || lrUser.Password != lrUser.ConfirmPassword)
-            {            
-                return View(lrUser);
-            }         
-
-            var user = new LrUser
-            {
-                Id = userId,
-                Username = lrUser.Username,
-                Password = lrUser.Password,
-                Email = lrUser.Email,
-                PhoneNumber = lrUser.PhoneNumber,
-                IsMechanic = lrUser.UserType == TypeMechanic,               
-            };
-
-
-            if (((lrUser.Username == "Anko" && lrUser.Password == "1234567")
-                || (lrUser.Username == "Niki" && lrUser.Password == "12345678")) && lrUser.UserPreoritet == TypeAdministrator)
-            {
-                user.IsAdministrator = true;         
-
-            }
-          
-            data.LrUsers.Add(user);
-
-            data.SaveChanges();
-
-          
-            return Redirect("/LrUsers/Login");
-        }
 
         [Authorize]
         public IActionResult ForgotPassword()
@@ -151,33 +94,7 @@
             user.PasswordHash = userModel.Password;
             data.SaveChanges();
             return Redirect("/Identity/Account/Login");
-        }
-
-        public IActionResult Login() => View();
-
-        [HttpPost]
-        public IActionResult Login(LoginUserFormModel model)
-        {
-            var userId = this.data
-               .LrUsers
-               .Where(u => u.Username == model.Username && u.Password == model.Password)
-               .Select(u => u.Id)
-               .FirstOrDefault();
-
-            if (userId == null)
-            {
-                this.ModelState.AddModelError(nameof(userId), "Username and password combination is not valid.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-           // this.SignIn(userId);         
-          
-            return Redirect("/Categories/All");
-        }
+        }       
 
         [Authorize(Roles = "Administrator")]
         public IActionResult All()

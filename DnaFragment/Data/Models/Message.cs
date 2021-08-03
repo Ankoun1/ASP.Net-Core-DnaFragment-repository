@@ -17,11 +17,7 @@
         [Required]
         [MaxLength(DefaultDescriptionMaxLength)]
         public string Description { get; set; }
-
-        [Required]
-        public string LrUserId { get; init; }
-
-        public LrUser LrUser { get; init; }
+       
 
         [Required]
         public string UserId { get; init; }

@@ -7,9 +7,9 @@
     public class CategoriesController : Controller
     {
         
-        private readonly CategoriesService categoriesService;
+        private readonly ICategoriesService categoriesService;
 
-        public CategoriesController(CategoriesService categoriesService)
+        public CategoriesController(ICategoriesService categoriesService)
         {           
             
             this.categoriesService = categoriesService;

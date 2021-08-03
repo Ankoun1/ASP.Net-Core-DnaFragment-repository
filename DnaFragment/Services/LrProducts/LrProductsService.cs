@@ -46,8 +46,7 @@ namespace DnaFragment.Services.LrProducts
             
             var userProduct = new UserProduct
             {
-                UserId = userId,
-                LrUserId = userId,
+                UserId = userId,               
                 LrProductId = product.Id
             };
             product.UserProducts.Add(userProduct);
@@ -172,7 +171,7 @@ namespace DnaFragment.Services.LrProducts
         }).FirstOrDefault(); 
         
         public List<LrProductDetailsServiceModel> Favorits(string id)
-        =>data.LrProducts.Where(x => x.UserProducts.Where(y => y.LrUserId == id).Select(y => y.LrUserId)
+        =>data.LrProducts.Where(x => x.UserProducts.Where(y => y.UserId == id).Select(y => y.UserId)
             .FirstOrDefault() == id)
             .OrderBy(x => x.CategoryId)
             .ThenBy(x => x.Price)
@@ -207,8 +206,7 @@ namespace DnaFragment.Services.LrProducts
         {
             var userProduct = new UserProduct
             {
-                UserId = userId,
-                LrUserId = userId,
+                UserId = userId,                
                 LrProductId = productId
             };
 

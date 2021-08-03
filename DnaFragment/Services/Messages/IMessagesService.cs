@@ -8,5 +8,7 @@ namespace DnaFragment.Services.Messages
         void AddMessageDb(string userId,string description);
 
         List<MessageListingViewModel> AllMessageDb(string userId,bool isAdmin);
+
+        void DeleteMessageDb(string messageId);
     }
 }

@@ -21,8 +21,7 @@
 
             var message = new Message
             {
-                Description = description,
-                LrUserId = userId,
+                Description = description,                
                 UserId = userId
             };
 
@@ -59,6 +58,19 @@
             }
 
             return messageModels;
+        }
+
+        public void DeleteMessageDb(string messageId)
+        {
+            var message = data.Messages.Find(messageId);
+            if (message == null)
+            {
+                return;
+            }
+
+
+            this.data.Messages.Remove(message);
+            this.data.SaveChanges();
         }
     }
 }

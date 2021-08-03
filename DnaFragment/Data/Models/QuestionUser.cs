@@ -8,11 +8,7 @@
         public string QuestionId { get; set; }
 
         public Question Question { get; set; }
-
-        [Required]
-        public string LrUserId { get; set; }
-
-        public LrUser LrUser { get; set; }
+       
 
         [Required]
         public string UserId { get; set; }

@@ -10,10 +10,7 @@ namespace DnaFragment.Data
         public DnaFragmentDbContext(DbContextOptions<DnaFragmentDbContext> options)
             : base(options)
         {
-        }
-
-
-        public DbSet<LrUser> LrUsers { get; init; }        
+        }            
 
         public DbSet<LrProduct> LrProducts { get; init; }
 
@@ -42,9 +39,9 @@ namespace DnaFragment.Data
                .HasForeignKey(c => c.CategoryId)
                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<UserProduct>().HasKey(up => new { up.UserId, up.LrUserId, up.LrProductId });
+            builder.Entity<UserProduct>().HasKey(up => new { up.UserId, up.LrProductId });
 
-            builder.Entity<QuestionUser>().HasKey(up => new { up.UserId, up.LrUserId, up.QuestionId });
+            builder.Entity<QuestionUser>().HasKey(up => new { up.UserId, up.QuestionId });
             
             base.OnModelCreating(builder);
 

@@ -7,8 +7,8 @@
     public class ResetPasswordUserModel
     {
 
-        [Required]       
-        public string RessetPasswordId { get; init; }
+           
+        public int? RessetPasswordId { get; init; }
 
         [Required]
         [StringLength(DefaultMaxLength, MinimumLength = MinLengthPassword)]

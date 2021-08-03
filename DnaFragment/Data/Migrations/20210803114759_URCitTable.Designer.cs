@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnaFragment.Data.Migrations
 {
     [DbContext(typeof(DnaFragmentDbContext))]
-    [Migration("20210803100652_URCitTable")]
+    [Migration("20210803114759_URCitTable")]
     partial class URCitTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,40 +119,6 @@ namespace DnaFragment.Data.Migrations
                     b.ToTable("LrProducts");
                 });
 
-            modelBuilder.Entity("DnaFragment.Data.Models.LrUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAdministrator")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsMechanic")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LrUsers");
-                });
-
             modelBuilder.Entity("DnaFragment.Data.Models.Message", b =>
                 {
                     b.Property<string>("Id")
@@ -167,10 +133,6 @@ namespace DnaFragment.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("LrUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(40)");
-
                     b.Property<bool>("StopAutomaticDelete")
                         .HasColumnType("bit");
 
@@ -179,8 +141,6 @@ namespace DnaFragment.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LrUserId");
 
                     b.HasIndex("UserId");
 
@@ -214,15 +174,10 @@ namespace DnaFragment.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LrUserId")
-                        .HasColumnType("nvarchar(40)");
-
                     b.Property<string>("QuestionId")
                         .HasColumnType("nvarchar(40)");
 
-                    b.HasKey("UserId", "LrUserId", "QuestionId");
-
-                    b.HasIndex("LrUserId");
+                    b.HasKey("UserId", "QuestionId");
 
                     b.HasIndex("QuestionId");
 
@@ -278,8 +233,8 @@ namespace DnaFragment.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ResetPasswordId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ResetPasswordId")
+                        .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -309,17 +264,12 @@ namespace DnaFragment.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LrUserId")
-                        .HasColumnType("nvarchar(40)");
-
                     b.Property<string>("LrProductId")
                         .HasColumnType("nvarchar(40)");
 
-                    b.HasKey("UserId", "LrUserId", "LrProductId");
+                    b.HasKey("UserId", "LrProductId");
 
                     b.HasIndex("LrProductId");
-
-                    b.HasIndex("LrUserId");
 
                     b.ToTable("UserProducts");
                 });
@@ -483,31 +433,17 @@ namespace DnaFragment.Data.Migrations
 
             modelBuilder.Entity("DnaFragment.Data.Models.Message", b =>
                 {
-                    b.HasOne("DnaFragment.Data.Models.LrUser", "LrUser")
-                        .WithMany("Messages")
-                        .HasForeignKey("LrUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DnaFragment.Data.Models.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("LrUser");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.QuestionUser", b =>
                 {
-                    b.HasOne("DnaFragment.Data.Models.LrUser", "LrUser")
-                        .WithMany("QuestionUsers")
-                        .HasForeignKey("LrUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DnaFragment.Data.Models.Question", "Question")
                         .WithMany("QuestionUsers")
                         .HasForeignKey("QuestionId")
@@ -519,8 +455,6 @@ namespace DnaFragment.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("LrUser");
 
                     b.Navigation("Question");
 
@@ -535,12 +469,6 @@ namespace DnaFragment.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DnaFragment.Data.Models.LrUser", "LrUser")
-                        .WithMany("UserProducts")
-                        .HasForeignKey("LrUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DnaFragment.Data.Models.User", "User")
                         .WithMany("UserProducts")
                         .HasForeignKey("UserId")
@@ -548,8 +476,6 @@ namespace DnaFragment.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("LrProduct");
-
-                    b.Navigation("LrUser");
 
                     b.Navigation("User");
                 });
@@ -612,15 +538,6 @@ namespace DnaFragment.Data.Migrations
 
             modelBuilder.Entity("DnaFragment.Data.Models.LrProduct", b =>
                 {
-                    b.Navigation("UserProducts");
-                });
-
-            modelBuilder.Entity("DnaFragment.Data.Models.LrUser", b =>
-                {
-                    b.Navigation("Messages");
-
-                    b.Navigation("QuestionUsers");
-
                     b.Navigation("UserProducts");
                 });
 

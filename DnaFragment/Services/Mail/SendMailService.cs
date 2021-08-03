@@ -31,7 +31,7 @@
         }
 
         public string UserEmail(string userId)
-        => data.LrUsers.Where(x => x.Id == userId).Select(x => x.Email).FirstOrDefault();
+        => data.Users.Where(x => x.Id == userId).Select(x => x.Email).FirstOrDefault();
 
     }
 }

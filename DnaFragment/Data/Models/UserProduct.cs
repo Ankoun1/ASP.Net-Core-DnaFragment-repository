@@ -3,11 +3,7 @@
 namespace DnaFragment.Data.Models
 {
     public class UserProduct
-    {
-        [Required]
-        public string LrUserId { get; set; }
-
-        public LrUser LrUser { get; set; }
+    {       
 
         [Required]
         public string UserId { get; set; }

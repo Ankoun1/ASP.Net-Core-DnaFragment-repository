@@ -21,25 +21,22 @@ namespace DnaFragment.Services.Questions
             {
                 Description = description + "?"
             };
-            var users = data.Users.Where(x => x.Email == "ankonikolchevpl@gmail.com" || x.Email == "niki@gmail.com").Select(x => x.Id).AsQueryable();
+            var users = data.Users.Where(x => x.IsAdministrator).Select(x => x.Id).AsQueryable();
             var questionUsers = new List<QuestionUser>
             {
                 new QuestionUser
                 {
-                QuestionId = question.Id,
-                LrUserId = userId,
+                QuestionId = question.Id,              
                 UserId = userId
                 },
                 new QuestionUser
                 {
-                QuestionId = question.Id,
-                LrUserId = users.Skip(1).FirstOrDefault(),
+                QuestionId = question.Id,               
                 UserId = users.Skip(1).FirstOrDefault()
                 },
                 new QuestionUser
                 {
-                QuestionId = question.Id,
-                LrUserId = users.FirstOrDefault(),
+                QuestionId = question.Id,                
                 UserId = users.FirstOrDefault()
                 }
             };

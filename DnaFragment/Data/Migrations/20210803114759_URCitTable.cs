@@ -28,7 +28,7 @@ namespace DnaFragment.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     IsAdministrator = table.Column<bool>(type: "bit", nullable: false),
-                    ResetPasswordId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResetPasswordId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -61,23 +61,6 @@ namespace DnaFragment.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LrUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    IsMechanic = table.Column<bool>(type: "bit", nullable: false),
-                    IsAdministrator = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LrUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -201,6 +184,27 @@ namespace DnaFragment.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StopAutomaticDelete = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LrProducts",
                 columns: table => new
                 {
@@ -224,34 +228,6 @@ namespace DnaFragment.Data.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Messages",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StopAutomaticDelete = table.Column<bool>(type: "bit", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    LrUserId = table.Column<string>(type: "nvarchar(40)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Messages_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Messages_LrUsers_LrUserId",
-                        column: x => x.LrUserId,
-                        principalTable: "LrUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -280,22 +256,15 @@ namespace DnaFragment.Data.Migrations
                 columns: table => new
                 {
                     QuestionId = table.Column<string>(type: "nvarchar(40)", nullable: false),
-                    LrUserId = table.Column<string>(type: "nvarchar(40)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestionUsers", x => new { x.UserId, x.LrUserId, x.QuestionId });
+                    table.PrimaryKey("PK_QuestionUsers", x => new { x.UserId, x.QuestionId });
                     table.ForeignKey(
                         name: "FK_QuestionUsers_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_QuestionUsers_LrUsers_LrUserId",
-                        column: x => x.LrUserId,
-                        principalTable: "LrUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -310,13 +279,12 @@ namespace DnaFragment.Data.Migrations
                 name: "UserProducts",
                 columns: table => new
                 {
-                    LrUserId = table.Column<string>(type: "nvarchar(40)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LrProductId = table.Column<string>(type: "nvarchar(40)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserProducts", x => new { x.UserId, x.LrUserId, x.LrProductId });
+                    table.PrimaryKey("PK_UserProducts", x => new { x.UserId, x.LrProductId });
                     table.ForeignKey(
                         name: "FK_UserProducts_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -327,12 +295,6 @@ namespace DnaFragment.Data.Migrations
                         name: "FK_UserProducts_LrProducts_LrProductId",
                         column: x => x.LrProductId,
                         principalTable: "LrProducts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserProducts_LrUsers_LrUserId",
-                        column: x => x.LrUserId,
-                        principalTable: "LrUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -387,19 +349,9 @@ namespace DnaFragment.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_LrUserId",
-                table: "Messages",
-                column: "LrUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Messages_UserId",
                 table: "Messages",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QuestionUsers_LrUserId",
-                table: "QuestionUsers",
-                column: "LrUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionUsers_QuestionId",
@@ -410,11 +362,6 @@ namespace DnaFragment.Data.Migrations
                 name: "IX_UserProducts_LrProductId",
                 table: "UserProducts",
                 column: "LrProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserProducts_LrUserId",
-                table: "UserProducts",
-                column: "LrUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -457,9 +404,6 @@ namespace DnaFragment.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "LrProducts");
-
-            migrationBuilder.DropTable(
-                name: "LrUsers");
 
             migrationBuilder.DropTable(
                 name: "Categories");
