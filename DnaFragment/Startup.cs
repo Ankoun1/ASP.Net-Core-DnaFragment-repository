@@ -59,6 +59,7 @@ namespace DnaFragment
             services.AddTransient<ISendMailService, SendMailService>();
             services.AddTransient<IMessagesService, MessagesService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<IPasswordHasher, PasswordHasher>();
            
         }
 

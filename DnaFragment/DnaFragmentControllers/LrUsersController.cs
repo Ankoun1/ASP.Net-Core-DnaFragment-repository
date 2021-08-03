@@ -12,87 +12,71 @@
     using static Data.DataConstants.LrUserConst;
     using DnaFragment.Services.Mail;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.WebUtilities;
+    using System.Text;
+    using System.Threading.Tasks;
 
     public class LrUsersController : Controller
     {
         private readonly ISendMailService sendMail;
         private readonly DnaFragmentDbContext data;
-
-        public LrUsersController( DnaFragmentDbContext data, ISendMailService sendMail)
+        private readonly IPasswordHasher passwordHasher;
+        private readonly UserManager<User> _userManager;
+        public LrUsersController( DnaFragmentDbContext data, ISendMailService sendMail, IPasswordHasher passwordHasher,UserManager<User> _userManager)
         {         
             this.data = data;
             this.sendMail = sendMail;
-        }
-        
-       
-
-        [Authorize]
+            this.passwordHasher = passwordHasher;
+            this._userManager = _userManager;
+        }       
+                     
         public IActionResult ForgotPassword()
         {
             return View();
         }
-
-        [Authorize]
+       
         [HttpPost]
-        public IActionResult ForgotPassword(ForgotPasswordUserModel resetPassword)
-        {
-           /* string resetPasswordId;
-            int i = 0;
-            foreach (var userResetPasswordId in data.Users.AsQueryable())
-            {
-                if (userResetPasswordId.ResetPasswordId == null)
-                {
-                    resetPasswordId = i.ToString();
-                    for (int j = 0; j < 4; j++)
-                    {
-                        resetPasswordId += (j + i).ToString();
-                        for (int c = 0; c < 3; c++)
-                        {
-                            resetPasswordId += (c + i).ToString();
-                        }
-                    }
-                    userResetPasswordId.ResetPasswordId = resetPasswordId;
-                }
-                i++;
-            }
-            data.SaveChanges();*/
-
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordUserModel resetPassword)
+        {           
             Random generator = new Random();
-            int r = generator.Next(100000, 1000000);
+            int r = generator.Next(100000, 1000000);            
             
-            var user = data.Users.Where(x => x.Email == resetPassword.Email).Select(x => new {UserName = x.FullName,Id = x.Id,ResetPasswordId = x.ResetPasswordId }).FirstOrDefault();
-            var userTrue = data.Users.Find(user.Id);
-            userTrue.ResetPasswordId = r;
+            var user = data.Users.Where(x => x.Email == resetPassword.Email).FirstOrDefault();           
+            
+            user.ResetPasswordId = r;
             data.SaveChanges();
             sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {r} Follow the link https://localhost:44350/LrUsers/ResetPassword to reset your password").Wait();
             ViewBag.message = "sucsses";
             return View();
         }
-
-        [Authorize]
+        
         public IActionResult ResetPassword()
         {
             return View();
-        }
-
-        [Authorize]
+        }   
+        
         [HttpPost]
-        public IActionResult ResetPassword(ResetPasswordUserModel userModel)
+        public async Task<IActionResult> ResetPassword(ResetPasswordUserModel userModel)
         {
             if (!this.data.Users.Any(u => u.ResetPasswordId == userModel.RessetPasswordId))
             {
                 this.ModelState.AddModelError(nameof(userModel.RessetPasswordId), $"User with '{userModel.RessetPasswordId}' not exists.");
             }
 
-
             if (!ModelState.IsValid || userModel.Password != userModel.ConfirmPassword)
             {
                 return View(userModel);
-            }
-            var userId = data.Users.Where(x => x.ResetPasswordId == userModel.RessetPasswordId).Select(x => x.Id).FirstOrDefault();
-            var user = data.Users.Find(userId);
-            user.PasswordHash = userModel.Password;
-            data.SaveChanges();
+            }         
+                        
+            var user = data.Users.Where(x => x.ResetPasswordId == userModel.RessetPasswordId).FirstOrDefault();
+            
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var  code1 = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code1));
+            var userReset = await _userManager.FindByEmailAsync(user.Email);      
+            var result = await _userManager.ResetPasswordAsync(userReset, Code, userModel.Password);
+            
             return Redirect("/Identity/Account/Login");
         }       
 
