@@ -15,7 +15,7 @@ namespace DnaFragment.Services.Answers
         }
         public void AddAnswerDb(string questId,string userId,string description)
         {
-            var quest = data.QuestionUsers.Where(x => x.LrUserId == userId && x.QuestionId == questId).FirstOrDefault();
+            var quest = data.QuestionUsers.Where(x => x.UserId == userId && x.QuestionId == questId).FirstOrDefault();
 
             var answer = new Answer
             {

@@ -256,7 +256,8 @@
                     {
                         Email = admin1Email,
                         UserName = admin1Email,
-                        FullName = "Admin1"
+                        FullName = "Admin1",
+                        IsAdministrator = true
                     }; 
                     const string admin2Email = "niki@gmail.com";
                     const string admin2Password = "admin1234";
@@ -265,7 +266,8 @@
                     {
                         Email = admin2Email,
                         UserName = admin2Email,
-                        FullName = "Admin2"
+                        FullName = "Admin2",
+                        IsAdministrator = true
                     };
 
                     await userManager.CreateAsync(user1, admin1Password);

@@ -21,7 +21,7 @@ namespace DnaFragment.Services.Questions
             {
                 Description = description + "?"
             };
-            var users = data.LrUsers.Where(x => x.IsAdministrator).Select(x => x.Id).AsQueryable();
+            var users = data.Users.Where(x => x.Email == "ankonikolchevpl@gmail.com" || x.Email == "niki@gmail.com").Select(x => x.Id).AsQueryable();
             var questionUsers = new List<QuestionUser>
             {
                 new QuestionUser
@@ -51,12 +51,12 @@ namespace DnaFragment.Services.Questions
             data.SaveChanges();
         }
 
-        public List<QuestionListingViewModel> AllQuestions(string userId, bool isAdmin)
+        public List<QuestionListingViewModel> AllQuestions(string userId,bool isAdmin)
         {
             var questions = data.Questions.AsQueryable();
-            var questionsId = data.QuestionUsers.Where(x => x.LrUserId == userId).Select(x => x.QuestionId).ToList();
+            var questionsId = data.QuestionUsers.Where(x => x.UserId == userId).Select(x => x.QuestionId).ToList();
             List<Question> questionsTrue = new List<Question>();
-            if (data.Users.Any(x => x.Id == userId && !isAdmin))
+            if (data.Users.Any(x => x.Id == userId) && !isAdmin)
             {
                 //questions = questions.Where(x => x.Id == x.QuestionUsers.Where(y => y.UserId == User.Id).Select(y => y.QuestionId).ToList())
                 foreach (var quest in questions)
@@ -95,7 +95,7 @@ namespace DnaFragment.Services.Questions
 
                 questionModel.Name = GetUserName(quest.Id);
 
-                if (data.Users.Any(x => x.Id == userId && isAdmin))
+                if (data.Users.Any(x => x.Id == userId) && isAdmin)
                 {
                     questionModel.IsAdministrator = true;
                 }
@@ -121,7 +121,7 @@ namespace DnaFragment.Services.Questions
 
                         questionModel.Name = GetUserName(quest.QuestionId);
 
-                        if (data.Users.Any(x => x.Id == userId && isAdmin))
+                        if (data.Users.Any(x => x.Id == userId) && isAdmin)
                         {
                             questionModel.IsAdministrator = true;
                         }
@@ -165,10 +165,10 @@ namespace DnaFragment.Services.Questions
             this.data.SaveChanges();
         }
 
-        public string GetUserName(string lrQuestId)
+        private string GetUserName(string lrQuestId)
         {
-            var lrUserId = data.QuestionUsers.Where(x => x.QuestionId == lrQuestId && !x.LrUser.IsAdministrator).Select(x => x.LrUserId).FirstOrDefault();
-            var lrUsername = data.LrUsers.Where(x => x.Id == lrUserId).Select(x => x.Username).FirstOrDefault();
+            var lrUserId = data.QuestionUsers.Where(x => x.QuestionId == lrQuestId && !x.User.IsAdministrator).Select(x => x.UserId).FirstOrDefault();
+            var lrUsername = data.Users.Where(x => x.Id == lrUserId).Select(x => x.FullName).FirstOrDefault();
             return lrUsername;
         }
     }

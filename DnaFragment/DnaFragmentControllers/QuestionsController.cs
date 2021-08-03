@@ -1,16 +1,12 @@
 ﻿namespace DnaFragment.DnaFragmentControllers
-{
-    using System;
+{   
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using DnaFragment.Data;
+    using System.Linq;       
     using DnaFragment.Data.Models;
     using DnaFragment.Models.Question;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using DnaFragment.Infrastructure;
-    using DnaFragment.Areas.Identity.Pages.Account;
+    using DnaFragment.Infrastructure;   
     using DnaFragment.Services.Questions;
     using DnaFragment.Services.Administrators;
 
@@ -33,9 +29,14 @@
         [HttpPost]
         public IActionResult Questions(AddQuestionModel questionModel)
         {
-            var userId = this.User.GetId();           
+            var userId = this.User.GetId();
+            var lrUserId = adminService.AdministratorId(User.GetId());
+            if (lrUserId != null)
+            {               
+                return Redirect("/Identity/Account/Login");
+            }
 
-            if (adminService.UserIsRegister(userId,User.IsAdmin()))
+            if (adminService.UserIsRegister(userId))
             {
                 return Unauthorized();
             }            
@@ -53,10 +54,10 @@
         [Authorize]
         public IActionResult All()
         {
-            var userId = User.GetId();
-            bool isAdmin = User.IsAdmin();
+            var userId = User.GetId();          
+            bool isAdmin= User.IsAdmin();          
 
-            var questions = questionsService.AllQuestions(userId, isAdmin);
+            var questions = questionsService.AllQuestions(userId,isAdmin);
 
             return View(questions);
         }       

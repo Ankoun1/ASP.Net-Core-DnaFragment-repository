@@ -7,9 +7,8 @@
     {
         void AddQuestion(string userId,string description);
 
-        List<QuestionListingViewModel> AllQuestions(string userId, bool isAdmin);
-
-        string GetUserName(string lrQuestId);
+        List<QuestionListingViewModel> AllQuestions(string userId,bool isAdmin);
+       
 
         void DeleteQuest(string questId);
 

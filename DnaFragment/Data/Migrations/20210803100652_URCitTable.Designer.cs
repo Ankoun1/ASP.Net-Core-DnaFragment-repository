@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnaFragment.Data.Migrations
 {
     [DbContext(typeof(DnaFragmentDbContext))]
-    [Migration("20210802153702_URCitTable")]
+    [Migration("20210803100652_URCitTable")]
     partial class URCitTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -251,6 +251,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<string>("FullName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsAdministrator")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");

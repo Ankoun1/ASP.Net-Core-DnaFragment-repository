@@ -11,16 +11,19 @@
     using System.Net.Mail;
     using System.Net;
     using DnaFragment.Services.Mail;
+    using DnaFragment.Services.Messages;
 
     public class MessagesController :Controller
     {      
         private readonly DnaFragmentDbContext data;
         private readonly ISendMailService sendMail;
+        private readonly MessagesService messageService;
 
-        public MessagesController(DnaFragmentDbContext data, ISendMailService sendMail)
+        public MessagesController(DnaFragmentDbContext data, ISendMailService sendMail, MessagesService messageService)
         {         
             this.data = data;
             this.sendMail = sendMail;
+            this.messageService = messageService;
         }
 
 
@@ -39,25 +42,15 @@
         [Authorize(Roles = "Administrator")]
         public IActionResult Add(string lrUserId, AddMessagesModel model)
         {
+            Random generator = new Random();
+            int r = generator.Next(100000, 1000000);
 
             if (!User.IsAdmin())
             {
                 return Unauthorized();
             }
 
-            //var user = data.Users.Where(x => x.Id == userId).FirstOrDefault();
-            // List<Message> messages = new List<Message>(); 
-
-            var message = new Message
-              {
-                 Description = model.Description,
-                 LrUserId = lrUserId,
-                 UserId = lrUserId
-              };           
-                          
-            data.Messages.Add(message);
-
-            data.SaveChanges();
+            messageService.AddMessageDb(lrUserId, model.Description);
 
             return Redirect("/Messages/All");
         }
@@ -75,17 +68,6 @@
         public IActionResult SendMail(string userId,SendMailMessageModel mailModel)        
         {         
             sendMail.SendEmailAsync(userId, mailModel.Subject,mailModel.Body).Wait();
-
-            /*DateTime nowTime = DateTime.Now;
-            
-           if (DateTime.Now.Second - nowTime.Second > 8)
-            {
-                ViewBag.message = null;
-            }
-            else
-            {
-                ViewBag.message = "sucsses";
-            }*/
            
             ViewBag.message = "sucsses";
             var emailUser = sendMail.UserEmail(userId);
@@ -98,39 +80,10 @@
         {
           
           var  userId = User.GetId();
-            var messages = data.Messages.AsQueryable();            
+          bool  isAdmin = User.IsAdmin();
 
-            if (data.Users.Any(x => x.Id == userId && !User.IsAdmin()))
-            {
-              messages =  messages.Where(x => x.UserId == userId);
-            }
-            var mId = messages.Select(x => x.UserId).FirstOrDefault();
-            var messageModels = messages.Select(x => new MessageListingViewModel
-            {
-                Id = x.Id,
-                Name = x.User.FullName,
-                CreatedOn = x.CreatedOn,
-                Description = x.Description
+            var messageModels = messageService.AllMessageDb(userId, isAdmin);
 
-            }).ToList();
-
-            foreach (var message in messageModels)
-            {
-                if (data.Users.Any(x => x.Id == userId && User.IsAdmin()))
-                {
-                    message.IsAdministrator = true;
-                }
-            }
-           /* if(messageModels.Count == 0)
-            {
-                messageModels.Add(new MessageListingViewModel
-                {
-                    Id = User.Id,
-                    CreatedOn = DateTime.UtcNow,
-                    Description = "В момента нямате нови съобщения"
-
-                });
-            }*/
             return View(messageModels);
         }
 

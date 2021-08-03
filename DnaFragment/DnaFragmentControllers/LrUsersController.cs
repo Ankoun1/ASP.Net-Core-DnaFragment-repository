@@ -79,7 +79,21 @@
 
             data.SaveChanges();
 
-            string resetPasswordId;
+          
+            return Redirect("/LrUsers/Login");
+        }
+
+        [Authorize]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult ForgotPassword(ForgotPasswordUserModel resetPassword)
+        {
+           /* string resetPasswordId;
             int i = 0;
             foreach (var userResetPasswordId in data.Users.AsQueryable())
             {
@@ -98,29 +112,27 @@
                 }
                 i++;
             }
-            data.SaveChanges();
-            return Redirect("/LrUsers/Login");
-        }
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
+            data.SaveChanges();*/
 
-        [HttpPost]
-        public IActionResult ForgotPassword(ForgotPasswordUserModel resetPassword)
-        {
-            var user = data.Users.Where(x => x.Email == resetPassword.Email).Select(x => new {UserName = x.UserName,Email = x.Email,Id = x.Id,ResetPasswordId = x.ResetPasswordId }).FirstOrDefault();
+            Random generator = new Random();
+            int r = generator.Next(100000, 1000000);
             
-            sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {user.ResetPasswordId} Follow the link https://localhost:44350/LrUsers/ResetPassword to reset your password").Wait();
+            var user = data.Users.Where(x => x.Email == resetPassword.Email).Select(x => new {UserName = x.FullName,Id = x.Id,ResetPasswordId = x.ResetPasswordId }).FirstOrDefault();
+            var userTrue = data.Users.Find(user.Id);
+            userTrue.ResetPasswordId = r;
+            data.SaveChanges();
+            sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {r} Follow the link https://localhost:44350/LrUsers/ResetPassword to reset your password").Wait();
             ViewBag.message = "sucsses";
             return View();
         }
 
+        [Authorize]
         public IActionResult ResetPassword()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult ResetPassword(ResetPasswordUserModel userModel)
         {
@@ -170,8 +182,7 @@
         [Authorize(Roles = "Administrator")]
         public IActionResult All()
         {
-            DateTime curentdate = DateTime.UtcNow;
-            
+            DateTime curentdate = DateTime.UtcNow;            
             var questionsOld = data.Questions.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30.0);
             var answersOld = data.Answers.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30);
             var messagesOld = data.Messages.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 360);
@@ -181,13 +192,12 @@
             data.Messages.RemoveRange(messagesOld);
             data.SaveChanges();
 
-            var users = data.LrUsers.Where(x => !x.IsAdministrator).Select(x => new UserListingViewModel
+            var users = data.Users.Where(x => !x.IsAdministrator).Select(x => new UserListingViewModel
             {
                 Id = x.Id,
-                Username = x.Username,
+                Username = x.FullName,
                 Email = x.Email,
-                PhoneNumber = x.PhoneNumber,
-                IsMechanic = x.IsMechanic,
+                PhoneNumber = x.PhoneNumber,               
                 IsAdministrator = x.IsAdministrator,
                 
             }).ToList();

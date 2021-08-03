@@ -1,9 +1,6 @@
 ﻿namespace DnaFragment.DnaFragmentControllers
-{
-    using System;
-    using System.Linq;
-    using DnaFragment.Data;
-    using DnaFragment.Data.Models;
+{    
+    using System.Linq;    
     using DnaFragment.Models.Answers;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -25,7 +22,7 @@
         [Authorize(Roles = "Administrator")]
         public IActionResult AddAnswer(string questId)
         {
-            if (!adminService.UserIsRegister(User.GetId(), User.IsAdmin()))
+            if (!adminService.UserIsRegister(User.GetId()))
             {
                 return Unauthorized();
             }
@@ -38,7 +35,7 @@
         {
             //string input = questId;
             var userId = User.GetId();
-            if (!adminService.UserIsRegister(User.GetId(), User.IsAdmin()))
+            if (!adminService.UserIsRegister(User.GetId()))
             {
                 return Unauthorized();
             }
@@ -52,7 +49,7 @@
         [Authorize]
         public IActionResult Delete(string answerId)
         {
-            if (!adminService.UserIsRegister(User.GetId(), User.IsAdmin()))
+            if (!adminService.UserIsRegister(User.GetId()))
             {
                 return Unauthorized();
             }

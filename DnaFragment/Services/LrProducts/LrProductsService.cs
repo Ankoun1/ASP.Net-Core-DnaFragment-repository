@@ -46,6 +46,7 @@ namespace DnaFragment.Services.LrProducts
             
             var userProduct = new UserProduct
             {
+                UserId = userId,
                 LrUserId = userId,
                 LrProductId = product.Id
             };
@@ -200,12 +201,13 @@ namespace DnaFragment.Services.LrProducts
           =>  this.data.Categories.Any(c => c.Id == categoryId);
 
         public bool ExistUserProduct(string productId, string userId)
-        => data.UserProducts.Any(x => x.LrProductId == productId && x.LrUserId == userId);
+        => data.UserProducts.Any(x => x.LrProductId == productId && x.UserId == userId);
 
         public void CreateUserProduct(string productId, string userId)
         {
             var userProduct = new UserProduct
             {
+                UserId = userId,
                 LrUserId = userId,
                 LrProductId = productId
             };

@@ -5,9 +5,8 @@
     using Microsoft.AspNetCore.Mvc;    
     using DnaFragment.Services.LrProducts;
     using DnaFragment.Services.Administrators;
-    using Microsoft.AspNetCore.Authorization;
-    using DnaFragment.Data;
-    using System.Linq;
+    using Microsoft.AspNetCore.Authorization;    
+    using System.Linq;   
 
     public class LrProductsController : Controller
     {    
@@ -24,9 +23,9 @@
         [Authorize(Roles = "Administrator")]
         public IActionResult Add()
         {
-            if (!administrator.UserIsRegister(User.GetId(),User.IsAdmin()))
+            if (!administrator.UserIsRegister(User.GetId()))
             {
-                return RedirectToAction(nameof(LrUsersController.Register), "LrUsers");
+                return Redirect("/Identity/Account/Register");
             }
 
             return View(new AddProductFormModel
@@ -40,11 +39,11 @@
         [Authorize(Roles = "Administrator")]
         public IActionResult Add(AddProductFormModel lrProduct)
         {
-            var lrUserId = administrator.AdministratorId(User.GetId(),User.IsAdmin());
+            var lrUserId = administrator.AdministratorId(User.GetId());
 
             if (lrUserId == null)
             {
-                return RedirectToAction(nameof(LrUsersController.Register), "LrUsers");
+                return Redirect("/Identity/Account/Register");
             }           
 
             if (!lrProducts.CategoryExsists(lrProduct.CategoryId))
@@ -78,7 +77,7 @@
 
             if (!User.IsAdmin())
             {
-                return RedirectToAction(nameof(LrUsersController.Register), "LrUsers");
+                return Redirect("/Identity/Account/Register");
             }
 
             var product = lrProducts.Details(id);
@@ -92,7 +91,7 @@
 
             if (!User.IsAdmin())
             {
-                return RedirectToAction(nameof(LrUsersController.Register), "LrUsers");
+                return Redirect("/Identity/Account/Register");
             }
 
             if (!lrProducts.CategoryExsists(product.CategoryId))
@@ -121,9 +120,9 @@
         public IActionResult Edit(string id)
         {
             string userId = User.GetId();
-            if (administrator.UserIsRegister(userId, User.IsAdmin()))
+            if (administrator.UserIsRegister(userId))
             {
-                return RedirectToAction(nameof(LrUsersController.Register), "LrUsers");
+                return Redirect("/Identity/Account/Register");
             }
             //var lrProduct = lrProducts.Details(id);
 
@@ -139,7 +138,7 @@
         [Authorize]
         public IActionResult Favorits()
         {
-            if(administrator.UserIsRegister(User.GetId(), User.IsAdmin()))
+            if(administrator.UserIsRegister(User.GetId()))
             {
                 return Unauthorized();
             }
