@@ -17,7 +17,7 @@ else
 
 <form class="mx-auto w-75">
     <img class="d-block w-100 " src="https://chamlinlaw.com/wp-content/uploads/2016/01/Assault_CR.jpg" alt="Responsive image">
-
+   
     @for (int i = 0; i < Model.Count; i++)
     {
         <div class="table-responsive">
@@ -51,11 +51,12 @@ else
                        asp-controller="Messages"
                        asp-action="SendMail"
                        asp-route-userId="@Model[i].Id">Email</a>
+
                 </li>
             </ul>
         </div>
-        <hr class="bg-white w-50">       
-    } 
+        <hr class="bg-white w-50">
+    }
 </form>
 
 

@@ -12,6 +12,7 @@ namespace DnaFragment
     using DnaFragment.Services.Mail;
     using DnaFragment.Services.Messages;
     using DnaFragment.Services.Questions;
+    using DnaFragment.Services.Users;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -52,6 +53,7 @@ namespace DnaFragment
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
 
+            services.AddTransient<IUsersService,UsersService>();
             services.AddTransient<ILrProductsService,LrProductsService>();
             services.AddTransient<IQuestionsService,QuestionsService>();
             services.AddTransient<IAnswersService,AnswersService>();
