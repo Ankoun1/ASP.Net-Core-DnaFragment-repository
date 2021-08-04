@@ -1,7 +1,7 @@
 ﻿namespace DnaFragment.Services.Questions
 {
     using System.Collections.Generic;
-    using DnaFragment.Models.Question;
+    using DnaFragment.Models.Questions;
 
     public interface IQuestionsService
     {

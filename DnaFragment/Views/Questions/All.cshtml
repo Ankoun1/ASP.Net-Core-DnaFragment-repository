@@ -1,38 +1,48 @@
-﻿@model List<QuestionListingViewModel>
-@{
-    ViewBag.Title = "My Questions";
-}
+﻿@model AddQuestionModel
+@{ ViewBag.Title = "Questions"; }
 <hr class="bg-primary w-75">
 <hr class="bg-primary w-50">
-@if (Model.Count == 0)
-{
-<h2 class="text-center mt-2 text-secondary">@ViewBag.Title</h2>  
-    <h1 class="text-center mt-2 text-secondary">▪</h1>
+<h2 class="text-center mt-2 text-white">@ViewBag.Title</h2>
+@if (Model.Questions.Count == 0)
+{    
+    <h1 class="text-center mt-2 text-danger">▪</h1> 
 }
 else
-{
-    <h2 class="text-center mt-2 text-white">My Questions</h2>  
-    <h1 class="text-center mt-2 text-white">▪</h1>
+{    
+    <h1 class="text-center mt-2 text-success">▪</h1>
 }
 
-<div class="form-group mx-auto w-75">
+<form class="mx-auto w-75" method="post">
     <img src="https://sfs.jobs/sfs-group/sfs-group-dna_basicteaserimagehighlightmobile.jpg"
-         class="img-fluid rounded-circle d-block w-100 "
-         alt="Responsive image" />
-   
+             class="img-fluid  d-block w-100 "
+             alt="Responsive image" />
+            
+    @if (!User.IsAdmin())
+    {
+        <div class="form-group">
+          <textarea asp-for="Description" rows="4" type="text" class="form-control" id="description-input"></textarea>
+          <span asp-validation-for="Description" class="small text-danger"></span>
+        </div>
 
-</div>
-<div class="button-holder d-flex justify-content-center ">
+        <div class="button-holder d-flex justify-content-center">
+          <button type="submit" class="btn btn-block btn-primary text-white w-auto">Add Question</button>           
+        </div>
+    }
+</form>
 
-    <a href="/Questions/Questions" class="btn  btn-lg btn-primary btn-rounded text-xl-center ">Ask question</a>
-    
-</div> 
 
+@if (Model.Questions.Count == 0)
+{    
+<h1 class="text-center mt-2 text-secondary">▪ ▪ ▪ ▪ ▪</h1>
+}
+else
+{    
 <h1 class="text-center mt-2 text-white">▪ ▪ ▪ ▪ ▪</h1>
+}
 
 <form class="mx-auto w-75">
 
-    @foreach (var quest in Model)
+    @foreach (var quest in Model.Questions)
     {
 
         <div class="form-group">
@@ -53,34 +63,31 @@ else
 
                 <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
                     <a class="btn btn-outline-primary "
-                        asp-controller="Questions"
-                        asp-action="Delete"
-                        asp-route-questId="@quest.QuestionId"
-                    >Delete Question</a>
+                       asp-controller="Questions"
+                       asp-action="Delete"
+                       asp-route-questId="@quest.QuestionId">Delete Question</a>
                     @if (quest.IsAdministrator)
                     {
                         <a class="btn btn-outline-primary "
-                            asp-controller="Answers"
-                            asp-action="AddAnswer"
-                            asp-route-questId="@quest.QuestionId"
-                        >Answer</a>
+                           asp-controller="Answers"
+                           asp-action="AddAnswer"
+                           asp-route-questId="@quest.QuestionId">Answer</a>
                     }
 
                     @if (quest.IsAdministrator)
                     {
-                        <a  class="btn btn-outline-primary "
-                            asp-controller="Answers"
-                            asp-action="Delete"
-                            asp-route-answerId="@quest.AnswerId"
-                        >Delete Answer</a>
-                    } 
+                        <a class="btn btn-outline-primary "
+                           asp-controller="Answers"
+                           asp-action="Delete"
+                           asp-route-answerId="@quest.AnswerId">Delete Answer</a>
+                    }  
+                  
                     @if (!quest.IsAdministrator && !quest.StopAtomaticDelete)
                     {
-                        <a  class="btn btn-outline-primary " title="Stop the function to automatically delete your question. By default the question and the answers to it,will be deleted automatically after 30 days!"
-                            asp-controller="Questions"
-                            asp-action="AutomaticDelete"
-                            asp-route-questId="@quest.QuestionId"
-                        >Stop Automatic Delete</a>
+                        <a class="btn btn-outline-primary " title="Stop the function to automatically delete your question. By default the question and the answers to it,will be deleted automatically after 30 days!"
+                           asp-controller="Questions"
+                           asp-action="AutomaticDelete"
+                           asp-route-questId="@quest.QuestionId">Stop Automatic Delete</a>
                     }
                 </li>
             </ul>
@@ -89,4 +96,9 @@ else
     }
 
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
 

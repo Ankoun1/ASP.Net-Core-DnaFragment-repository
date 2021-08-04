@@ -1,4 +1,4 @@
-﻿namespace DnaFragment.Models.Question
+﻿namespace DnaFragment.Models.Questions
 {
     using System;
 
@@ -22,6 +22,8 @@
         public bool IsAdministrator { get; set; }
 
         public bool StopAtomaticDelete { get; set; }
+
+        
 
 
     }

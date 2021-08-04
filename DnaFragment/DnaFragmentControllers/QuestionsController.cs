@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;       
     using DnaFragment.Data.Models;
-    using DnaFragment.Models.Question;
+    using DnaFragment.Models.Questions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using DnaFragment.Infrastructure;   
@@ -21,15 +21,25 @@
             this.questionsService = questionsService;
             this.adminService = adminService;
         }
-        
+
         [Authorize]
-        public IActionResult Questions() => View();
+        public IActionResult All()
+        {
+            var userId = User.GetId();
+            bool isAdmin = User.IsAdmin();
+
+            var questions = questionsService.AllQuestions(userId, isAdmin);
+            var questionModel = new AddQuestionModel { Description = "description",Questions = questions };
+            return View(questionModel);
+        }
+        
 
         [Authorize]
         [HttpPost]
-        public IActionResult Questions(AddQuestionModel questionModel)
+        public IActionResult All(AddQuestionModel questionModel)
         {
             var userId = this.User.GetId();
+            bool isAdmin = User.IsAdmin();
             var lrUserId = adminService.AdministratorId(User.GetId());
             if (lrUserId != null)
             {               
@@ -46,20 +56,12 @@
                 return View(questionModel);
             }
 
+            //var questions = questionsService.AllQuestions(userId, isAdmin);
+
             questionsService.AddQuestion(userId, questionModel.Description);
 
             return Redirect("/Questions/All");
-        }
 
-        [Authorize]
-        public IActionResult All()
-        {
-            var userId = User.GetId();          
-            bool isAdmin= User.IsAdmin();          
-
-            var questions = questionsService.AllQuestions(userId,isAdmin);
-
-            return View(questions);
         }       
 
         [Authorize]

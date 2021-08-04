@@ -6,7 +6,7 @@ namespace DnaFragment.Services.Questions
     using System.Linq;
     using DnaFragment.Data;
     using DnaFragment.Data.Models;
-    using DnaFragment.Models.Question;
+    using DnaFragment.Models.Questions;   
 
     public class QuestionsService : IQuestionsService
     {
@@ -46,6 +46,8 @@ namespace DnaFragment.Services.Questions
             data.Questions.Add(question);
             data.QuestionUsers.AddRange(questionUsers);
             data.SaveChanges();
+
+            
         }
 
         public List<QuestionListingViewModel> AllQuestions(string userId,bool isAdmin)
@@ -131,6 +133,7 @@ namespace DnaFragment.Services.Questions
                 }
 
             }
+           
             return (answerModels.OrderByDescending(x => x.CreatedOn).ThenBy(x => x.Name).ToList());
         }
 
