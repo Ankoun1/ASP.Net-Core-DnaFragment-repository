@@ -1,11 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace DnaFragment.Services.Users
+﻿namespace DnaFragment.Services.Users
 {
-    interface IUsersService
+    using System.Collections.Generic;
+    using DnaFragment.Models.Users;
+
+    public interface IUsersService
     {
+        void SendmailForgotPassword(string email);
+
+        bool CodCheck(int? code);
+
+        void ResetPasswordDb(int? code,string password);
+
+        List<UserListingViewModel> AllUsersDb();
     }
 }
