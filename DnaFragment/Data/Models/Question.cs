@@ -21,7 +21,10 @@
 
         public bool StopAutomaticDelete { get; set; }
 
-        public ICollection<QuestionUser> QuestionUsers { get; init; } = new List<QuestionUser>();        
+        [Required]
+        public string UserId { get; init; }
+        
+        public User User { get; init; }        
 
         public IEnumerable<Answer> Answers { get; init; } = new List<Answer>();      
 

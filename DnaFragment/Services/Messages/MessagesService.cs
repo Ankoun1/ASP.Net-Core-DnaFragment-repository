@@ -16,9 +16,6 @@
         }
         public void AddMessageDb(string userId,string description)
         {
-            //var user = data.Users.Where(x => x.Id == userId).FirstOrDefault();
-            // List<Message> messages = new List<Message>(); 
-
             var message = new Message
             {
                 Description = description,                
@@ -67,7 +64,6 @@
             {
                 return;
             }
-
 
             this.data.Messages.Remove(message);
             this.data.SaveChanges();

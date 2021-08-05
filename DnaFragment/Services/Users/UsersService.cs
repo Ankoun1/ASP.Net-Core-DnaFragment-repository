@@ -30,11 +30,12 @@
             Random generator = new Random();
             int r = generator.Next(100000, 1000000);
 
-            var user = data.Users.Where(x => x.Email == email).FirstOrDefault();
-
-            user.ResetPasswordId = r;
-            data.SaveChanges();
-            sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {r} Follow the link https://localhost:44350/LrUsers/ResetPassword to reset your password").Wait();
+            var user = ValidEmail(email);
+            
+                user.ResetPasswordId = r;
+                data.SaveChanges();
+                sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {r} Follow the link " +
+                    $"https://localhost:44350/LrUsers/ResetPassword to reset your password").Wait();            
         }
 
 
@@ -42,23 +43,23 @@
         {
             
             var user = data.Users.Where(x => x.ResetPasswordId == code).FirstOrDefault();
-
-            var code1 = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var code2 = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code1));
-            var Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code2));
-            var userReset = await _userManager.FindByEmailAsync(user.Email);
-            var result = await _userManager.ResetPasswordAsync(userReset, Code, password);
+           
+                var code1 = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var code2 = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code1));
+                var Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code2));
+                var userReset = await _userManager.FindByEmailAsync(user.Email);
+                var result = await _userManager.ResetPasswordAsync(userReset, Code, password);
+           
         }
 
         public List<UserListingViewModel> AllUsersDb(string userId,bool isAdmin)
         {
-            if (isAdmin)
-            {
-                AutomaticDeleteDb();
-            }
+           
             var users = data.Users.AsQueryable();
             if (isAdmin)
             {
+                AutomaticDeleteDb();
+
                 users = users.Where(x => !x.IsAdministrator);
             }
             else
@@ -80,26 +81,22 @@
             foreach (var user in userListing)
             {
                 user.NumberMessages = data.Messages.Where(x => x.UserId == user.Id).Count();
-                user.NumberQuestions = data.QuestionUsers.Where(x => x.UserId == user.Id).Count();
+                user.NumberQuestions = data.Questions.Where(x => x.UserId == user.Id).Count(); ///
             }
             return userListing;
         }
 
         public bool CodCheck(int? code)
         => this.data.Users.Any(u => u.ResetPasswordId == code);
-
+    
         public void DeleteUsersDb(string userId)
         {
-            var questionId = data.QuestionUsers.Where(x => x.UserId == userId).Select(x => x.QuestionId).FirstOrDefault();
-            var quest = data.Questions.Find(questionId);
-            data.Questions.Remove(quest);
-            var messages = data.Messages.Where(x => x.UserId == userId).ToList();
-            data.Messages.RemoveRange(messages); 
-            var answers = data.Answers.Where(x => x.QuestionId == questionId).ToList();
-            data.Answers.RemoveRange(answers);
-            var user = data.Users.Find(userId);
-            data.Users.Remove(user);
-            data.SaveChanges();
+            if (UserIsRegister(userId)) 
+            {               
+                var user = data.Users.Find(userId);
+                data.Users.Remove(user);
+                data.SaveChanges();
+            }
         }
         
             public bool UserIsRegister(string userId)
@@ -119,5 +116,8 @@
             data.Messages.RemoveRange(messagesOld);
             data.SaveChanges();
         }
+
+        public User ValidEmail(string email)
+        => data.Users.Where(x => x.Email == email).FirstOrDefault();
     }
 }

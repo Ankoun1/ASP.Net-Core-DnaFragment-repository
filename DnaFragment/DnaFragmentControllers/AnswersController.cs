@@ -40,7 +40,7 @@
                 return Unauthorized();
             }
 
-            answersService.AddAnswerDb(questId, userId, model.Description);
+            answersService.AddAnswerDb(questId, model.Description);
 
             return Redirect("/Questions/All");
         }

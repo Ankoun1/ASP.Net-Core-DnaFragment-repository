@@ -1,6 +1,7 @@
 ﻿namespace DnaFragment.Services.Users
 {
     using System.Collections.Generic;
+    using DnaFragment.Data.Models;
     using DnaFragment.Models.Users;
 
     public interface IUsersService
@@ -18,6 +19,8 @@
         void DeleteUsersDb(string userId);
 
         void AutomaticDeleteDb();
+
+        User ValidEmail(string email);
 
     }
 }

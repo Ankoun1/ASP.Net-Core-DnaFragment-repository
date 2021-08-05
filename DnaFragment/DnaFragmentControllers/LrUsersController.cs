@@ -31,6 +31,12 @@
         [HttpPost]
         public IActionResult ForgotPassword(ForgotPasswordUserModel resetPassword)
         {
+            var user = usersService.ValidEmail(resetPassword.Email);           
+
+            if (!ModelState.IsValid || User == null)
+            {
+                return View(resetPassword);
+            }
             usersService.SendmailForgotPassword(resetPassword.Email);
             ViewBag.message = "sucsses";
             return View();
@@ -84,7 +90,7 @@
             {
                 return Redirect(RedirectToLogin);
             }
-            if(userId == null || !usersService.UserIsRegister(userId) || User.IsAdmin())
+            if(!usersService.UserIsRegister(userId))
             {
                 return BadRequest();
             }

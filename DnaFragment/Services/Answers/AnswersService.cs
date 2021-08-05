@@ -13,15 +13,14 @@ namespace DnaFragment.Services.Answers
         {            
             this.data = data;
         }
-        public void AddAnswerDb(string questId,string userId,string description)
+        public void AddAnswerDb(string questId,string description)
         {
-            var quest = data.QuestionUsers.Where(x => x.UserId == userId && x.QuestionId == questId).FirstOrDefault();
+            var quest = data.Questions.Where(x =>  x.Id == questId).FirstOrDefault(); ///
 
             var answer = new Answer
             {
-                Description = description + ".",
-                //UserId = quest.UserId
-                QuestionId = quest.QuestionId
+                Description = description + ".",               
+                QuestionId = quest.Id
             };
 
             data.Answers.Add(answer);

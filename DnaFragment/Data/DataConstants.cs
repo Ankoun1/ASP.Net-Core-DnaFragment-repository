@@ -46,6 +46,7 @@
             public const string TypeUser = "User";
             public const int PhoneNumberMinLength = 6;
             public const int PhoneNumberMaxLength = 30;
+            public const int CodeNumber = 999999;
         }
 
         public class UserConst

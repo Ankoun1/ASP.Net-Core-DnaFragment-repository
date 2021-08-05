@@ -2,7 +2,7 @@
 {
     public interface IAnswersService
     {
-        void AddAnswerDb(string questId,string userId,string description);
+        void AddAnswerDb(string questId,string description);
 
         void DeleteAnswerDb(string answerId);
     }

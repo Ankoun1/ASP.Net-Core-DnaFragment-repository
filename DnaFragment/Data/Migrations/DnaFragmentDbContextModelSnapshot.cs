@@ -162,24 +162,15 @@ namespace DnaFragment.Data.Migrations
                     b.Property<bool>("StopAutomaticDelete")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Questions");
-                });
-
-            modelBuilder.Entity("DnaFragment.Data.Models.QuestionUser", b =>
-                {
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("QuestionId")
-                        .HasColumnType("nvarchar(40)");
+                    b.HasKey("Id");
 
-                    b.HasKey("UserId", "QuestionId");
+                    b.HasIndex("UserId");
 
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("QuestionUsers");
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.User", b =>
@@ -440,21 +431,13 @@ namespace DnaFragment.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DnaFragment.Data.Models.QuestionUser", b =>
+            modelBuilder.Entity("DnaFragment.Data.Models.Question", b =>
                 {
-                    b.HasOne("DnaFragment.Data.Models.Question", "Question")
-                        .WithMany("QuestionUsers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DnaFragment.Data.Models.User", "User")
-                        .WithMany("QuestionUsers")
+                        .WithMany("Questions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Question");
 
                     b.Navigation("User");
                 });
@@ -542,15 +525,13 @@ namespace DnaFragment.Data.Migrations
             modelBuilder.Entity("DnaFragment.Data.Models.Question", b =>
                 {
                     b.Navigation("Answers");
-
-                    b.Navigation("QuestionUsers");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.User", b =>
                 {
                     b.Navigation("Messages");
 
-                    b.Navigation("QuestionUsers");
+                    b.Navigation("Questions");
 
                     b.Navigation("UserProducts");
                 });

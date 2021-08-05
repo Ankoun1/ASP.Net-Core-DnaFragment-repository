@@ -7,7 +7,7 @@
     public class ResetPasswordUserModel
     {
 
-           
+        [Range(100000,CodeNumber)]  
         public int? RessetPasswordId { get; init; }
 
         [Required]

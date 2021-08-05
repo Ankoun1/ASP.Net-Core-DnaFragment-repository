@@ -15,7 +15,7 @@
 
         public int? ResetPasswordId { get; set; }      
                               
-        public ICollection<QuestionUser> QuestionUsers { get; init; } = new List<QuestionUser>();
+        public ICollection<Question> Questions { get; init; } = new List<Question>();
 
         public ICollection<UserProduct> UserProducts { get; init; } = new List<UserProduct>();
 

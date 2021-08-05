@@ -12,12 +12,14 @@
 
         public string Description { get; set; }
 
-        public string QuestionId { get; set; }
+        public string QuestionId { get; init; }
+
+        public string UserId { get; init; }
 
 
         public string AnswerDescription { get; set; }
         
-        public string AnswerId { get; set; }     
+        public string AnswerId { get; init; }     
 
         public bool IsAdministrator { get; set; }
 

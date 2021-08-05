@@ -16,48 +16,27 @@ namespace DnaFragment.Services.Questions
             this.data = data;
         }
         public void AddQuestion(string userId,string description)
-        {         
-            var question = new Question
+        {
+            if (data.Users.Any(x => x.Id == userId))
             {
-                Description = description + "?"
-            };
-            var users = data.Users.Where(x => x.IsAdministrator).Select(x => x.Id).AsQueryable();
-            var questionUsers = new List<QuestionUser>
-            {
-                new QuestionUser
+                var question = new Question
                 {
-                QuestionId = question.Id,              
-                UserId = userId
-                },
-                new QuestionUser
-                {
-                QuestionId = question.Id,               
-                UserId = users.Skip(1).FirstOrDefault()
-                },
-                new QuestionUser
-                {
-                QuestionId = question.Id,                
-                UserId = users.FirstOrDefault()
-                }
-            };
-
-            question.QuestionUsers.Add(questionUsers[0]);
-
-            data.Questions.Add(question);
-            data.QuestionUsers.AddRange(questionUsers);
-            data.SaveChanges();
-
-            
+                    Description = description + "?",
+                    UserId = userId
+                };
+                data.Questions.Add(question);
+                data.SaveChanges();               
+            }
+         
         }
 
         public List<QuestionListingViewModel> AllQuestions(string userId,bool isAdmin)
         {
             var questions = data.Questions.AsQueryable();
-            var questionsId = data.QuestionUsers.Where(x => x.UserId == userId).Select(x => x.QuestionId).ToList();
+            var questionsId = data.Questions.Where(x => x.UserId == userId).Select(x => x.Id).ToList(); ///
             List<Question> questionsTrue = new List<Question>();
             if (data.Users.Any(x => x.Id == userId) && !isAdmin)
-            {
-                //questions = questions.Where(x => x.Id == x.QuestionUsers.Where(y => y.UserId == User.Id).Select(y => y.QuestionId).ToList())
+            {                
                 foreach (var quest in questions)
                 {
                     foreach (var qustId in questionsId)
@@ -67,8 +46,7 @@ namespace DnaFragment.Services.Questions
                             questionsTrue.Add(quest);
                         }
                     }
-                }
-                //questions = questions.Where(x => x.Id == questionId);
+                }               
             }
             else
             {
@@ -88,9 +66,9 @@ namespace DnaFragment.Services.Questions
                     CreatedOn = quest.CreatedOn,
                     Description = quest.Description,
                     QuestionId = quest.Id,
-                    StopAtomaticDelete = quest.StopAutomaticDelete
+                    StopAtomaticDelete = quest.StopAutomaticDelete,
+                    UserId = quest.UserId
                 };
-
 
                 questionModel.Name = GetUserName(quest.Id);
 
@@ -114,26 +92,25 @@ namespace DnaFragment.Services.Questions
                             CreatedOn = quest.CreatedOn,
                             Description = quest.Description,
                             QuestionId = quest.QuestionId,
-                            StopAtomaticDelete = quest.StopAtomaticDelete
+                            StopAtomaticDelete = quest.StopAtomaticDelete,
+                            AnswerId = answer.Id,
+                            AnswerDescription = answer.Description,
+                            UserId = quest.UserId
                         };
-
 
                         questionModel.Name = GetUserName(quest.QuestionId);
 
                         if (data.Users.Any(x => x.Id == userId) && isAdmin)
                         {
                             questionModel.IsAdministrator = true;
-                        }
-                        questionModel.AnswerDescription = answer.Description;
-                        questionModel.AnswerId = answer.Id;
+                        }                    
 
                         answerModels.Add(questionModel);
                     }
 
                 }
 
-            }
-           
+            }           
             return (answerModels.OrderByDescending(x => x.CreatedOn).ThenBy(x => x.Name).ToList());
         }
 
@@ -166,9 +143,10 @@ namespace DnaFragment.Services.Questions
         }
 
         private string GetUserName(string lrQuestId)
-        {
-            var lrUserId = data.QuestionUsers.Where(x => x.QuestionId == lrQuestId && !x.User.IsAdministrator).Select(x => x.UserId).FirstOrDefault();
-            var lrUsername = data.Users.Where(x => x.Id == lrUserId).Select(x => x.FullName).FirstOrDefault();
+        {            
+            var lrUsername = data.Users.Where(x => x.Questions.Where(y => y.Id == lrQuestId)
+                                 .Select(y => y.UserId).FirstOrDefault() == x.Id).Select(x => x.FullName).FirstOrDefault();
+
             return lrUsername;
         }
     }
