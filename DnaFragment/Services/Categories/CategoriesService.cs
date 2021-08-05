@@ -23,7 +23,7 @@
                 Image = x.PictureUrl
             }).ToList();
 
-            categories.Add(new ListingCategoryModel { Name = "ВСИЧКИ ПРОДУКТИ", Image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIlA125LTEOuRshodgy9dsdKOHi_OaiXRQKJlZ1ytsWkpC1_cJJXnad_Y_b06osL9On8Y&usqp=CAU" });
+            categories.Add(new ListingCategoryModel { Name = "ВСИЧКИ ПРОДУКТИ", Image = "https://mms.businesswire.com/media/20210315005417/en/865102/5/LR_logo_invCMYK.jpg" });
 
             foreach (var category in categories)
             {
