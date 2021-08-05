@@ -6,7 +6,8 @@
     using DnaFragment.Services.LrProducts;
     using DnaFragment.Services.Administrators;
     using Microsoft.AspNetCore.Authorization;    
-    using System.Linq;   
+    using System.Linq;
+    using static WebConstants;
 
     public class LrProductsController : Controller
     {    
@@ -25,7 +26,7 @@
         {
             if (!administrator.UserIsRegister(User.GetId()))
             {
-                return Redirect("/Identity/Account/Register");
+                return Redirect(RedirectToLogin);
             }
 
             return View(new AddProductFormModel
@@ -43,7 +44,7 @@
 
             if (lrUserId == null)
             {
-                return Redirect("/Identity/Account/Register");
+                return Redirect(RedirectToLogin);
             }           
 
             if (!lrProducts.CategoryExsists(lrProduct.CategoryId))
@@ -77,7 +78,7 @@
 
             if (!User.IsAdmin())
             {
-                return Redirect("/Identity/Account/Register");
+                return Redirect(RedirectToLogin);
             }
 
             var product = lrProducts.Details(id);
@@ -91,7 +92,7 @@
 
             if (!User.IsAdmin())
             {
-                return Redirect("/Identity/Account/Register");
+                return Redirect(RedirectToLogin);
             }
 
             if (!lrProducts.CategoryExsists(product.CategoryId))
@@ -122,7 +123,7 @@
             string userId = User.GetId();
             if (administrator.UserIsRegister(userId))
             {
-                return Redirect("/Identity/Account/Register");
+                return Redirect(RedirectToLogin);
             }
             //var lrProduct = lrProducts.Details(id);
 

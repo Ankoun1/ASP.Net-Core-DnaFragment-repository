@@ -54,15 +54,7 @@
         {
             if (isAdmin)
             {
-                DateTime curentdate = DateTime.UtcNow;
-                var questionsOld = data.Questions.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30.0);
-                var answersOld = data.Answers.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30);
-                var messagesOld = data.Messages.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 360);
-
-                data.Questions.RemoveRange(questionsOld);
-                data.Answers.RemoveRange(answersOld);
-                data.Messages.RemoveRange(messagesOld);
-                data.SaveChanges();
+                AutomaticDeleteDb();
             }
             var users = data.Users.AsQueryable();
             if (isAdmin)
@@ -107,6 +99,24 @@
             data.Answers.RemoveRange(answers);
             var user = data.Users.Find(userId);
             data.Users.Remove(user);
+            data.SaveChanges();
+        }
+        
+            public bool UserIsRegister(string userId)
+                => this.data
+               .Users
+               .Any(d => d.Id == userId);
+
+        public void AutomaticDeleteDb()
+        {
+            DateTime curentdate = DateTime.UtcNow;
+            var questionsOld = data.Questions.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30.0);
+            var answersOld = data.Answers.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30);
+            var messagesOld = data.Messages.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 360);
+
+            data.Questions.RemoveRange(questionsOld);
+            data.Answers.RemoveRange(answersOld);
+            data.Messages.RemoveRange(messagesOld);
             data.SaveChanges();
         }
     }

@@ -5,6 +5,8 @@
 
     public interface IUsersService
     {
+        bool UserIsRegister(string userId);
+
         void SendmailForgotPassword(string email);
 
         bool CodCheck(int? code);
@@ -14,5 +16,8 @@
         List<UserListingViewModel> AllUsersDb(string userId,bool isAdmin);
 
         void DeleteUsersDb(string userId);
+
+        void AutomaticDeleteDb();
+
     }
 }

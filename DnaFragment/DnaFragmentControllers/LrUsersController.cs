@@ -9,11 +9,12 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    
-    
+    using static WebConstants;
+
+
     public class LrUsersController : Controller
     {
-        
+        //private readonly WebConstants webConstants;
         private readonly IUsersService usersService;
         private readonly SignInManager<User> signInManager;
         public LrUsersController( IUsersService usersService, SignInManager<User> signInManager)
@@ -55,7 +56,7 @@
 
             usersService.ResetPasswordDb(userModel.RessetPasswordId, userModel.Password);
 
-            return Redirect("/Identity/Account/Login");
+            return Redirect(RedirectToLogin);
         }       
 
         [Authorize]
@@ -63,32 +64,37 @@
         {
             bool isAdmin = User.IsAdmin();
             var userId = User.GetId();
+            if(userId == null)
+            {
+                return Redirect(RedirectToLogin);
+            }
+            if (!usersService.UserIsRegister(userId))
+            {
+                return BadRequest();
+            }
             var users = usersService.AllUsersDb(userId,isAdmin);
             return View(users);
         }
-
+        
         [Authorize]        
-        public  IActionResult DeleteUser(string userId)
+        public async Task<IActionResult> DeleteUser(string userId)
         {
-            if(userId == null)
+            var thisId = User.GetId();
+            if (thisId == null )
+            {
+                return Redirect(RedirectToLogin);
+            }
+            if(userId == null || !usersService.UserIsRegister(userId) || User.IsAdmin())
             {
                 return BadRequest();
             }
             
             usersService.DeleteUsersDb(userId);
 
-            //await signInManager.SignOutAsync();
+            await signInManager.SignOutAsync();           
 
-            SignOut();
-
-            return RedirectToAction("Exit", "LrUsers");
-
+            return RedirectToAction("Index", "Home");   
         }
-          public IActionResult Exit()
-        {
-            this.SignOut();
-
-            return RedirectToAction("Index", "Home");
-        }
+        
     }
 }
