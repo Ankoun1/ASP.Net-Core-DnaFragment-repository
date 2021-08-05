@@ -1,25 +1,32 @@
 ﻿namespace DnaFragment.DnaFragmentControllers
 { 
     using System.Linq;
+    using System.Threading.Tasks;
+    using DnaFragment.Data.Models;
+    using DnaFragment.Infrastructure;
     using DnaFragment.Models.Users;
     using DnaFragment.Services.Users;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-
+    
+    
     public class LrUsersController : Controller
     {
         
         private readonly IUsersService usersService;
-        public LrUsersController( IUsersService usersService)
+        private readonly SignInManager<User> signInManager;
+        public LrUsersController( IUsersService usersService, SignInManager<User> signInManager)
         {                                
             this.usersService = usersService;
+            this.signInManager = signInManager;
         }       
                      
         public IActionResult ForgotPassword()
         {
             return View();
         }
-       
+      
         [HttpPost]
         public IActionResult ForgotPassword(ForgotPasswordUserModel resetPassword)
         {
@@ -51,18 +58,37 @@
             return Redirect("/Identity/Account/Login");
         }       
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize]
         public IActionResult All()
         {
-            var users = usersService.AllUsersDb();
+            bool isAdmin = User.IsAdmin();
+            var userId = User.GetId();
+            var users = usersService.AllUsersDb(userId,isAdmin);
             return View(users);
         }
 
-        public IActionResult Logout()
+        [Authorize]        
+        public  IActionResult DeleteUser(string userId)
+        {
+            if(userId == null)
+            {
+                return BadRequest();
+            }
+            
+            usersService.DeleteUsersDb(userId);
+
+            //await signInManager.SignOutAsync();
+
+            SignOut();
+
+            return RedirectToAction("Exit", "LrUsers");
+
+        }
+          public IActionResult Exit()
         {
             this.SignOut();
 
-            return Redirect("/");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

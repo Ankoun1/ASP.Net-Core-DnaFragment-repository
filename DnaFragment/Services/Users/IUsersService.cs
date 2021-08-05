@@ -11,6 +11,8 @@
 
         void ResetPasswordDb(int? code,string password);
 
-        List<UserListingViewModel> AllUsersDb();
+        List<UserListingViewModel> AllUsersDb(string userId,bool isAdmin);
+
+        void DeleteUsersDb(string userId);
     }
 }

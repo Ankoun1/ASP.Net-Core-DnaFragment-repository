@@ -43,6 +43,8 @@ else
             </table>
             <ul class="list-group list-group-flush ">
                 <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
+                    @if (User.IsAdmin())
+                    {
                     <a class="btn btn-outline-primary "
                        asp-controller="Messages"
                        asp-action="Add"
@@ -51,7 +53,12 @@ else
                        asp-controller="Messages"
                        asp-action="SendMail"
                        asp-route-userId="@Model[i].Id">Email</a>
-
+                    }                   
+                  <a class="btn btn-danger "title="The feature will immediately delete all your account data except the accumulated points!"
+                   asp-controller="LrUsers"
+                   asp-action="DeleteUser"
+                   asp-route-userId="@Model[i].Id">Delete Account</a>
+                    
                 </li>
             </ul>
         </div>

@@ -50,19 +50,31 @@
             var result = await _userManager.ResetPasswordAsync(userReset, Code, password);
         }
 
-        public List<UserListingViewModel> AllUsersDb()
+        public List<UserListingViewModel> AllUsersDb(string userId,bool isAdmin)
         {
-            DateTime curentdate = DateTime.UtcNow;
-            var questionsOld = data.Questions.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30.0);
-            var answersOld = data.Answers.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30);
-            var messagesOld = data.Messages.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 360);
+            if (isAdmin)
+            {
+                DateTime curentdate = DateTime.UtcNow;
+                var questionsOld = data.Questions.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30.0);
+                var answersOld = data.Answers.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 30);
+                var messagesOld = data.Messages.ToList().Where(x => !x.StopAutomaticDelete && (curentdate - x.CreatedOn).TotalDays > 360);
 
-            data.Questions.RemoveRange(questionsOld);
-            data.Answers.RemoveRange(answersOld);
-            data.Messages.RemoveRange(messagesOld);
-            data.SaveChanges();
+                data.Questions.RemoveRange(questionsOld);
+                data.Answers.RemoveRange(answersOld);
+                data.Messages.RemoveRange(messagesOld);
+                data.SaveChanges();
+            }
+            var users = data.Users.AsQueryable();
+            if (isAdmin)
+            {
+                users = users.Where(x => !x.IsAdministrator);
+            }
+            else
+            {
+                users = users.Where(x => x.Id == userId);
+            }
 
-            var users = data.Users.Where(x => !x.IsAdministrator).Select(x => new UserListingViewModel
+            var userListing = users.Select(x => new UserListingViewModel
             {
                 Id = x.Id,
                 Username = x.FullName,
@@ -71,15 +83,31 @@
                 IsAdministrator = x.IsAdministrator,
 
             }).ToList();
-            foreach (var user in users)
+
+
+            foreach (var user in userListing)
             {
                 user.NumberMessages = data.Messages.Where(x => x.UserId == user.Id).Count();
                 user.NumberQuestions = data.QuestionUsers.Where(x => x.UserId == user.Id).Count();
             }
-            return users;
+            return userListing;
         }
 
         public bool CodCheck(int? code)
         => this.data.Users.Any(u => u.ResetPasswordId == code);
+
+        public void DeleteUsersDb(string userId)
+        {
+            var questionId = data.QuestionUsers.Where(x => x.UserId == userId).Select(x => x.QuestionId).FirstOrDefault();
+            var quest = data.Questions.Find(questionId);
+            data.Questions.Remove(quest);
+            var messages = data.Messages.Where(x => x.UserId == userId).ToList();
+            data.Messages.RemoveRange(messages); 
+            var answers = data.Answers.Where(x => x.QuestionId == questionId).ToList();
+            data.Answers.RemoveRange(answers);
+            var user = data.Users.Find(userId);
+            data.Users.Remove(user);
+            data.SaveChanges();
+        }
     }
 }
