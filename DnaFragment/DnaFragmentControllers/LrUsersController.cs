@@ -33,7 +33,7 @@
         {
             var user = usersService.ValidEmail(resetPassword.Email);           
 
-            if (!ModelState.IsValid || User == null)
+            if (!ModelState.IsValid || user == null)
             {
                 return View(resetPassword);
             }

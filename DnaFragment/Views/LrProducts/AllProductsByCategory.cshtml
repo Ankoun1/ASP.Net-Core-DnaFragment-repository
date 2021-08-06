@@ -3,6 +3,14 @@
 @{ ViewBag.Title = "Products by category"; }
 
 <hr class="bg-primary w-75">
+@if (Model == null)
+ {
+    <form class="mx-auto w-50" size="3">
+      <div class="alert alert-danger alert-dismissible fade show small ">
+        <strong>please import products by categoryId in the database!</strong><button type="button" class="close btn-outline-danger" data-dismiss="alert">&times;</button>
+      </div>
+    </form>
+ }
 <hr class="bg-primary w-50">
 <h2 class="text-center mt-2">@ViewBag.Title</h2>
 
@@ -25,16 +33,10 @@ else
 <form class="mx-auto w-50" size="3">
  @if (Model == null)
  {
-
-
 <img src="https://img5.goodfon.com/wallpaper/nbig/0/fb/devushka-shatenka-shliapa-priroda-lug-tsvety-peizazh.jpg"
          class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
-         data-placement="bottom">
+         data-placement="bottom">   
 
-
-<ul class="list-group list-group-flush small">
-        <li class="list-group-item text-center  "><h2 class="text-danger">•</h2> Моля заредете базата от данни с продукти по категории!</li>
-    </ul>
  }
  else 
  {
