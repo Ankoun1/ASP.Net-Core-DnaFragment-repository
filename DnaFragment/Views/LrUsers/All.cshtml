@@ -34,38 +34,38 @@ else
     @for (int i = 0; i < Model.Count; i++)
     {
 
-    <div class="form-group">       
+<div class="form-group">
+    <hr class="bg-white w-50">
+    <ul class="list-group list-group-flush ">
+        <li class="list-group-item text-xl-center text-white">@Model[i].Username</li>
+        <li class="list-group-item text-center text-break">@Model[i].Email</li>
+        <li class="list-group-item text-center text-break">@Model[i].PhoneNumber</li>
+        <li class="list-group-item text-center">@Model[i].NumberQuestions   @Model[i].NumberMessages</li>
+        <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
+            @if (User.IsAdmin())
+            {
+                <a class="btn btn-outline-primary "
+                   asp-controller="Messages"
+                   asp-action="Add"
+                   asp-route-lrUserId="@Model[i].Id">Send Message</a>
+            }
+            <a class="btn btn-danger " title="The feature will immediately delete all your account data except the accumulated points!"
+               asp-controller="LrUsers"
+               asp-action="DeleteUser"
+               asp-route-userId="@Model[i].Id">Delete Account</a>
+            @if (User.IsAdmin())
+            {
+                <a class="btn btn-outline-primary "
+                   asp-controller="Messages"
+                   asp-action="SendMail"
+                   asp-route-userId="@Model[i].Id">Send Email</a>
+            }
 
-        <ul class="list-group list-group-flush ">
-            <li class="list-group-item text-xl-center text-white">@Model[i].Username</li>
-            <li class="list-group-item text-center text-break">@Model[i].Email</li>
-            <li class="list-group-item text-center text-break">@Model[i].PhoneNumber</li>
-            <li class="list-group-item text-center" >@Model[i].NumberQuestions   @Model[i].NumberMessages</li>        
-            <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
-                @if (User.IsAdmin())
-                {
-                    <a class="btn btn-outline-primary "
-                       asp-controller="Messages"
-                       asp-action="Add"
-                       asp-route-lrUserId="@Model[i].Id">Send Message</a>                    
-                }
-                <a class="btn btn-danger " title="The feature will immediately delete all your account data except the accumulated points!"
-                   asp-controller="LrUsers"
-                   asp-action="DeleteUser"
-                   asp-route-userId="@Model[i].Id">Delete Account</a>
-                @if (User.IsAdmin())
-                {                   
-                    <a class="btn btn-outline-primary "
-                       asp-controller="Messages"
-                       asp-action="SendMail"
-                       asp-route-userId="@Model[i].Id">Send Email</a>
-                }
-
-            </li>
-        </ul>
-    </div>
+        </li>
+    </ul>
+</div>
    
-        <hr class="bg-white w-50">
+        
 
     }
   

@@ -6,7 +6,7 @@
 
 <hr class="bg-primary w-75">
 
-    @if (Model.Count == 1)
+    @if (Model.Count == 1 && User.IsAdmin())
     {
 <form class="mx-auto w-50" size="3">
     <div class="alert alert-danger alert-dismissible fade show small ">

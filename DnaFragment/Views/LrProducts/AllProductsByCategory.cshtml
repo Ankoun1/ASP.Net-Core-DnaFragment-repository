@@ -3,11 +3,11 @@
 @{ ViewBag.Title = "Products by category"; }
 
 <hr class="bg-primary w-75">
-@if (Model == null)
+@if (Model == null && !User.IsAdmin())
  {
     <form class="mx-auto w-50" size="3">
-      <div class="alert alert-danger alert-dismissible fade show small ">
-        <strong>please import products by categoryId in the database!</strong><button type="button" class="close btn-outline-danger" data-dismiss="alert">&times;</button>
+      <div class="alert alert-secondary alert-dismissible fade show small ">
+          <strong>We expect delivery of a new batch from the plant in Germany.</strong><button type="button" class="close btn-outline-danger" data-dismiss="alert">&times;</button>
       </div>
     </form>
  }

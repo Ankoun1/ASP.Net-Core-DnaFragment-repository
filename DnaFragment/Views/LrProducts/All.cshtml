@@ -4,6 +4,14 @@
     ViewBag.Title = "LR";
 }
  <hr class="bg-primary w-75">
+   @if (!Model.LrProducts.Any() && User.IsAdmin())
+    {
+<form class="mx-auto w-50" size="3">
+    <div class="alert alert-danger alert-dismissible fade show small ">
+        <strong>please import products by category in the database!</strong><button type="button" class="close btn-outline-danger" data-dismiss="alert">&times;</button>
+    </div>
+</form>
+    }
  <hr class="bg-primary w-50">
  <hr class="bg-primary w-25">
  
@@ -93,7 +101,7 @@
     </div>
 </div>
 
-@if (!Model.LrProducts.Any())
+@if (!Model.LrProducts.Any() && !User.IsAdmin())
 {
   <h3 class="text-center">No products found by the given criteria!</h3>
 }
