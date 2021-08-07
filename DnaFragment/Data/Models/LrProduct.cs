@@ -38,7 +38,7 @@
         public string PictureUrl { get; set; }
 
         [Required]
-        [MaxLength(8)]
+        [MaxLength(PlateNumberMaxLength)]
         public string PlateNumber { get; set; }
 
         public ICollection<UserProduct> UserProducts { get; init; } = new List<UserProduct>();

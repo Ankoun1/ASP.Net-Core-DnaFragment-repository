@@ -13,7 +13,11 @@ namespace DnaFragment.Data
         {
         }       
        
-        public DbSet<StatisticsLrUser> StatisticsLrUsers { get; init; }
+        public DbSet<LrUser> LrUsers { get; init; }
+
+        public DbSet<StatisticsCategory> StatisticsCategories { get; init; }
+
+        public DbSet<StatisticsProduct> StatisticsProducts { get; init; }
 
         public DbSet<LrProduct> LrProducts { get; init; }
 

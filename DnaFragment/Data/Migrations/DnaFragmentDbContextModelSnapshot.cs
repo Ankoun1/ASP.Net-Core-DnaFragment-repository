@@ -101,8 +101,8 @@ namespace DnaFragment.Data.Migrations
 
                     b.Property<string>("PlateNumber")
                         .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -115,6 +115,27 @@ namespace DnaFragment.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("LrProducts");
+                });
+
+            modelBuilder.Entity("DnaFragment.Data.Models.LrUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("LrPoints")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("TotalSum")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LrUsers");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.Message", b =>
@@ -173,7 +194,7 @@ namespace DnaFragment.Data.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("DnaFragment.Data.Models.StatisticsLrUser", b =>
+            modelBuilder.Entity("DnaFragment.Data.Models.StatisticsCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -183,11 +204,26 @@ namespace DnaFragment.Data.Migrations
                     b.Property<int?>("CategoryVisitsCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("LrPoints")
+                    b.Property<int>("LrUserId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LrUserId");
+
+                    b.ToTable("StatisticsCategories");
+                });
+
+            modelBuilder.Entity("DnaFragment.Data.Models.StatisticsProduct", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("PlateNumber")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
 
                     b.Property<int?>("ProductVisitsCount")
                         .HasColumnType("int");
@@ -195,12 +231,14 @@ namespace DnaFragment.Data.Migrations
                     b.Property<int?>("PurchasesCount")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("TotalSum")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("StatisticsCategoryId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("StatisticsLrUsers");
+                    b.HasIndex("StatisticsCategoryId");
+
+                    b.ToTable("StatisticsProducts");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.User", b =>
@@ -472,6 +510,28 @@ namespace DnaFragment.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DnaFragment.Data.Models.StatisticsCategory", b =>
+                {
+                    b.HasOne("DnaFragment.Data.Models.LrUser", "LrUser")
+                        .WithMany("StatisticsCategories")
+                        .HasForeignKey("LrUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LrUser");
+                });
+
+            modelBuilder.Entity("DnaFragment.Data.Models.StatisticsProduct", b =>
+                {
+                    b.HasOne("DnaFragment.Data.Models.StatisticsCategory", "StatisticsCategory")
+                        .WithMany("StatisticsProducts")
+                        .HasForeignKey("StatisticsCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StatisticsCategory");
+                });
+
             modelBuilder.Entity("DnaFragment.Data.Models.UserProduct", b =>
                 {
                     b.HasOne("DnaFragment.Data.Models.LrProduct", "LrProduct")
@@ -552,9 +612,19 @@ namespace DnaFragment.Data.Migrations
                     b.Navigation("UserProducts");
                 });
 
+            modelBuilder.Entity("DnaFragment.Data.Models.LrUser", b =>
+                {
+                    b.Navigation("StatisticsCategories");
+                });
+
             modelBuilder.Entity("DnaFragment.Data.Models.Question", b =>
                 {
                     b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("DnaFragment.Data.Models.StatisticsCategory", b =>
+                {
+                    b.Navigation("StatisticsProducts");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.User", b =>

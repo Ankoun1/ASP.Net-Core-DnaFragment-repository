@@ -78,8 +78,8 @@
            
             if (ModelState.IsValid)
             {
-                var statisticsLrUser = new StatisticsLrUser { Email = Input.Email };
-                data.StatisticsLrUsers.Add(statisticsLrUser);
+                var lrUser = new LrUser { Email = Input.Email };
+                data.LrUsers.Add(lrUser);
                 data.SaveChanges();
 
                 var user = new User { UserName = Input.Email, Email = Input.Email,FullName = Input.FullName,PhoneNumber = Input.PhoneNumber };
