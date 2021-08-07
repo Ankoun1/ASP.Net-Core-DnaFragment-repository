@@ -8,8 +8,7 @@
 
 @if (Model != null)
 {   
-    <h1 class="text-center mt-2 text-white">▪</h1>   
-
+    <h1 class="text-center mt-2 text-white">▪</h1>  
 }
 else
 {    
@@ -30,7 +29,7 @@ else
      <ul class="list-group list-group-flush ">
          <li class="list-group-item text-center font-italic text-white">@Model.Model  @Model.PackagingVolume ml.</li>
     </ul>
-    <img class="card-img-top" src="@Model.Image">
+    <img class="card-img-top" src="@Model.PictureUrl">
    
     <a class="btn btn-block btn--secondary text-white text-lg-center"
        asp-controller="LrProducts"
@@ -58,7 +57,6 @@ else
 {   
 <h1 class="text-secondary">• ChemicalIngredients</h1>
 }
-
         <ul class="list-group list-group-flush ">
             <li class="list-group-item text-left font-italic text-break ">@Model.ChemicalIngredients</li>
         </ul> 

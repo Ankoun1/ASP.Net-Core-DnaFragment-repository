@@ -4,7 +4,7 @@ namespace DnaFragment.Services.LrProducts
    
     using System.Collections.Generic;
     using DnaFragment.Models;
-    using DnaFragment.Services.LrProducts;
+    using DnaFragment.Services.LrProducts.Models;
 
     public interface ILrProductsService
     {

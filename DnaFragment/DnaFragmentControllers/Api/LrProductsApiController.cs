@@ -6,6 +6,7 @@ namespace DnaFragment.DnaFragmentControllers.Api
     using System.Linq;    
     using DnaFragment.Models.Api.LrProducts;
     using DnaFragment.Services.LrProducts;
+    using DnaFragment.Services.LrProducts.Models;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]

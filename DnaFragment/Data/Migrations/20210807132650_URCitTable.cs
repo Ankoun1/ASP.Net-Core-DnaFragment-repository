@@ -64,6 +64,24 @@ namespace DnaFragment.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StatisticsLrUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryVisitsCount = table.Column<int>(type: "int", nullable: true),
+                    ProductVisitsCount = table.Column<int>(type: "int", nullable: true),
+                    PurchasesCount = table.Column<int>(type: "int", nullable: true),
+                    TotalSum = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    LrPoints = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StatisticsLrUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -216,7 +234,7 @@ namespace DnaFragment.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: false),
+                    Model = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: false),
                     PackagingVolume = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
                     Year = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -234,7 +252,7 @@ namespace DnaFragment.Data.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -369,6 +387,9 @@ namespace DnaFragment.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "StatisticsLrUsers");
 
             migrationBuilder.DropTable(
                 name: "UserProducts");

@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using DnaFragment.Services.LrProducts;
+    using DnaFragment.Services.LrProducts.Models;
 
     public class AllProductsQueryModel
     {

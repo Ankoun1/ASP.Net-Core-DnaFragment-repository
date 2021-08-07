@@ -11,7 +11,9 @@ namespace DnaFragment.Data
         public DnaFragmentDbContext(DbContextOptions<DnaFragmentDbContext> options)
             : base(options)
         {
-        }            
+        }       
+       
+        public DbSet<StatisticsLrUser> StatisticsLrUsers { get; init; }
 
         public DbSet<LrProduct> LrProducts { get; init; }
 
@@ -29,16 +31,7 @@ namespace DnaFragment.Data
         
 
         protected override void OnModelCreating(ModelBuilder builder)
-        {
-            builder
-               .Entity<LrProduct>()
-               .HasOne(c => c.Category)
-               .WithMany(c => c.LrProducts)
-               .HasForeignKey(c => c.CategoryId)
-               .OnDelete(DeleteBehavior.Restrict); 
-
-         
-
+        {         
             builder.Entity<UserProduct>().HasKey(up => new { up.UserId, up.LrProductId });
 
             builder.Entity<UserProduct>()
@@ -69,7 +62,6 @@ namespace DnaFragment.Data
               .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(builder);
-
         }
     }
 }

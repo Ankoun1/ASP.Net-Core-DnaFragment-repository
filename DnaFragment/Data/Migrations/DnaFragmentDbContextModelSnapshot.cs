@@ -86,7 +86,7 @@ namespace DnaFragment.Data.Migrations
                         .HasMaxLength(800)
                         .HasColumnType("nvarchar(800)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Model")
                         .IsRequired()
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
@@ -171,6 +171,36 @@ namespace DnaFragment.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("DnaFragment.Data.Models.StatisticsLrUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CategoryVisitsCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("LrPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductVisitsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PurchasesCount")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("TotalSum")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StatisticsLrUsers");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.User", b =>
@@ -414,7 +444,7 @@ namespace DnaFragment.Data.Migrations
                     b.HasOne("DnaFragment.Data.Models.Category", "Category")
                         .WithMany("LrProducts")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");

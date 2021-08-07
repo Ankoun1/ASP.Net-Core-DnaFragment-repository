@@ -66,6 +66,17 @@
             return View(new SendMailMessageModel { To = emailUser,Subject = mailModel.Subject,Body = mailModel.Body });
         }
 
+       
+        [Authorize(Roles = "Administrator")]
+        public IActionResult Sms()        
+        {
+            sendMail.SmsMessanger();
+
+
+
+            return Redirect("/Messages/All");
+        }
+
         [Authorize]
         public IActionResult All()
         {          

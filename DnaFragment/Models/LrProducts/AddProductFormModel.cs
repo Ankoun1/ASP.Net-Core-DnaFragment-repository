@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;  
     using static Data.DataConstants.LrProductConst;
     using static Data.DataConstants.DefaultConstants;
-    using DnaFragment.Services.LrProducts;
+    using DnaFragment.Services.LrProducts.Models;
 
     public class AddProductFormModel
     {

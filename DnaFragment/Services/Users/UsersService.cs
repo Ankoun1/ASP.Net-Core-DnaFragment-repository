@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Threading.Tasks;
     using DnaFragment.Data;
     using DnaFragment.Data.Models;
     using DnaFragment.Models.Users;
@@ -39,7 +40,7 @@
         }
 
 
-        public async  void ResetPasswordDb(int? code, string password)
+        public async  Task ResetPasswordDb(int? code, string password)
         {
             
             var user = data.Users.Where(x => x.ResetPasswordId == code).FirstOrDefault();
@@ -48,7 +49,7 @@
                 var code2 = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code1));
                 var Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code2));
                 var userReset = await _userManager.FindByEmailAsync(user.Email);
-                var result = await _userManager.ResetPasswordAsync(userReset, Code, password);
+                await _userManager.ResetPasswordAsync(userReset, Code, password);
            
         }
 
@@ -119,5 +120,7 @@
 
         public User ValidEmail(string email)
         => data.Users.Where(x => x.Email == email).FirstOrDefault();
+
+        
     }
 }

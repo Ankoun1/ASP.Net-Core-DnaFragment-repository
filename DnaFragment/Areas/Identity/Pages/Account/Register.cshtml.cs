@@ -14,20 +14,24 @@
     using Microsoft.Extensions.Logging;
     using static Data.DataConstants.DefaultConstants;
     using static Data.DataConstants.UserConst;
+    using DnaFragment.Data;
 
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> signInManager;
         private readonly UserManager<User> userManager;        
+        private readonly DnaFragmentDbContext data;        
 
         public RegisterModel(
             UserManager<User> userManager,
-            SignInManager<User> signInManager            
+            SignInManager<User> signInManager,
+            DnaFragmentDbContext data
             )
         {
            this.userManager = userManager;
            this.signInManager = signInManager;          
+           this.data = data;          
         }
 
         [BindProperty]
@@ -74,7 +78,12 @@
            
             if (ModelState.IsValid)
             {
+                var statisticsLrUser = new StatisticsLrUser { Email = Input.Email };
+                data.StatisticsLrUsers.Add(statisticsLrUser);
+                data.SaveChanges();
+
                 var user = new User { UserName = Input.Email, Email = Input.Email,FullName = Input.FullName,PhoneNumber = Input.PhoneNumber };
+                
                 var result = await this.userManager.CreateAsync(user, Input.Password);
                 
                 if (result.Succeeded)

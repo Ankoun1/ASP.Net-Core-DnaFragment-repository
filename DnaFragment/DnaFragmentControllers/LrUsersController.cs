@@ -14,7 +14,7 @@
 
     public class LrUsersController : Controller
     {
-        //private readonly WebConstants webConstants;
+        
         private readonly IUsersService usersService;
         private readonly SignInManager<User> signInManager;
         public LrUsersController( IUsersService usersService, SignInManager<User> signInManager)
@@ -48,7 +48,7 @@
         }   
         
         [HttpPost]
-        public IActionResult ResetPassword(ResetPasswordUserModel userModel)
+        public  IActionResult ResetPassword(ResetPasswordUserModel userModel)
         {
             if (!usersService.CodCheck(userModel.RessetPasswordId))
             {

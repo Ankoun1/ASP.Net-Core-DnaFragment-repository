@@ -29,7 +29,7 @@
             bool isAdmin = User.IsAdmin();
 
             var questions = questionsService.AllQuestions(userId, isAdmin);
-            var questionModel = new AddQuestionModel { Description = "description",Questions = questions };
+            var questionModel = new AddQuestionModel { Description = "ask a question ...", Questions = questions };
             return View(questionModel);
         }
         

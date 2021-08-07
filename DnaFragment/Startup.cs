@@ -49,6 +49,8 @@ namespace DnaFragment
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DnaFragmentDbContext>();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddControllersWithViews(options => {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });

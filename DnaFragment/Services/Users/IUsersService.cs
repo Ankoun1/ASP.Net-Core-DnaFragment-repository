@@ -1,6 +1,7 @@
 ﻿namespace DnaFragment.Services.Users
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using DnaFragment.Data.Models;
     using DnaFragment.Models.Users;
 
@@ -12,7 +13,7 @@
 
         bool CodCheck(int? code);
 
-        void ResetPasswordDb(int? code,string password);
+        Task ResetPasswordDb(int? code,string password);
 
         List<UserListingViewModel> AllUsersDb(string userId,bool isAdmin);
 

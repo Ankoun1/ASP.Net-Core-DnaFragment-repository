@@ -2,23 +2,26 @@
 {    
     using DnaFragment.Infrastructure;   
     using DnaFragment.Models.LrProducts;   
-    using Microsoft.AspNetCore.Mvc;    
-    using DnaFragment.Services.LrProducts;
+    using Microsoft.AspNetCore.Mvc; 
     using DnaFragment.Services.Administrators;
     using Microsoft.AspNetCore.Authorization;    
     using System.Linq;
     using static WebConstants;
+    using DnaFragment.Services.LrProducts;
+    using AutoMapper;
 
     public class LrProductsController : Controller
     {    
         private readonly ILrProductsService lrProducts;
-        private readonly IAdministratorService administrator;      
+        private readonly IAdministratorService administrator;
+        private readonly IMapper mapper;
 
         public LrProductsController(         
-               ILrProductsService lrProducts, IAdministratorService administrator)
+               ILrProductsService lrProducts, IAdministratorService administrator, IMapper mapper)
         {           
             this.lrProducts = lrProducts;
-            this.administrator = administrator;           
+            this.administrator = administrator;
+            this.mapper = mapper;
         }
 
         [Authorize(Roles = "Administrator")]
@@ -28,7 +31,7 @@
             {
                 return Redirect(RedirectToLogin);
             }
-
+            
             return View(new AddProductFormModel
             {
                 Categories = lrProducts.AllCategories()
@@ -82,8 +85,8 @@
             }
 
             var product = lrProducts.Details(id);
-
-            return View(new AddProductUpdateFormModel {Description =product.Description,Price = product.Price ,CategoryId = product.CategoryId});
+            var productForm = mapper.Map<AddProductUpdateFormModel>(product);
+            return View(productForm);
         } 
 
         public IActionResult Update(string id, AddProductUpdateFormModel product)

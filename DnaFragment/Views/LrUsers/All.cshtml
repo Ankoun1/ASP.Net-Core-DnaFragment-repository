@@ -12,7 +12,6 @@ else
 {
     <h2 class="text-center mt-2 text-white">@ViewBag.Title</h2>
     <h1 class="text-center mt-2 text-success">▪</h1>
-
 }
 
 <form class="mx-auto w-75">
@@ -37,7 +36,7 @@ else
 <div class="form-group">
     <hr class="bg-white w-50">
     <ul class="list-group list-group-flush ">
-        <li class="list-group-item text-xl-center text-white">@Model[i].Username</li>
+        <li class="list-group-item text-center text-break">@Model[i].Username</li>
         <li class="list-group-item text-center text-break">@Model[i].Email</li>
         <li class="list-group-item text-center text-break">@Model[i].PhoneNumber</li>
         <li class="list-group-item text-center">@Model[i].NumberQuestions   @Model[i].NumberMessages</li>
@@ -47,25 +46,22 @@ else
                 <a class="btn btn-outline-primary "
                    asp-controller="Messages"
                    asp-action="Add"
-                   asp-route-lrUserId="@Model[i].Id">Send Message</a>
+                   asp-route-lrUserId="@Model[i].Id">Message</a>
+                <a class="btn btn-outline-primary "
+                   asp-controller="Messages"
+                   asp-action="SendMail"
+                   asp-route-userId="@Model[i].Id">Email</a>
+                <a class="btn btn-outline-primary "
+                   asp-controller="Messages"
+                   asp-action="Sms">Sms</a>
             }
             <a class="btn btn-danger " title="The feature will immediately delete all your account data except the accumulated points!"
                asp-controller="LrUsers"
                asp-action="DeleteUser"
-               asp-route-userId="@Model[i].Id">Delete Account</a>
-            @if (User.IsAdmin())
-            {
-                <a class="btn btn-outline-primary "
-                   asp-controller="Messages"
-                   asp-action="SendMail"
-                   asp-route-userId="@Model[i].Id">Send Email</a>
-            }
-
+               asp-route-userId="@Model[i].Id">Delete DB</a>          
         </li>
     </ul>
-</div>
-   
-        
+</div>      
 
     }
   

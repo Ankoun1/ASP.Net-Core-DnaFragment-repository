@@ -1,17 +1,23 @@
-﻿namespace DnaFragment.Services.LrProducts
+﻿
+
+namespace DnaFragment.Services.LrProducts.Models
 {
+    using System.Collections.Generic;
+
     public class LrProductServiceModel
     {
         public string Id { get; init; }
 
         public string Model { get; init; }
 
-        public string Image { get; init; }
+        public string PictureUrl { get; init; }
 
         public string PackagingVolume { get; init; }
 
         public decimal Price { get; init; }
 
         public int CategoryId { get; init; }
+
+        public ICollection<string> Photos { get; set; } = new List<string>();
     }
 }

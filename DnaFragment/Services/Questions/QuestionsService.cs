@@ -4,6 +4,7 @@ namespace DnaFragment.Services.Questions
 {
     using System.Collections.Generic;
     using System.Linq;
+    using AutoMapper;
     using DnaFragment.Data;
     using DnaFragment.Data.Models;
     using DnaFragment.Models.Questions;   
@@ -11,10 +12,14 @@ namespace DnaFragment.Services.Questions
     public class QuestionsService : IQuestionsService
     {
         private readonly DnaFragmentDbContext data;
-        public QuestionsService(DnaFragmentDbContext data)
+        private readonly IMapper mapper;       
+
+        public QuestionsService(DnaFragmentDbContext data, IMapper mapper)
         {        
             this.data = data;
+            this.mapper = mapper;            
         }
+
         public void AddQuestion(string userId,string description)
         {
             if (data.Users.Any(x => x.Id == userId))
@@ -53,22 +58,13 @@ namespace DnaFragment.Services.Questions
                 questionsTrue = questions.ToList();
             }
 
-
             var answerModels = new List<QuestionListingViewModel>();
             string lrQuestId = null;
             string lrUsername = GetUserName(lrQuestId);
 
             foreach (var quest in questionsTrue.ToList())
             {
-                var questionModel = new QuestionListingViewModel
-                {
-                    //Id = quest.Id,
-                    CreatedOn = quest.CreatedOn,
-                    Description = quest.Description,
-                    QuestionId = quest.Id,
-                    StopAtomaticDelete = quest.StopAutomaticDelete,
-                    UserId = quest.UserId
-                };
+                var questionModel = mapper.Map<QuestionListingViewModel>(quest);
 
                 questionModel.Name = GetUserName(quest.Id);
 
@@ -145,7 +141,7 @@ namespace DnaFragment.Services.Questions
         private string GetUserName(string lrQuestId)
         {            
             var lrUsername = data.Users.Where(x => x.Questions.Where(y => y.Id == lrQuestId)
-                                 .Select(y => y.UserId).FirstOrDefault() == x.Id).Select(x => x.FullName).FirstOrDefault();
+                             .Select(y => y.UserId).FirstOrDefault() == x.Id).Select(x => x.FullName).FirstOrDefault();
 
             return lrUsername;
         }

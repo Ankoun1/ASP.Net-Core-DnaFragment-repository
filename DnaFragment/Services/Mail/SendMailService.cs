@@ -1,11 +1,14 @@
 ﻿namespace DnaFragment.Services.Mail
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using DnaFragment.Data;
     using Microsoft.Extensions.Configuration;
     using SendGrid;
     using SendGrid.Helpers.Mail;
+    using Twilio;
+    using Twilio.Rest.Api.V2010.Account;
 
     public class SendMailService : ISendMailService
     {
@@ -33,5 +36,20 @@
         public string UserEmail(string userId)
         => data.Users.Where(x => x.Id == userId).Select(x => x.Email).FirstOrDefault();
 
+        public void SmsMessanger()
+        {
+            string accountSid = Environment.GetEnvironmentVariable("");
+            string authToken = Environment.GetEnvironmentVariable("");
+
+            TwilioClient.Init(accountSid, authToken);
+
+            var message = MessageResource.Create(
+                body: "Test message from DnaFragment",
+                from: new Twilio.Types.PhoneNumber("+12515806588"),
+                to: new Twilio.Types.PhoneNumber("+359877668490")
+            );
+
+            Console.WriteLine(message.Body);
+        }
     }
 }

@@ -15,7 +15,7 @@
 
         [Required]
         [MaxLength(ModelMaxLength)]
-        public string Name { get; init; }
+        public string Model { get; init; }
       
         [MaxLength(3)]
         public string PackagingVolume { get; init; }

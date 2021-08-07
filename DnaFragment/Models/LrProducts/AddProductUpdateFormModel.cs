@@ -5,7 +5,7 @@ namespace DnaFragment.Models.LrProducts
     using static Data.DataConstants.LrProductConst;
     using static Data.DataConstants.DefaultConstants;
     using System.Collections.Generic;
-    using DnaFragment.Services.LrProducts;
+    using DnaFragment.Services.LrProducts.Models;
 
     public class AddProductUpdateFormModel
     {

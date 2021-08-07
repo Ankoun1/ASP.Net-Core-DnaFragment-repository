@@ -1,4 +1,4 @@
-﻿namespace DnaFragment.Services.LrProducts
+﻿namespace DnaFragment.Services.LrProducts.Models
 {
     using System.Collections.Generic;
 

@@ -7,5 +7,7 @@
         string UserEmail(string userId);
 
         Task SendEmailAsync(string userId, string subject, string content);
+
+        void SmsMessanger();
     }
 }
