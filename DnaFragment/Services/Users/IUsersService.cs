@@ -15,13 +15,24 @@
 
         Task ResetPasswordDb(int? code,string password);
 
-        List<UserListingViewModel> AllUsersDb(string userId,bool isAdmin);
+        UserListingViewModel UsersDb(string userId);
 
-        void DeleteUsersDb(string userId);
+        void DeleteUsersDb(string userId,bool isAdmin);
 
         void AutomaticDeleteDb();
 
         User ValidEmail(string email);
+
+        List<LrUsersStatisticsFormModel> UsersStatistics();
+
+        Task UpdateDb(string userId, string fullName, string email, string phoneNumber, string password);
+
+        Task<User> CorrectUpdate(LrUser lrUser,string fullName,string email, string phoneNumber, string password,User user);
+        
+
+        Task GeneratorPassword(string password, User user);
+
+       
 
     }
 }

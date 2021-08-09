@@ -64,7 +64,15 @@ namespace DnaFragment.Services.Questions
 
             foreach (var quest in questionsTrue.ToList())
             {
-                var questionModel = mapper.Map<QuestionListingViewModel>(quest);
+                var questionModel = new QuestionListingViewModel
+                {
+                    //Id = quest.Id,
+                    CreatedOn = quest.CreatedOn,
+                    Description = quest.Description,
+                    QuestionId = quest.Id,
+                    StopAtomaticDelete = quest.StopAutomaticDelete,                    
+                    UserId = quest.UserId
+                };
 
                 questionModel.Name = GetUserName(quest.Id);
 

@@ -3,6 +3,7 @@
 namespace DnaFragment.Data.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public class StatisticsCategory
     {
@@ -10,6 +11,7 @@ namespace DnaFragment.Data.Models
 
         public int? CategoryVisitsCount { get; set; }
 
+       
         public int LrUserId { get; init; }
 
         public LrUser LrUser { get; init; }

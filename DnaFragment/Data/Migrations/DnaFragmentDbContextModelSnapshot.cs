@@ -127,6 +127,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDanger")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("LrPoints")
                         .HasColumnType("int");
 
@@ -136,6 +139,26 @@ namespace DnaFragment.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LrUsers");
+                });
+
+            modelBuilder.Entity("DnaFragment.Data.Models.LrUserOldEmails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LrUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LrUserId");
+
+                    b.ToTable("LrUsersOldEmails");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.Message", b =>
@@ -488,6 +511,17 @@ namespace DnaFragment.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("DnaFragment.Data.Models.LrUserOldEmails", b =>
+                {
+                    b.HasOne("DnaFragment.Data.Models.LrUser", "LrUser")
+                        .WithMany("OldEmails")
+                        .HasForeignKey("LrUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LrUser");
+                });
+
             modelBuilder.Entity("DnaFragment.Data.Models.Message", b =>
                 {
                     b.HasOne("DnaFragment.Data.Models.User", "User")
@@ -614,6 +648,8 @@ namespace DnaFragment.Data.Migrations
 
             modelBuilder.Entity("DnaFragment.Data.Models.LrUser", b =>
                 {
+                    b.Navigation("OldEmails");
+
                     b.Navigation("StatisticsCategories");
                 });
 

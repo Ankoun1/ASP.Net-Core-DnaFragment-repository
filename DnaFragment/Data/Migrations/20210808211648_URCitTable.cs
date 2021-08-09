@@ -71,7 +71,8 @@ namespace DnaFragment.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TotalSum = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    LrPoints = table.Column<int>(type: "int", nullable: true)
+                    LrPoints = table.Column<int>(type: "int", nullable: true),
+                    IsDanger = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -253,6 +254,26 @@ namespace DnaFragment.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LrUsersOldEmails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LrUserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LrUsersOldEmails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LrUsersOldEmails_LrUsers_LrUserId",
+                        column: x => x.LrUserId,
+                        principalTable: "LrUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StatisticsCategories",
                 columns: table => new
                 {
@@ -388,6 +409,11 @@ namespace DnaFragment.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LrUsersOldEmails_LrUserId",
+                table: "LrUsersOldEmails",
+                column: "LrUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Messages_UserId",
                 table: "Messages",
                 column: "UserId");
@@ -432,6 +458,9 @@ namespace DnaFragment.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "LrUsersOldEmails");
 
             migrationBuilder.DropTable(
                 name: "Messages");

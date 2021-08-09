@@ -1,6 +1,7 @@
 
 namespace DnaFragment
 {
+   
     using DnaFragment.Data;
     using DnaFragment.Data.Models;
     using DnaFragment.DnaFragmentControllers;
@@ -89,6 +90,7 @@ namespace DnaFragment
             .UseAuthorization()
             .UseEndpoints(endpoints =>
             {
+                endpoints.MapDefaultAreaRoute();
                 endpoints.MapDefaultControllerRoute();
                 //endpoints.MapControllerRoute(name: "default", pattern: "{controller=Messages}/{action=SendMail}/{id?}"); 
                 endpoints.MapRazorPages();

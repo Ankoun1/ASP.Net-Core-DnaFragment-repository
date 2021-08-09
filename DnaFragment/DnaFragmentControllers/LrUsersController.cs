@@ -66,7 +66,7 @@
         }       
 
         [Authorize]
-        public IActionResult All()
+        public IActionResult Profile()
         {
             bool isAdmin = User.IsAdmin();
             var userId = User.GetId();
@@ -74,33 +74,69 @@
             {
                 return Redirect(RedirectToLogin);
             }
+            if (User.IsAdmin())
+            {
+                return BadRequest();
+            }
+            var user = usersService.UsersDb(userId);
+            if(user == null)
+            {
+                return Redirect(RedirectToLogin);
+            }
+            return View(user);
+        } 
+
+        [Authorize]
+        public IActionResult UpdateProfile()
+        {           
+            if (User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+           
+            return View();
+        }
+        
+        [Authorize]
+        [HttpPost]
+        public IActionResult UpdateProfile(string userId, UpdateUserModel user)
+        {
+            if (userId == null || !usersService.UserIsRegister(userId))
+            {
+                return Redirect(RedirectToLogin);
+            }
+
+            if (User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid && user.Password != user.ConfirmPassword)
+            {
+                return View(user);
+            }
+            usersService.UpdateDb(userId,user.FullName,user.Email,user.PhoneNumber,user.Password);
+
+            return Redirect(RedirectToLogin);
+        }
+        [Authorize]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+
             if (!usersService.UserIsRegister(userId))
             {
                 return BadRequest();
             }
-            var users = usersService.AllUsersDb(userId,isAdmin);
-            return View(users);
-        }
-        
-        [Authorize]        
-        public async Task<IActionResult> DeleteUser(string userId)
-        {
-            var thisId = User.GetId();
-            if (thisId == null )
-            {
-                return Redirect(RedirectToLogin);
-            }
-            if(!usersService.UserIsRegister(userId))
-            {
-                return BadRequest();
-            }
-            
-            usersService.DeleteUsersDb(userId);
 
-            await signInManager.SignOutAsync();           
+            usersService.DeleteUsersDb(userId,User.IsAdmin());
 
-            return RedirectToAction("Index", "Home");   
+            if (!User.IsAdmin())
+            {
+                await signInManager.SignOutAsync();
+            }
+            return RedirectToAction("Index", "Home");
         }
-        
+
     }
 }

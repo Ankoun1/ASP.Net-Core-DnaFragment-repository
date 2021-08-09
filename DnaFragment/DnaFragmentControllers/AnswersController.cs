@@ -17,34 +17,7 @@
         {                 
             this.answersService = answersService;
             this.adminService = adminService;
-        }
-
-        [Authorize(Roles = "Administrator")]
-        public IActionResult AddAnswer(string questId)
-        {
-            if (!adminService.UserIsRegister(User.GetId()))
-            {
-                return Unauthorized();
-            }
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
-        public IActionResult AddAnswer(string questId, AddAnswerModel model)
-        {
-            //string input = questId;
-            var userId = User.GetId();
-            if (!adminService.UserIsRegister(User.GetId()))
-            {
-                return Unauthorized();
-            }
-
-            answersService.AddAnswerDb(questId, model.Description);
-
-            return Redirect("/Questions/All");
-        }
-
+        }       
 
         [Authorize]
         public IActionResult Delete(string answerId)

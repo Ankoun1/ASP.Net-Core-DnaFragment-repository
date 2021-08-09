@@ -154,21 +154,21 @@
         public IActionResult Details(string id)
         {
             var product = lrProducts.Details(id);
-               
+
+            lrProducts.UpdateCountVisitsProduct(User.GetName());
 
             return View(product);
         }
 
         public IActionResult AllProductsByCategory(int categoryId)
         {
-            var products = lrProducts.AllProductsByCategory(categoryId);          
-
+            var products = lrProducts.AllProductsByCategory(categoryId);
+            lrProducts.UpdateCountVisitsCategory(User.GetName());
             return View(products);
         }
 
         public IActionResult All([FromQuery] AllProductsQueryModel query)
         {
-
             var queryResult = this.lrProducts.All(query.Brand, query.SearchTerm, query.Sorting, query.CurrentPage, AllProductsQueryModel.ProductsPerPage);
             var lrBrands = this.lrProducts.AllLrBrands();
 

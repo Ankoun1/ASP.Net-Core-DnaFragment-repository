@@ -120,9 +120,8 @@ namespace DnaFragment.Services.LrProducts
                 "https://c4.wallpaperflare.com/wallpaper/869/515/658/pic-girl-2560x1600-wallpaper-preview.jpg",
                 "https://wallup.net/wp-content/uploads/2019/09/473320-landscape-view-height-city-dal-beauty-wind-girl-sunset.jpg",
                 "https://c4.wallpaperflare.com/wallpaper/898/902/381/pic-girl-2560x1600-wallpaper-thumb.jpg",
-                "https://c4.wallpaperflare.com/wallpaper/898/902/381/pic-girl-2560x1600-wallpaper-thumb.jpg"};
+                "https://c4.wallpaperflare.com/wallpaper/898/902/381/pic-girl-2560x1600-wallpaper-thumb.jpg"};           
 
-         
             if (!data.LrProducts.Any(x => x.CategoryId == categoryId))
             {
                 products = null;
@@ -178,6 +177,22 @@ namespace DnaFragment.Services.LrProducts
             };
 
             data.UserProducts.Add(userProduct);
+            data.SaveChanges();
+        }
+
+        public void UpdateCountVisitsCategory(string userName)
+        {
+            var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
+            var statisticsCategory = data.StatisticsCategories.Where(x => x.LrUserId == userId).FirstOrDefault();
+            statisticsCategory.CategoryVisitsCount++;
+            data.SaveChanges();
+        }
+
+        public void UpdateCountVisitsProduct(string userName)
+        {
+            var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
+            var statisticsProduct = data.StatisticsProducts.Where(x => x.StatisticsCategory.LrUserId == userId).FirstOrDefault();
+            statisticsProduct.ProductVisitsCount++;
             data.SaveChanges();
         }
     }

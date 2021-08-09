@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using static Data.DataConstants.UserConst;   
+    using static Data.DataConstants.LrUserConst;   
     using Microsoft.AspNetCore.Identity;
 
     public class User : IdentityUser

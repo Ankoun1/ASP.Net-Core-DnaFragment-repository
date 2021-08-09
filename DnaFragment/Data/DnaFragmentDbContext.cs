@@ -15,6 +15,8 @@ namespace DnaFragment.Data
        
         public DbSet<LrUser> LrUsers { get; init; }
 
+        public DbSet<LrUserOldEmails> LrUsersOldEmails { get; init; }
+
         public DbSet<StatisticsCategory> StatisticsCategories { get; init; }
 
         public DbSet<StatisticsProduct> StatisticsProducts { get; init; }

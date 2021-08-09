@@ -37,27 +37,14 @@
 
         public class LrUserConst
         {
-            public const int MinLengthUsername = 3;
-            public const int MinLengthPassword = 5;
-            public const string EmailRegularExpression = @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-            public const string TypeClient = "Client";
-            public const string TypeMechanic = "Mechanic";
-            public const string TypeAdministrator = "Administrator";
-            public const string TypeUser = "User";
-            public const int PhoneNumberMinLength = 6;
-            public const int PhoneNumberMaxLength = 30;
-            public const int CodeNumber = 999999;
-        }
-
-        public class UserConst
-        {
             public const int MinLengthFullName = 5;
             public const int MaxLengthFullName = 100;
             public const int MinLengthPassword = 5;
             public const int MaxLengthPassword = 50;
             public const int PhoneNumberMinLength = 6;
             public const int PhoneNumberMaxLength = 30;
-        }
+            public const int CodeNumber = 999999;
+        }    
 
 
     }

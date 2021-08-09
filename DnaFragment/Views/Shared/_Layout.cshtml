@@ -44,10 +44,6 @@
                                     <a class="nav-link text-white active h5" asp-area="" asp-controller="LrProducts" asp-action="All">All✦Products</a>
                                 </li>
 
-                                <li class="nav-item ml-auto">
-                                    <a class="nav-link text-white active h5" asp-area="" asp-controller="LrUsers" asp-action="All">User✦Information</a>
-                                </li>
-
                             }
                             else
                             {
@@ -57,6 +53,7 @@
                                 <li class="nav-item ml-auto">
                                     <a class="nav-link text-white active h5" asp-area="" asp-controller="LrProducts" asp-action="Favorits">♥</a>
                                 </li>
+                                
                             }
                             <li class="nav-item ml-auto">
                                 <a class="nav-link text-white active h5" asp-area="" asp-controller="Questions" asp-action="All">My✦Questions</a>
@@ -64,7 +61,9 @@
                             </li>
                             <li class="nav-item ml-auto">
                                 <a class="nav-link text-white active h5" asp-area="" asp-controller="Messages" asp-action="All">📨</a>
-                            </li>                          
+                            </li>
+
+
 
                         }
                         else
@@ -75,7 +74,9 @@
                             </li>
                             <li class="nav-item ml-auto">
                                 <a class="nav-link text-white active h5" asp-area="" asp-controller="LrProducts" asp-action="Favorits">♥</a>
-                            </li>                            
+                            </li>
+
+
 
                         }
                     </ul>

@@ -11,12 +11,18 @@
     {
 
     <form class="form-inline mx-auto w-75" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-        <div class="row justify-content-center">
-            <button type="submit" class="nav-link btn btn-link  btn-outline-primary text-hide small w-25">@ViewBag.Title</button>
-            <img class="d-block w-100 " src="https://i0.wp.com/godofindia.com/wp-content/uploads/2017/08/romantic-hd-wallpapers.jpg" alt="Snow">
-        </div>   
+       
+        <div class="card">
+
+            <div class="card-body">                
+                <button type="submit" class="nav-link btn btn-link  btn-primary float-right text-white small w-25">@ViewBag.Title</button>
+                <img src="https://i0.wp.com/godofindia.com/wp-content/uploads/2017/08/romantic-hd-wallpapers.jpg" class="card-img-top" alt="...">
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+
+            </div>
+        </div>
     </form>
-        <meta http-equiv="refresh" content="7;url=https://localhost:44350/?page=%2F" />
+        <meta http-equiv="refresh" content="100;url=https://localhost:44350/?page=%2F" />
     }
     else
     {

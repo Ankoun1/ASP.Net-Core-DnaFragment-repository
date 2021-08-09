@@ -39,5 +39,9 @@ namespace DnaFragment.Services.LrProducts
         IEnumerable<LrCategoryServiceModel> AllCategories();
 
         bool CategoryExsists(int categoryId);
+
+        void UpdateCountVisitsCategory(string userName);
+
+        void UpdateCountVisitsProduct(string userName);
     }
 }

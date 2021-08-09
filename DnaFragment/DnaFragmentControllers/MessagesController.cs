@@ -4,79 +4,19 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using DnaFragment.Infrastructure;
-    using DnaFragment.Models.Messages;   
-    using DnaFragment.Services.Mail;
+    using DnaFragment.Models.Messages;      
     using DnaFragment.Services.Messages;
 
     public class MessagesController :Controller
-    {      
-     
-        private readonly ISendMailService sendMail;
+    {    
         private readonly IMessagesService messageService;
 
-        public MessagesController(ISendMailService sendMail, IMessagesService messageService)
+        public MessagesController(IMessagesService messageService)
         {    
-            this.sendMail = sendMail;
-            this.messageService = messageService;
-        }
-
-
-        [Authorize(Roles = "Administrator")]
-        public IActionResult Add(string lrUserId)
-        {
-            if (!User.IsAdmin())
-            {
-                return Unauthorized();
-            }
-
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
-        public IActionResult Add(string lrUserId, AddMessagesModel model)
-        {           
-            if (!User.IsAdmin())
-            {
-                return Unauthorized();
-            }
-
-            messageService.AddMessageDb(lrUserId, model.Description);
-
-            return Redirect("/Messages/All");
-        }
-
-
-        [Authorize(Roles = "Administrator")]
-        public IActionResult SendMail(string userId)
-        {
-            var emailUser = sendMail.UserEmail(userId);
-            return View(new SendMailMessageModel { To = emailUser,Body = "<h1>Hay! From: DNAFragment-Asp.Net-Core-project</h1>" });
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
-        public IActionResult SendMail(string userId,SendMailMessageModel mailModel)        
-        {         
-            sendMail.SendEmailAsync(userId, mailModel.Subject,mailModel.Body).Wait();
-           
-            ViewBag.message = "sucsses";
-            var emailUser = sendMail.UserEmail(userId);
             
-            return View(new SendMailMessageModel { To = emailUser,Subject = mailModel.Subject,Body = mailModel.Body });
-        }
-
-       
-        [Authorize(Roles = "Administrator")]
-        public IActionResult Sms()        
-        {
-            sendMail.SmsMessanger();
-
-
-
-            return Redirect("/Messages/All");
-        }
-
+            this.messageService = messageService;
+        }  
+                                 
         [Authorize]
         public IActionResult All()
         {          

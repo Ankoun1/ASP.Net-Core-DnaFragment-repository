@@ -69,7 +69,8 @@ else
                     @if (quest.IsAdministrator)
                     {
                         <a class="btn btn-outline-primary "
-                           asp-controller="Answers"
+                           asp-area="Admin"
+                           asp-controller="Messages"
                            asp-action="AddAnswer"
                            asp-route-questId="@quest.QuestionId">Answer</a>
                     }
@@ -77,7 +78,8 @@ else
                     @if (quest.IsAdministrator)
                     {
                         <a class="btn btn-outline-primary "
-                           asp-controller="Answers"
+                           asp-area="Admin"
+                           asp-controller="Messages"
                            asp-action="Delete"
                            asp-route-answerId="@quest.AnswerId">Delete Answer</a>
                     }  

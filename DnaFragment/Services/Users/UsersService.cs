@@ -40,70 +40,52 @@
         }
 
 
-        public async  Task ResetPasswordDb(int? code, string password)
-        {
-            
+        public async Task ResetPasswordDb(int? code, string password)
+        {            
             var user = data.Users.Where(x => x.ResetPasswordId == code).FirstOrDefault();
-           
-                var code1 = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var code2 = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code1));
-                var Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code2));
-                var userReset = await _userManager.FindByEmailAsync(user.Email);
-                await _userManager.ResetPasswordAsync(userReset, Code, password);
-           
+
+            await GeneratorPassword(password,user);
         }
 
-        public List<UserListingViewModel> AllUsersDb(string userId,bool isAdmin)
-        {
-           
-            var users = data.Users.AsQueryable();
-            if (isAdmin)
-            {
-                AutomaticDeleteDb();
-
-                users = users.Where(x => !x.IsAdministrator);
-            }
-            else
-            {
-                users = users.Where(x => x.Id == userId);
-            }
-
-            var userListing = users.Select(x => new UserListingViewModel
+        public UserListingViewModel UsersDb(string userId)
+        {      
+            var user = data.Users.Where(x => x.Id == userId).Select(x => new UserListingViewModel
             {
                 Id = x.Id,
                 Username = x.FullName,
                 Email = x.Email,
                 PhoneNumber = x.PhoneNumber,
                 IsAdministrator = x.IsAdministrator,
+                NumberMessages = data.Messages.Where(x => x.UserId == userId).Count(),
+                NumberQuestions = data.Questions.Where(x => x.UserId == userId).Count()
+            }).FirstOrDefault();
 
-            }).ToList();
-
-
-            foreach (var user in userListing)
-            {
-                user.NumberMessages = data.Messages.Where(x => x.UserId == user.Id).Count();
-                user.NumberQuestions = data.Questions.Where(x => x.UserId == user.Id).Count(); ///
-            }
-            return userListing;
+            return user;
         }
 
         public bool CodCheck(int? code)
         => this.data.Users.Any(u => u.ResetPasswordId == code);
     
-        public void DeleteUsersDb(string userId)
+        public void DeleteUsersDb(string userId,bool isAdmin)
         {
             if (UserIsRegister(userId)) 
-            {               
+            {  
+                
                 var user = data.Users.Find(userId);
+                if (isAdmin)
+                {
+                    var lrUser = data.LrUsers.Where(x => x.Email == user.Email).FirstOrDefault();
+                    lrUser.IsDanger = true;
+                }
                 data.Users.Remove(user);
                 data.SaveChanges();
             }
         }
         
-            public bool UserIsRegister(string userId)
-                => this.data
-               .Users
-               .Any(d => d.Id == userId);
+        public bool UserIsRegister(string userId)
+            => this.data
+           .Users
+           .Any(d => d.Id == userId);
 
         public void AutomaticDeleteDb()
         {
@@ -121,6 +103,118 @@
         public User ValidEmail(string email)
         => data.Users.Where(x => x.Email == email).FirstOrDefault();
 
-        
+        public List<LrUsersStatisticsFormModel> UsersStatistics()
+        {
+            AutomaticDeleteDb();
+            var lrUsers =  data.LrUsers.OrderBy(x => x.Email).ToList();
+            var users = new List<LrUsersStatisticsFormModel>();
+            foreach (var lrUser in lrUsers)
+            {
+               
+                var statisticsCategory = data.StatisticsCategories.Where(y => y.LrUserId == lrUser.Id).Select(x => x.CategoryVisitsCount).FirstOrDefault();
+                var statisticsProduct = data.StatisticsProducts.Where(y => y.StatisticsCategory.LrUserId == lrUser.Id).Select(x => x.ProductVisitsCount).FirstOrDefault();
+                if (lrUser.Email != null)
+                {
+
+                    var userDb = data.Users.Where(x => !x.IsAdministrator).OrderBy(x => x.Email).FirstOrDefault();
+                    if (userDb == null)
+                    {
+                        var user = new LrUsersStatisticsFormModel
+                        {
+                            Id = null,
+                            Username = null,
+                            Email = lrUser.Email,
+                            PhoneNumber = null,
+                            IsDanger = lrUser.IsDanger,
+                            CategoryVisitsCount = statisticsCategory,
+                            ProductVisitsCount = statisticsProduct
+                        };
+                        users.Add(user);
+                    }
+                    else
+                    {
+                        var user = new LrUsersStatisticsFormModel
+                        {
+                            Id = userDb.Id,
+                            Username = userDb.FullName,
+                            Email = lrUser.Email,
+                            PhoneNumber = userDb.PhoneNumber,
+                            CategoryVisitsCount = statisticsCategory,
+                            ProductVisitsCount = statisticsProduct
+                        };
+                        users.Add(user);
+                    }
+                    
+                }
+                else
+                {                   
+                    var user =  new LrUsersStatisticsFormModel
+                    {                                           
+                        Username = "Users not registration",
+                        Email = lrUser.Email,
+                        PhoneNumber = null,                  
+                        CategoryVisitsCount = statisticsCategory,
+                        ProductVisitsCount = statisticsProduct
+                    };
+                    users.Add(user);
+                }
+            }         
+                        
+            return users;
+        }
+
+        public async Task UpdateDb(string userId, string fullName, string email, string phoneNumber, string password)
+        {
+            var user = data.Users.Find(userId);                      
+            
+            var lrUser = data.LrUsers.Where(x => x.Email == user.Email).FirstOrDefault();
+
+          var curentUser =  await CorrectUpdate(lrUser, fullName, email, phoneNumber, password, user);
+        }
+
+        public  async Task GeneratorPassword(string password,User user)
+        {
+            var code1 = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var code2 = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code1));
+            var Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code2));
+            var userReset = await _userManager.FindByEmailAsync(user.Email);
+            await _userManager.ResetPasswordAsync(userReset, Code, password);
+        }
+
+       
+
+        public async Task<User> CorrectUpdate(LrUser lrUser, string fullName,string email, string phoneNumber, string password,User user)
+        {
+            if (lrUser != null)
+            {
+                if (!data.LrUsersOldEmails.Any(x => x.LrUserId == lrUser.Id && x.Email == email))
+                {
+
+                    var oldEmails = new LrUserOldEmails { Email = lrUser.Email, LrUserId = lrUser.Id };
+                    data.LrUsersOldEmails.Add(oldEmails);
+                    data.SaveChanges();
+
+                }
+
+                lrUser.Email = email;
+
+                user.FullName = fullName;
+                user.UserName = email;
+                user.Email = email;
+                user.NormalizedEmail = email.ToUpper();
+                user.NormalizedUserName = email.ToUpper();
+
+                if (phoneNumber != null)
+                {
+                    user.PhoneNumber = phoneNumber;
+                    data.SaveChanges();
+                }
+
+                data.SaveChanges();
+
+                await GeneratorPassword(password, user);
+            }
+            return user;
+        }
     }
 }

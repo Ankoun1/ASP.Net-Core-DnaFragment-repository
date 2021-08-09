@@ -4,7 +4,8 @@
     using System.ComponentModel.DataAnnotations;
 
     public class LrUser
-    {
+    {        
+        
         public int Id { get; init; }
         
         [EmailAddress]
@@ -14,7 +15,11 @@
 
         public int? LrPoints { get; set; }
 
+        public bool IsDanger { get; set; }
+
         public IEnumerable<StatisticsCategory> StatisticsCategories { get; init; } = new List<StatisticsCategory>();
+
+        public ICollection<LrUserOldEmails> OldEmails { get; set; } = new HashSet<LrUserOldEmails>();
 
     }
 }

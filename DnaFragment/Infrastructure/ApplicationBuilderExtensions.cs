@@ -9,7 +9,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using static WebConstants;
+    using static DnaFragment.Areas.Admin.AdminConstants;
 
     public static class ApplicationBuilderExtensions
     {
@@ -24,6 +24,7 @@
             SeedAdministrator(services);
             //SeedCategories(services);
             //SeedLrProducts(services);
+            SeedLrUser(services);
 
             return app;
         }
@@ -35,9 +36,22 @@
             data.Database.Migrate();
         }
 
+        private static void SeedLrUser(IServiceProvider services)
+        {
+           var data = services.GetRequiredService<DnaFragmentDbContext>();
+
+             if (data.LrUsers.Any())
+             {
+                 return;
+             }
+
+            data.LrUsers.Add(new LrUser { Email = null });         
+            data.SaveChanges();
+        }
+
         /* private static void SeedCategories(IServiceProvider services)
          {
-           var data = services.GetRequiredService<DnaFragmentContext>();
+           var data = services.GetRequiredService<DnaFragmentDbContext>();
 
              if (data.Categories.Any())
              {
@@ -62,7 +76,7 @@
 
         /*private static void SeedLrProducts(IServiceProvider services)
         {
-          var data = services.GetRequiredService<DnaFragmentContext>();
+          var data = services.GetRequiredService<DnaFragmentDbContext>();
 
             if (data.LrProducts.Any())
             {
@@ -77,7 +91,7 @@
            {
            new LrProduct
            {
-               Name = "Мъжки парфюм LR Bruce Willis",
+               Model = "Мъжки парфюм LR Bruce Willis",
                PackagingVolume = "50",
                Year = 1999,
                Price = 80,
@@ -90,7 +104,7 @@
            },
            new LrProduct
            {
-               Name = "Мъжки парфюм Guido Maria Kretschmer LR",
+               Model = "Мъжки парфюм Guido Maria Kretschmer LR",
                PackagingVolume = "50",
                Year = 1999,
                Price = 70,
@@ -104,7 +118,7 @@
            },
            new LrProduct
            {
-               Name = "Парфюм LR Rockin' Romance",
+               Model = "Парфюм LR Rockin' Romance",
                PackagingVolume = "50",
                Year = 1999,
                Price = 52,
@@ -116,7 +130,7 @@
            },
            new LrProduct
            {
-               Name = "Дамски парфюм LR Lovingly by Bruce WillIis",
+               Model = "Дамски парфюм LR Lovingly by Bruce WillIis",
                PackagingVolume = "50",
                Year = 1999,
                Price = 80,
@@ -130,7 +144,7 @@
            },
            new LrProduct
            {
-               Name = "Дамски парфюм Guido Maria Kretschmer LR",
+               Model = "Дамски парфюм Guido Maria Kretschmer LR",
                PackagingVolume = "50",
                Year = 1999,
                Price = 80,
@@ -144,7 +158,7 @@
            },
            new LrProduct
            {
-               Name = "Парфюмна вода 'Стокхолм'",
+               Model = "Парфюмна вода 'Стокхолм'",
                PackagingVolume = "50",
                Year = 1999,
                Price = 28.70m,
@@ -156,7 +170,7 @@
            },
            new LrProduct
            {
-               Name = "Алое Вера Контурен гел за тяло",
+               Model = "Алое Вера Контурен гел за тяло",
                PackagingVolume = "200",
                Year = 1999,
                Price = 49.40m,
@@ -169,7 +183,7 @@
            },
            new LrProduct
            {
-               Name = "Алое Вера коригиращ крем за тяло",
+               Model = "Алое Вера коригиращ крем за тяло",
                PackagingVolume = "200",
                Year = 1999,
                Price = 49.40m,
@@ -182,7 +196,7 @@
            },
            new LrProduct
            {
-               Name = "Алое Вера рол-он дезодорант",
+               Model = "Алое Вера рол-он дезодорант",
                PackagingVolume = "50",
                Year = 1999,
                Price = 11.36m,
@@ -195,7 +209,7 @@
            },
            new LrProduct
            {
-               Name = "Алое Вера Хидратиращ лосион за тяло",
+               Model = "Алое Вера Хидратиращ лосион за тяло",
                PackagingVolume = "200",
                Year = 1999,
                Price = 29.39m,
@@ -208,7 +222,7 @@
            },
            new LrProduct
            {
-               Name = "Алое Вера Паста за зъби-гел",
+               Model = "Алое Вера Паста за зъби-гел",
                PackagingVolume = "100",
                Year = 1999,
                Price = 10.69m,
@@ -223,10 +237,10 @@
 
 
             data.SaveChanges();
-            string userId = data.LrUsers.Select(x => x.Id).FirstOrDefault();
+            string userId = data.Users.Select(x => x.Id).FirstOrDefault();
             foreach (var productId in data.LrProducts.Select(x => x.Id).ToList())
             {
-                var userProduct = new UserProduct { LrUserId = userId, LrProductId = productId };
+                var userProduct = new UserProduct { UserId = userId, LrProductId = productId };
                 data.UserProducts.Add(userProduct);
                 data.SaveChanges();
             }
