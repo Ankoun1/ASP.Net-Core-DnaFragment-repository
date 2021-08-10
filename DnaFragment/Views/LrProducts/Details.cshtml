@@ -27,7 +27,7 @@ else
 else
 {
      <ul class="list-group list-group-flush ">
-         <li class="list-group-item text-center font-italic text-white">@Model.Model  @Model.PackagingVolume ml.</li>
+         <li class="list-group-item text-center font-italic text-xl-center text-warning ">@Model.Model  @Model.PackagingVolume ml.</li>
     </ul>
     <img class="card-img-top" src="@Model.PictureUrl">
    
@@ -51,19 +51,19 @@ else
 <hr class="bg-primary w-100">
 @if (Model != null)
 {   
-<h class="text-xl-left text-primary">• ChemicalIngredients</h>
+<h class="text-xl-left font-italic text-primary">✦ ChemicalIngredients</h>
 }
 else
 {   
-<h1 class="text-secondary">• ChemicalIngredients</h1>
+<h1 class="text-xl-left font-italic text-secondary">✦ ChemicalIngredients</h1>
 }
         <ul class="list-group list-group-flush ">
-            <li class="list-group-item text-left font-italic text-break ">@Model.ChemicalIngredients</li>
+            <li class="list-group-item text-left  text-break ">@Model.ChemicalIngredients</li>
         </ul> 
         <hr class="bg-primary w-100">
-        <h class="text-primary">• Description</h>
+        <h class="text-xl-left font-italic text-primary">✦ Description</h>
         <ul class="list-group list-group-flush ">
-            <li class="list-group-item text-left font-italic text-break"> @Model.Description</li>       
+            <li class="list-group-item text-left  text-break"> @Model.Description</li>       
         </ul>
     <hr class="bg-primary w-100">
 </form>

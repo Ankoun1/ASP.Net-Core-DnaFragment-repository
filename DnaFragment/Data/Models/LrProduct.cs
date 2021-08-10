@@ -9,9 +9,7 @@
     public class  LrProduct
     {
         [Key]
-        [Required]
-        [MaxLength(IdMaxLength)]
-        public string Id { get; init; } = Guid.NewGuid().ToString();
+        public int Id { get; init; }
 
         [Required]
         [MaxLength(ModelMaxLength)]

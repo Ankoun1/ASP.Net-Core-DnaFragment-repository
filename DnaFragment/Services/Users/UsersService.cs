@@ -111,9 +111,11 @@
             foreach (var lrUser in lrUsers)
             {
                
-                var statisticsCategory = data.StatisticsCategories.Where(y => y.LrUserId == lrUser.Id).Select(x => x.CategoryVisitsCount).FirstOrDefault();
-                var statisticsProduct = data.StatisticsProducts.Where(y => y.StatisticsCategory.LrUserId == lrUser.Id).Select(x => x.ProductVisitsCount).FirstOrDefault();
-                if (lrUser.Email != null)
+               
+                var statisticsProduct = data.LrUserStatisticsProducts.Where(y => y.LrUserId == lrUser.Id).ToList();
+                StringBuilder sb = new StringBuilder();
+
+                if (lrUser.Email != "unknown@city.com")
                 {
 
                     var userDb = data.Users.Where(x => !x.IsAdministrator).OrderBy(x => x.Email).FirstOrDefault();
@@ -126,9 +128,17 @@
                             Email = lrUser.Email,
                             PhoneNumber = null,
                             IsDanger = lrUser.IsDanger,
-                            CategoryVisitsCount = statisticsCategory,
-                            ProductVisitsCount = statisticsProduct
+                            CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
+                            
                         };
+
+                        foreach (var item in statisticsProduct)
+                        {
+                            var product = data.StatisticsProducts.Where(x => x.Id == item.StatisticsProductId).FirstOrDefault();
+                            sb.Append($"<{product.PlateNumber}({item.ProductVisitsCount})>");
+
+                        }
+                        user.ProductsVisitsCount = sb.ToString();
                         users.Add(user);
                     }
                     else
@@ -139,9 +149,17 @@
                             Username = userDb.FullName,
                             Email = lrUser.Email,
                             PhoneNumber = userDb.PhoneNumber,
-                            CategoryVisitsCount = statisticsCategory,
-                            ProductVisitsCount = statisticsProduct
+                            CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
+                            
                         };
+                        foreach (var item in statisticsProduct)
+                        {
+                            var product = data.StatisticsProducts.Where(x => x.Id == item.StatisticsProductId).FirstOrDefault();
+                            sb.Append($"<{product.PlateNumber}({item.ProductVisitsCount})>");
+
+                        }
+                        user.ProductsVisitsCount = sb.ToString();
+                   
                         users.Add(user);
                     }
                     
@@ -152,10 +170,18 @@
                     {                                           
                         Username = "Users not registration",
                         Email = lrUser.Email,
-                        PhoneNumber = null,                  
-                        CategoryVisitsCount = statisticsCategory,
-                        ProductVisitsCount = statisticsProduct
+                        PhoneNumber = null,
+                        CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
+                        
                     };
+                    foreach (var item in statisticsProduct)
+                    {
+                        var product = data.StatisticsProducts.Where(x => x.Id == item.StatisticsProductId).FirstOrDefault();
+                        sb.Append($"<{product.PlateNumber} ({item.ProductVisitsCount})>  ");
+
+                    }
+                    user.ProductsVisitsCount = sb.ToString();
+                    
                     users.Add(user);
                 }
             }         

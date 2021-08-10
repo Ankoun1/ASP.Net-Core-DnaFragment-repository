@@ -6,7 +6,7 @@ namespace DnaFragment.Services.LrProducts.Models
 
     public class LrProductServiceModel
     {
-        public string Id { get; init; }
+        public int Id { get; init; }
 
         public string Model { get; init; }
 

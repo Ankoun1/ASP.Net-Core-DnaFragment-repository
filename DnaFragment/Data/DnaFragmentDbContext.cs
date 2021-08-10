@@ -15,6 +15,8 @@ namespace DnaFragment.Data
        
         public DbSet<LrUser> LrUsers { get; init; }
 
+        public DbSet<LrUserStatisticsProduct> LrUserStatisticsProducts { get; init; }
+
         public DbSet<LrUserOldEmails> LrUsersOldEmails { get; init; }
 
         public DbSet<StatisticsCategory> StatisticsCategories { get; init; }
@@ -39,6 +41,7 @@ namespace DnaFragment.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {         
             builder.Entity<UserProduct>().HasKey(up => new { up.UserId, up.LrProductId });
+            builder.Entity<LrUserStatisticsProduct>().HasKey(up => new { up.LrUserId, up.StatisticsProductId });
 
             builder.Entity<UserProduct>()
             .HasOne<User>(tm => tm.User)

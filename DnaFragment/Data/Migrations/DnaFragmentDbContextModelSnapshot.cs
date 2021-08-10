@@ -69,9 +69,10 @@ namespace DnaFragment.Data.Migrations
 
             modelBuilder.Entity("DnaFragment.Data.Models.LrProduct", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -130,10 +131,10 @@ namespace DnaFragment.Data.Migrations
                     b.Property<bool>("IsDanger")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("LrPoints")
+                    b.Property<int>("LrPoints")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("TotalSum")
+                    b.Property<decimal>("TotalSum")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -159,6 +160,30 @@ namespace DnaFragment.Data.Migrations
                     b.HasIndex("LrUserId");
 
                     b.ToTable("LrUsersOldEmails");
+                });
+
+            modelBuilder.Entity("DnaFragment.Data.Models.LrUserStatisticsProduct", b =>
+                {
+                    b.Property<int>("LrUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatisticsProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryVisitsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductVisitsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PurchasesCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("LrUserId", "StatisticsProductId");
+
+                    b.HasIndex("StatisticsProductId");
+
+                    b.ToTable("LrUserStatisticsProducts");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.Message", b =>
@@ -224,35 +249,22 @@ namespace DnaFragment.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CategoryVisitsCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LrUserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("LrUserId");
 
                     b.ToTable("StatisticsCategories");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.StatisticsProduct", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("PlateNumber")
                         .IsRequired()
                         .HasMaxLength(7)
                         .HasColumnType("nvarchar(7)");
-
-                    b.Property<int?>("ProductVisitsCount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PurchasesCount")
-                        .HasColumnType("int");
 
                     b.Property<int>("StatisticsCategoryId")
                         .HasColumnType("int");
@@ -344,8 +356,8 @@ namespace DnaFragment.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LrProductId")
-                        .HasColumnType("nvarchar(40)");
+                    b.Property<int>("LrProductId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "LrProductId");
 
@@ -522,6 +534,25 @@ namespace DnaFragment.Data.Migrations
                     b.Navigation("LrUser");
                 });
 
+            modelBuilder.Entity("DnaFragment.Data.Models.LrUserStatisticsProduct", b =>
+                {
+                    b.HasOne("DnaFragment.Data.Models.LrUser", "LrUser")
+                        .WithMany("StatisticsCategories")
+                        .HasForeignKey("LrUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DnaFragment.Data.Models.StatisticsProduct", "StatisticsProduct")
+                        .WithMany("StatisticsCategories")
+                        .HasForeignKey("StatisticsProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LrUser");
+
+                    b.Navigation("StatisticsProduct");
+                });
+
             modelBuilder.Entity("DnaFragment.Data.Models.Message", b =>
                 {
                     b.HasOne("DnaFragment.Data.Models.User", "User")
@@ -542,17 +573,6 @@ namespace DnaFragment.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DnaFragment.Data.Models.StatisticsCategory", b =>
-                {
-                    b.HasOne("DnaFragment.Data.Models.LrUser", "LrUser")
-                        .WithMany("StatisticsCategories")
-                        .HasForeignKey("LrUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LrUser");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.StatisticsProduct", b =>
@@ -661,6 +681,11 @@ namespace DnaFragment.Data.Migrations
             modelBuilder.Entity("DnaFragment.Data.Models.StatisticsCategory", b =>
                 {
                     b.Navigation("StatisticsProducts");
+                });
+
+            modelBuilder.Entity("DnaFragment.Data.Models.StatisticsProduct", b =>
+                {
+                    b.Navigation("StatisticsCategories");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.User", b =>

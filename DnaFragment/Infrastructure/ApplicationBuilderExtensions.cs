@@ -1,10 +1,12 @@
 ﻿namespace DnaFragment.Infrastructure
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using DnaFragment.Data;
     using DnaFragment.Data.Models;
+    using DnaFragment.Services.Users;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,7 @@
 
     public static class ApplicationBuilderExtensions
     {
+       
         public static IApplicationBuilder PrepareDatabase(
             this IApplicationBuilder app)
         {
@@ -22,9 +25,8 @@
             MigrateDatabase(services);
 
             SeedAdministrator(services);
-            //SeedCategories(services);
-            //SeedLrProducts(services);
-            SeedLrUser(services);
+            SeedCategories(services);
+            SeedLrProducts(services);            
 
             return app;
         }
@@ -35,29 +37,15 @@
 
             data.Database.Migrate();
         }
-
-        private static void SeedLrUser(IServiceProvider services)
+        
+        private static void SeedCategories(IServiceProvider services)
         {
-           var data = services.GetRequiredService<DnaFragmentDbContext>();
-
-             if (data.LrUsers.Any())
-             {
-                 return;
-             }
-
-            data.LrUsers.Add(new LrUser { Email = null });         
-            data.SaveChanges();
-        }
-
-        /* private static void SeedCategories(IServiceProvider services)
-         {
            var data = services.GetRequiredService<DnaFragmentDbContext>();
 
              if (data.Categories.Any())
              {
                  return;
              }
-
 
              data.Categories.AddRange(new[]
              {
@@ -68,13 +56,18 @@
                  new Category { Name = "АЛОЕ ВЕРА ГЕЛ ЗА ПИЕНЕ",PictureUrl = "https://primelr.ru/wp-content/uploads/2020/06/thumb_gel_aloe_vera_maglr-lr-immun_plus.jpg" },
                  new Category { Name = "КОЗМЕТИКА LR" ,PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/lr-colours-lipstick-care-balm-maglr.jpg"},
                  new Category { Name = "ПАРФЮМИ ЗА МЪЖЕ LR", PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/full_ocean_parfum.jpg" }
-             });
+             });            
 
+            data.SaveChanges();
 
-             data.SaveChanges();
-         }*/
+            for (int i = 1; i <= 7; i++)
+            {
+                data.StatisticsCategories.Add(new StatisticsCategory());
+                data.SaveChanges();
+            }
+        }
 
-        /*private static void SeedLrProducts(IServiceProvider services)
+       private static void SeedLrProducts(IServiceProvider services)
         {
           var data = services.GetRequiredService<DnaFragmentDbContext>();
 
@@ -234,9 +227,8 @@
                PlateNumber = "20690",
                CategoryId = 2
            }});
-
-
             data.SaveChanges();
+
             string userId = data.Users.Select(x => x.Id).FirstOrDefault();
             foreach (var productId in data.LrProducts.Select(x => x.Id).ToList())
             {
@@ -244,7 +236,23 @@
                 data.UserProducts.Add(userProduct);
                 data.SaveChanges();
             }
-        }*/
+
+            var statisticsProducts = new List<StatisticsProduct>();
+            for (int i = 1; i <= 7; i++)
+            {
+                var category = data.Categories.Where(x => x.Id == i).FirstOrDefault();
+                    
+                for (int j = 0; j < category.LrProducts.Count(); j++)
+                {
+                    var product = data.LrProducts.Select(x => new { Id = x.Id, PlateNumber = x.PlateNumber }).Skip(j).FirstOrDefault();
+
+                    statisticsProducts.Add(new StatisticsProduct {StatisticsCategoryId = i ,PlateNumber = product.PlateNumber});                    
+                }
+               
+            }
+            data.StatisticsProducts.AddRange(statisticsProducts);
+            data.SaveChanges();
+        }
 
         private static void SeedAdministrator(IServiceProvider services)
         {

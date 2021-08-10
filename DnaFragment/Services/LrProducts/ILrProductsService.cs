@@ -8,7 +8,7 @@ namespace DnaFragment.Services.LrProducts
 
     public interface ILrProductsService
     {
-        public string Create(
+        public int Create(
                string Model,
                string PackagingVolume,
                string ChemicalIngredients,
@@ -20,17 +20,17 @@ namespace DnaFragment.Services.LrProducts
                int CategoryId, 
                string userId);
 
-        void CreateUserProduct(string productId,string userId);
+        void CreateUserProduct(int productId,string userId);
 
-        bool Update(string id, string description,decimal price, int categoryId);
+        bool Update(int id, string description,decimal price, int categoryId);
 
         LrProductQueryServiceModel All(string brand, string searchTerm, LrProductSorting sorting, int currentPage, int productsPerPage);
 
-        LrProductDetailsServiceModel Details(string Id);
+        LrProductDetailsServiceModel Details(int Id);
 
         List<LrProductDetailsServiceModel> Favorits(string Id);
 
-        bool ExistUserProduct(string productId, string userId);
+        bool ExistUserProduct(int productId, string userId);
 
         List<LrProductServiceModel> AllProductsByCategory(int categoryId);
 
@@ -40,8 +40,8 @@ namespace DnaFragment.Services.LrProducts
 
         bool CategoryExsists(int categoryId);
 
-        void UpdateCountVisitsCategory(string userName);
+        void UpdateCountVisitsCategory(string userName,int categoryId);
 
-        void UpdateCountVisitsProduct(string userName);
+        void UpdateCountVisitsProduct(string userName,int id);
     }
 }

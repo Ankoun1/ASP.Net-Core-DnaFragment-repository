@@ -11,7 +11,7 @@
 
         public int? CategoryVisitsCount { get; init; }
 
-        public int? ProductVisitsCount { get; init; }
+        public string ProductsVisitsCount { get; set; }
        
     }
 }

@@ -21,7 +21,6 @@ namespace DnaFragment.DnaFragmentControllers.Api
         }
 
         [HttpGet]
-
         public LrProductQueryServiceModel All([FromQuery] AllLrProductsApiRequestModel query)
         {
             return lrProducts.All(query.Brand, query.SearchTerm, query.Sorting, query.CurrentPage, query.ProductsPerPage);        

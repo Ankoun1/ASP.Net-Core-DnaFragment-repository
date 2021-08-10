@@ -75,7 +75,7 @@
         }
 
         [Authorize(Roles = "Administrator")]
-        public IActionResult Update(string id)
+        public IActionResult Update(int id)
         {
             var userId = this.User.GetId();
 
@@ -89,7 +89,7 @@
             return View(productForm);
         } 
 
-        public IActionResult Update(string id, AddProductUpdateFormModel product)
+        public IActionResult Update(int id, AddProductUpdateFormModel product)
         {
            
 
@@ -121,7 +121,7 @@
         }
 
         [Authorize]
-        public IActionResult Edit(string id)
+        public IActionResult Edit(int id)
         {
             string userId = User.GetId();
             if (administrator.UserIsRegister(userId))
@@ -151,11 +151,11 @@
             return View(products);
         } 
 
-        public IActionResult Details(string id)
+        public IActionResult Details(int id)
         {
             var product = lrProducts.Details(id);
 
-            lrProducts.UpdateCountVisitsProduct(User.GetName());
+            lrProducts.UpdateCountVisitsProduct(User.GetName(),id);
 
             return View(product);
         }
@@ -163,7 +163,7 @@
         public IActionResult AllProductsByCategory(int categoryId)
         {
             var products = lrProducts.AllProductsByCategory(categoryId);
-            lrProducts.UpdateCountVisitsCategory(User.GetName());
+            lrProducts.UpdateCountVisitsCategory(User.GetName(),categoryId);
             return View(products);
         }
 

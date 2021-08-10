@@ -3,7 +3,7 @@
 @{ ViewBag.Title = "Products by category"; }
 
 <hr class="bg-primary w-75">
-@if (Model == null && !User.IsAdmin())
+@if (Model.Count == 1 && !User.IsAdmin())
  {
     <form class="mx-auto w-50" size="3">
       <div class="alert alert-secondary alert-dismissible fade show small ">
@@ -14,7 +14,7 @@
 <hr class="bg-primary w-50">
 <h2 class="text-center mt-2">@ViewBag.Title</h2>
 
-@if (Model != null)
+@if (Model.Count != 1)
 {
     <h1 class="text-center mt-2 text-success">▪</h1>
     <h1 class="text-center mt-2 text-white">▪</h1>
@@ -29,7 +29,7 @@ else
     <h1 class="text-center mt-2 text-secondary">▪</h1>
 }
 <form class="mx-auto w-50" size="3">
- @if (Model == null)
+ @if (Model.Count == 1)
  {
 <img src="https://img5.goodfon.com/wallpaper/nbig/0/fb/devushka-shatenka-shliapa-priroda-lug-tsvety-peizazh.jpg"
          class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
@@ -40,7 +40,7 @@ else
      int i = 1;
      foreach (var photo in Model[0].Photos)
      {
-       @if (Model[0].CategoryId == i)
+       @if (Model[1].CategoryId == i)
        {
          <img src=@photo
          class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
@@ -50,7 +50,7 @@ else
      }
     
  }
-@if (Model != null)
+@if (Model.Count != 1)
 {
     <h1 class="text-center mt-2 text-white">▪</h1>
     <h1 class="text-center mt-2 text-white">▪</h1>
@@ -64,29 +64,33 @@ else
     <h1 class="text-center mt-2 text-secondary">▪</h1>
     <h1 class="text-center mt-2 text-secondary">▪</h1>
 }
-@if (Model != null)
+@if (Model.Count != 1)
 {
-    @foreach (var product in Model)
+    for (int i = 1; i < Model.Count; i++)
     {
-<div class="form-group col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-    <a class="btn btn-block btn-outline-warning btn-sm font-italic text-break"
-       asp-controller="LrProducts"
-       asp-action="All">
-        @product.Model
-    </a>
-    <img src="@product.PictureUrl"
-         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
-         data-placement="bottom" title="LR">
-    <a class="btn btn-block btn--secondary text-white text-lg-center"
-       asp-controller="LrProducts"
-       asp-action="All">
-        @product.Price lv.
-    </a>
 
-    <h5 class="text-center mt-2 text-success ">▪</h5>
-    <h5 class="text-center mt-2 text-success ">▪</h5>
-
-</div>
+        <div class="form-group col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+            <a class="btn btn-block btn-outline-warning btn-sm font-italic text-break"
+               asp-controller="LrProducts"
+               asp-action="Details"
+               asp-route-id="@Model[i].Id">
+                @Model[i].Model
+            </a>
+            <img src="@Model[i].PictureUrl"
+                 class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+                 data-placement="bottom" title="LR">
+            <a class="btn btn-block btn--secondary text-white text-lg-center"
+               asp-controller="LrProducts"
+               asp-action="Details"
+               asp-route-id="@Model[i].Id">
+                @Model[i].Price lv.
+            </a>
+        
+            <h4 class="text-center mt-2 text-white ">▪▪</h4>
+            <h4 class="text-center mt-2 text-success ">▪</h4>
+            <h4 class="text-center mt-2 text-white ">▪▪</h4>
+        
+        </div>
     }
 }
 </form>

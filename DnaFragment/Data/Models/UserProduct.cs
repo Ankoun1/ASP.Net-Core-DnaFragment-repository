@@ -10,8 +10,8 @@ namespace DnaFragment.Data.Models
 
         public User User { get; set; }
 
-        [Required]
-        public string LrProductId { get; set; }
+        
+        public int LrProductId { get; set; }
 
         public LrProduct LrProduct { get; set; }
     }

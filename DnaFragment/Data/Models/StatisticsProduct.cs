@@ -4,24 +4,21 @@
     using System.ComponentModel.DataAnnotations;
     using static DataConstants.LrProductConst;
     using static DataConstants.DefaultConstants;
+    using System.Collections.Generic;
 
     public class StatisticsProduct
     {
-        [Key]
-        [Required]
-        [MaxLength(IdMaxLength)]
-        public string Id { get; init; } = Guid.NewGuid().ToString();
+        [Key]        
+        public int Id { get; init; }
 
         [Required]
         [MaxLength(PlateNumberMaxLength)]
-        public string PlateNumber { get; init; }
-
-        public int? ProductVisitsCount { get; set; }
-
-        public int? PurchasesCount { get; set; }
+        public string PlateNumber { get; init; }       
         
         public int StatisticsCategoryId { get; init; }
 
         public StatisticsCategory StatisticsCategory { get; init; }
+
+        public IEnumerable<LrUserStatisticsProduct> StatisticsCategories { get; init; } = new List<LrUserStatisticsProduct>();
     }
 }

@@ -73,6 +73,6 @@
         {
             sendMail.SmsMessanger();
             return Redirect("/LrUsers/All");
-        }
+        }       
     }
 }

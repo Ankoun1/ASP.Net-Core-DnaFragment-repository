@@ -7,14 +7,7 @@ namespace DnaFragment.Data.Models
 
     public class StatisticsCategory
     {
-        public int Id { get; init; }
-
-        public int? CategoryVisitsCount { get; set; }
-
-       
-        public int LrUserId { get; init; }
-
-        public LrUser LrUser { get; init; }
+        public int Id { get; init; }            
 
         public IEnumerable<StatisticsProduct> StatisticsProducts { get; init; } = new List<StatisticsProduct>();
     }

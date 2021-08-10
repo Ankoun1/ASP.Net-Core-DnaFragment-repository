@@ -114,8 +114,19 @@
                 if (oldUser == null)
                 {
                     var lrUsers = new LrUser { Email = email };
+                    
+
                     data.LrUsers.Add(lrUsers);
                     data.SaveChanges();
+                    for (int i = 1; i <= 7; i++)
+                    {
+                        foreach(var item in data.StatisticsProducts.Where(x => x.StatisticsCategoryId == i).Select(x => x.Id).ToList())
+                        {
+                            data.LrUserStatisticsProducts.Add(new LrUserStatisticsProduct { LrUserId = lrUsers.Id, StatisticsProductId = item });
+                            data.SaveChanges();
+                        }
+                       
+                    }
                     result = await this.userManager.CreateAsync(user, Input.Password);                
                 }
                 else

@@ -26,8 +26,7 @@
      <h1 class="text-center mt-2 text-danger">▪</h1>
  }
  @if (Model.Count > 1)
- {
-      
+ {      
       for (int i = 1; i <= 3; i++)
       {
         @if (Model[i].CountCategoryProducts == 0)
@@ -114,16 +113,16 @@
              @category.Name
          </a>
     }
+        <h5 class="text-center mt-2 text-white ">▪ ▪</h5>
     @if (category.CountCategoryProducts == 0)
     {
-         <h5 class="text-center mt-2 text-secondary ">•</h5>
-         <h5 class="text-center mt-2 text-secondary ">•</h5>
+        <h5 class="text-center mt-2 text-danger ">▪</h5>
     }
     else
-    {
-         <h5 class="text-center mt-2 text-white ">▪</h5>
-         <h5 class="text-center mt-2 text-white ">▪</h5>
+    {        
+        <h5 class="text-center mt-2 text-success ">▪</h5>        
     }
+        <h5 class="text-center mt-2 text-white ">▪ ▪</h5>
 
 </div>
     }
