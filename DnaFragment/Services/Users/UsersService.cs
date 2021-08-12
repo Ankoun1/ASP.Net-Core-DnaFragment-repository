@@ -242,5 +242,21 @@
             }
             return user;
         }
+
+        public void AddNewLrUserInfoDb(LrUser lrUser)       
+        {          
+
+            var lrUserStatisticsProduct = new List<LrUserStatisticsProduct>();
+            for (int i = 1; i <= 7; i++)
+            {
+                foreach (var item in data.StatisticsProducts.Where(x => x.StatisticsCategoryId == i).Select(x => x.Id).ToList())
+                {
+                    lrUserStatisticsProduct.Add(new LrUserStatisticsProduct { LrUserId = lrUser.Id, LrUser = lrUser, StatisticsProductId = item });
+
+                }
+            }
+            data.LrUserStatisticsProducts.AddRange(lrUserStatisticsProduct);
+            data.SaveChanges();
+        }
     }
 }

@@ -7,32 +7,33 @@
     @if (SignInManager.IsSignedIn(User))
     {
         @if (User.IsAdmin())
-         {
-            <li class="nav-item ml-auto">
-                <h5 scope="col" class="text-info"> •</h5>
-            </li>
+        {
             <li class="nav-item">
                 <a class="nav-link text-white active h5" asp-area="Admin" asp-controller="LrUsers" asp-action="All">User✦Information</a>
             </li>
-         }
-         else
-         {
+            <li class="nav-item ml-auto">
+                <h4 scope="col" class="text-info">.</h4>
+            </li>
+
+        }
+        else
+        {
             <li class="nav-item ml-auto">
                 <a class="nav-link text-white active h5" asp-area="" asp-controller="LrUsers" asp-action="Profile">Profile</a>
             </li>
-         }
-
+        }
         <li class="nav-item ml-auto">
             <a id="logout" class="nav-link text-white active h5" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action(" Index", "Home" , new { area="" })">Logout</a>
         </li>
-     }
-     else
-     {
+       
+    }
+    else
+    {
         <li class="nav-item ml-auto">
             <a class="nav-link text-white active h5" asp-area="Identity" asp-page="/Account/Register">Register</a>
         </li>
         <li class="nav-item ml-auto">
             <a class="nav-link text-white active h5" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
-     }
+    }
 </ul>

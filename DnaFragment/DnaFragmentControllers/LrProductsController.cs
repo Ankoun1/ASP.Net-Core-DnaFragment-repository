@@ -2,123 +2,32 @@
 {    
     using DnaFragment.Infrastructure;   
     using DnaFragment.Models.LrProducts;   
-    using Microsoft.AspNetCore.Mvc; 
+    
     using DnaFragment.Services.Administrators;
-    using Microsoft.AspNetCore.Authorization;    
+    
     using System.Linq;
     using static WebConstants;
     using DnaFragment.Services.LrProducts;
-    using AutoMapper;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+
+    //using AutoMapper;
 
     public class LrProductsController : Controller
     {    
         private readonly ILrProductsService lrProducts;
         private readonly IAdministratorService administrator;
-        private readonly IMapper mapper;
+        //private readonly IMapper mapper;
 
         public LrProductsController(         
-               ILrProductsService lrProducts, IAdministratorService administrator, IMapper mapper)
+               ILrProductsService lrProducts, IAdministratorService administrator)
         {           
             this.lrProducts = lrProducts;
             this.administrator = administrator;
-            this.mapper = mapper;
+            //this.mapper = mapper;
         }
 
-        [Authorize(Roles = "Administrator")]
-        public IActionResult Add()
-        {
-            if (!administrator.UserIsRegister(User.GetId()))
-            {
-                return Redirect(RedirectToLogin);
-            }
-            
-            return View(new AddProductFormModel
-            {
-                Categories = lrProducts.AllCategories()
-            });
-        }
        
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
-        public IActionResult Add(AddProductFormModel lrProduct)
-        {
-            var lrUserId = administrator.AdministratorId(User.GetId());
-
-            if (lrUserId == null)
-            {
-                return Redirect(RedirectToLogin);
-            }           
-
-            if (!lrProducts.CategoryExsists(lrProduct.CategoryId))
-            {
-                this.ModelState.AddModelError(nameof(lrProduct.CategoryId), "Category does not exist.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(lrProduct);
-            }
-
-            lrProducts.Create(lrProduct.Model,
-                 lrProduct.PackagingVolume,
-                 lrProduct.ChemicalIngredients,
-                 lrProduct.Description,
-                 lrProduct.Price,
-                 lrProduct.Year,
-                 lrProduct.Image,
-                 lrProduct.PlateNumber,
-                 lrProduct.CategoryId,
-                 lrUserId);
-
-            return  RedirectToAction(nameof(All));
-        }
-
-        [Authorize(Roles = "Administrator")]
-        public IActionResult Update(int id)
-        {
-            var userId = this.User.GetId();
-
-            if (!User.IsAdmin())
-            {
-                return Redirect(RedirectToLogin);
-            }
-
-            var product = lrProducts.Details(id);
-            var productForm = mapper.Map<AddProductUpdateFormModel>(product);
-            return View(productForm);
-        } 
-
-        public IActionResult Update(int id, AddProductUpdateFormModel product)
-        {
-           
-
-            if (!User.IsAdmin())
-            {
-                return Redirect(RedirectToLogin);
-            }
-
-            if (!lrProducts.CategoryExsists(product.CategoryId))
-            {
-                this.ModelState.AddModelError(nameof(product.CategoryId), "Category does not exist.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                product.Categories = lrProducts.AllCategories();
-
-                return View(product);
-            }
-
-
-            lrProducts.Update(
-                id,                
-                product.Description,
-                product.Price,
-                product.CategoryId);
-
-            return RedirectToAction(nameof(All));
-        }
 
         [Authorize]
         public IActionResult Edit(int id)

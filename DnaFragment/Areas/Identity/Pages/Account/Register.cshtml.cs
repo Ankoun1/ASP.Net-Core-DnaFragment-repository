@@ -113,20 +113,20 @@
                 var oldUser = data.LrUsers.Where(x => x.Id == oldEmailUserId).FirstOrDefault();
                 if (oldUser == null)
                 {
-                    var lrUsers = new LrUser { Email = email };
-                    
-
-                    data.LrUsers.Add(lrUsers);
-                    data.SaveChanges();
-                    for (int i = 1; i <= 7; i++)
+                    var lrUser = new LrUser();
+                    if (data.LrUsers.Any())
                     {
-                        foreach(var item in data.StatisticsProducts.Where(x => x.StatisticsCategoryId == i).Select(x => x.Id).ToList())
-                        {
-                            data.LrUserStatisticsProducts.Add(new LrUserStatisticsProduct { LrUserId = lrUsers.Id, StatisticsProductId = item });
-                            data.SaveChanges();
-                        }
-                       
+                        lrUser.Email = email;                                                
                     }
+                    else
+                    {
+                        lrUser.Email = "unknown@city.com";                                              
+                    }
+                    data.LrUsers.Add(lrUser);
+                    data.SaveChanges();
+
+                    usersService.AddNewLrUserInfoDb(lrUser);
+
                     result = await this.userManager.CreateAsync(user, Input.Password);                
                 }
                 else

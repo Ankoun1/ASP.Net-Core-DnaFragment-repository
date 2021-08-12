@@ -41,12 +41,15 @@
         [Url]
         public string Image { get; init; }
 
-        public string PlateNumber { get; init; }
+        [Required]
+        [MaxLength(PlateNumberMaxLength)]
+        public string PlateNumber { get; set; }
 
         [Display(Name = "Category")]
         public int CategoryId { get; init; }
 
         public IEnumerable<LrCategoryServiceModel> Categories { get; set; }
+       
     }
 }
 

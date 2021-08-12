@@ -17,19 +17,18 @@ namespace DnaFragment.Services.LrProducts
                int Year,
                string Image,
                string PlateNumber,
-               int CategoryId, 
-               string userId);
+               int CategoryId);       
 
         void CreateUserProduct(int productId,string userId);
 
-        bool Update(int id, string description,decimal price, int categoryId);
-
+        bool Update(string description, decimal price, string image, string plateNumber, int productId, int categoryId);
+                    
         LrProductQueryServiceModel All(string brand, string searchTerm, LrProductSorting sorting, int currentPage, int productsPerPage);
-
+                    
         LrProductDetailsServiceModel Details(int Id);
-
+                    
         List<LrProductDetailsServiceModel> Favorits(string Id);
-
+                  
         bool ExistUserProduct(int productId, string userId);
 
         List<LrProductServiceModel> AllProductsByCategory(int categoryId);

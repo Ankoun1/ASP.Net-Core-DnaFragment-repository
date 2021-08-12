@@ -27,10 +27,11 @@
 
         Task UpdateDb(string userId, string fullName, string email, string phoneNumber, string password);
 
-        Task<User> CorrectUpdate(LrUser lrUser,string fullName,string email, string phoneNumber, string password,User user);
-        
+        Task<User> CorrectUpdate(LrUser lrUser,string fullName,string email, string phoneNumber, string password,User user);        
 
         Task GeneratorPassword(string password, User user);
+
+        void AddNewLrUserInfoDb(LrUser lrUser);
 
        
 

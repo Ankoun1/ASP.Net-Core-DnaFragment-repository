@@ -23,5 +23,7 @@ namespace DnaFragment.Models.LrProducts
         public int CategoryId { get; init; }
 
         public IEnumerable<LrCategoryServiceModel> Categories { get; set; }
+
+        public int UserId { get; init; }
     }
 }

@@ -31,8 +31,8 @@ namespace DnaFragment.Services.LrProducts
                 int year,
                 string image,
                 string plateNumber,
-                int categoryId,
-                string userId)
+                int categoryId)
+
         {
             var product = new LrProduct
             {
@@ -46,25 +46,43 @@ namespace DnaFragment.Services.LrProducts
                 PlateNumber = plateNumber,
                 CategoryId = categoryId
             };
-            
-            this.data.LrProducts.Add(product);
 
-            CreateUserProduct(product.Id, userId);           
+            this.data.LrProducts.Add(product);
+            UpdateLrUserStatisticsProducts(plateNumber, categoryId);
+
+            //CreateUserProduct(product.Id, userId);           
 
             return product.Id;
         }
 
-        public bool Update(int id, string description,decimal price,int categoryId)
+        private void UpdateLrUserStatisticsProducts(string plateNumber, int categoryId)
         {
-            var productData = this.data.LrProducts.Find(id);
+            var lrProduct = new StatisticsProduct { StatisticsCategoryId = categoryId, PlateNumber = plateNumber };
+            data.StatisticsProducts.Add(new StatisticsProduct { StatisticsCategoryId = categoryId, PlateNumber = plateNumber });
+            data.SaveChanges();
+
+            var lrUserStatisticsProducts = new List<LrUserStatisticsProduct>();
+            foreach (var user in data.LrUsers.ToList())
+            {
+                lrUserStatisticsProducts.Add(new LrUserStatisticsProduct { LrUserId = user.Id, StatisticsProductId = data.LrProducts.Where(x => x.PlateNumber == plateNumber).Select(x => x.Id).FirstOrDefault() });
+            }
+            data.LrUserStatisticsProducts.AddRange(lrUserStatisticsProducts);
+            data.SaveChanges();
+        }
+
+        public bool Update(string description, decimal price, string image, string plateNumber, int productId, int categoryId)
+        {
+            var productData = this.data.LrProducts.Find(productId);
 
             if (productData == null)
             {
                 return false;
-            }
-           
+            }           
+                    
             productData.Description = description;         
-            productData.Price = price;         
+            productData.Price = price;
+            productData.PictureUrl = image;
+            productData.PlateNumber = plateNumber;
             productData.CategoryId = categoryId;
 
             this.data.SaveChanges();
@@ -99,7 +117,15 @@ namespace DnaFragment.Services.LrProducts
 
             var products = productsQuery
                 .Skip((currentPage - 1) * productsPerPage)
-                .Take(productsPerPage).ProjectTo<LrProductServiceModel>(mapper)               
+                .Take(productsPerPage).Select(c => new LrProductServiceModel
+                {
+                    Id = c.Id,
+                    Model = c.Model,
+                    PackagingVolume = c.PackagingVolume,
+                    Price = c.Price,
+                    PictureUrl = c.PictureUrl,
+                    //Category = c.Category.Name
+                })
                 .ToList();
 
             return new LrProductQueryServiceModel
@@ -152,9 +178,20 @@ namespace DnaFragment.Services.LrProducts
         }
 
         public LrProductDetailsServiceModel Details(int Id)
-        => data.LrProducts.Where(x => x.Id == Id).ProjectTo<LrProductDetailsServiceModel>(mapper)
-           .FirstOrDefault(); 
-        
+        => data.LrProducts.Where(x => x.Id == Id).Select(x => new LrProductDetailsServiceModel
+        {
+            Id = x.Id,
+            Model = x.Model,
+            PackagingVolume = x.PackagingVolume,
+            Description = x.Description,
+            ChemicalIngredients = x.ChemicalIngredients,
+            Price = x.Price,
+            PictureUrl = x.PictureUrl,
+            PlateNumber = x.PlateNumber,
+            CategoryId = x.CategoryId,
+            //LrUserId = x.Id
+        }).FirstOrDefault();
+
         public List<LrProductDetailsServiceModel> Favorits(string id)
         =>data.LrProducts.Where(x => x.UserProducts.Where(y => y.UserId == id).Select(y => y.UserId)
             .FirstOrDefault() == id)
