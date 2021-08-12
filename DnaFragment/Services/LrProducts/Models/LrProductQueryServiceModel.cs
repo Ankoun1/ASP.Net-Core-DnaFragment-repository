@@ -11,5 +11,7 @@
         public int ProductsPerPage { get; init; }
 
         public IEnumerable<LrProductServiceModel> LrProducts { get; init; }
+
+        public bool  CategoryAny { get; set; }
     }
 }

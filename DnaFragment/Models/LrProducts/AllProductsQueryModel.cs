@@ -22,5 +22,7 @@
         public IEnumerable<string> Brands { get; set; }
 
         public IEnumerable<LrProductServiceModel> LrProducts { get; set; }
+
+        public bool CategoryAny { get; set; }
     }
 }

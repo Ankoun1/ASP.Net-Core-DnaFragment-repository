@@ -15,10 +15,16 @@
             
         }
 
+      
+        public IActionResult Start()
+        {
+            lrProducts.StartLrProduktDb();
+
+            return Redirect("~/LrProducts/All");
+        }
         
         public IActionResult Add(int id)
-        {
-         
+        {         
             if (id != 0)
             {
                 var product = lrProducts.Details(id);
@@ -42,7 +48,6 @@
             }
         }
 
-
         [HttpPost]      
         public IActionResult Add(int id, AddProductFormModel lrProduct)
         {
@@ -62,7 +67,6 @@
                 lrProduct.Categories = this.lrProducts.AllCategories();
                 return View(lrProduct);
             }
-
 
             if (id != 0)
             {

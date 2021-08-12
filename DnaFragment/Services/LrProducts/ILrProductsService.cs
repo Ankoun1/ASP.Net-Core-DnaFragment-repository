@@ -8,6 +8,8 @@ namespace DnaFragment.Services.LrProducts
 
     public interface ILrProductsService
     {
+        void StartLrProduktDb();
+
         public int Create(
                string Model,
                string PackagingVolume,

@@ -25,9 +25,7 @@
             this.lrProducts = lrProducts;
             this.administrator = administrator;
             //this.mapper = mapper;
-        }
-
-       
+        }       
 
         [Authorize]
         public IActionResult Edit(int id)
@@ -42,8 +40,7 @@
             if (!lrProducts.ExistUserProduct(id,userId))
             {
                 lrProducts.CreateUserProduct(id, userId);
-            }         
-          
+            }                
 
             return RedirectToAction(nameof(Favorits));
         }
@@ -64,15 +61,20 @@
         {
             var product = lrProducts.Details(id);
 
-            lrProducts.UpdateCountVisitsProduct(User.GetName(),id);
-
+            if (!User.IsAdmin())
+            {
+                lrProducts.UpdateCountVisitsProduct(User.GetName(), id);
+            }
             return View(product);
         }
 
         public IActionResult AllProductsByCategory(int categoryId)
         {
             var products = lrProducts.AllProductsByCategory(categoryId);
-            lrProducts.UpdateCountVisitsCategory(User.GetName(),categoryId);
+            if (!User.IsAdmin())
+            {
+                lrProducts.UpdateCountVisitsCategory(User.GetName(), categoryId);
+            }
             return View(products);
         }
 
@@ -84,6 +86,7 @@
             query.TotalProducts = queryResult.TotalProducts;
             query.Brands = lrBrands;
             query.LrProducts = queryResult.LrProducts;
+            query.CategoryAny = queryResult.CategoryAny;
 
             return View(query);
         }     

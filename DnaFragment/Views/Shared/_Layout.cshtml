@@ -35,7 +35,12 @@
 
                             @if (userIsAdmin)
                             {
-
+                                <li class="nav-item ml-auto">
+                                    <h4 scope="col" class="text-info">.</h4>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white active h5" asp-area="Admin" asp-controller="LrUsers" asp-action="All">User✦Information</a>
+                                </li>
                                 <li class="nav-item ml-auto">
                                     <a class="nav-link text-white active h5" asp-area="" asp-controller="LrProducts" asp-action="Add">Add✦Product</a>
                                 </li>
@@ -48,12 +53,15 @@
                             else
                             {
                                 <li class="nav-item ml-auto">
+                                    <a class="nav-link text-white active h5" asp-area="" asp-controller="LrUsers" asp-action="Profile">Profile</a>
+                                </li>
+                                <li class="nav-item ml-auto">
                                     <a class="nav-link text-white active h5" asp-area="" asp-controller="Categories" asp-action="All">LR✦Shop</a>
                                 </li>
                                 <li class="nav-item ml-auto">
                                     <a class="nav-link text-white active h5" asp-area="" asp-controller="LrProducts" asp-action="Favorits">♥</a>
                                 </li>
-                                
+
                             }
                             <li class="nav-item ml-auto">
                                 <a class="nav-link text-white active h5" asp-area="" asp-controller="Questions" asp-action="All">My✦Questions</a>

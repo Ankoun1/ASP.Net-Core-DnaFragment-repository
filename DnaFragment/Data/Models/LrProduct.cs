@@ -13,10 +13,10 @@
 
         [Required]
         [MaxLength(ModelMaxLength)]
-        public string Model { get; init; }
+        public string Model { get; set; }
       
         [MaxLength(3)]
-        public string PackagingVolume { get; init; }
+        public string PackagingVolume { get; set; }
 
        
         public int Year { get; set; }

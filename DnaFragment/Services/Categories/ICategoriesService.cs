@@ -6,5 +6,7 @@
     public interface ICategoriesService
     {
         List<ListingCategoryModel> AllCategoriesDb();
+
+        void StartCategoryDb();
     }
 }

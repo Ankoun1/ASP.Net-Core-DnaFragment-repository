@@ -11,141 +11,165 @@
         <strong>please import products by category in the database!</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
     </div>
 </form>
+    } 
+    else if (!Model.LrProducts.Any() && !User.IsAdmin())
+    {
+<form class="mx-auto w-50" size="3">
+    <div class="alert alert-secondary  small ">
+        <strong>We are currently loading the new batch from the plant in Germany!</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
+    </div>
+</form>
     }
  <hr class="bg-primary w-50">
  <hr class="bg-primary w-25">
  
-  <div class="container w-75">
-         <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-             <div class="carousel-inner">
-                 <div class="carousel-item active">
-                     <img class="d-block w-100" src="https://wallpapermemory.com/uploads/641/perfume-background-hd-2560x1440-301965.jpg" alt="Responsive image">
-                 </div>
-                 <div class="carousel-item">
-                     <img class="d-block w-100" src="http://wallpaperstock.net/purple-flowers_wallpapers_55102_1920x1080.jpg" alt="Responsive image">
-                 </div>
-                 <div class="carousel-item">
-                     <img class="d-block w-100" src="https://www.teahub.io/photos/full/306-3063216_benefits-of-aloe-vera-aloe-vera-gel.jpg" alt="Responsive image">
-                 </div>
+ <div class="container w-75">
+     <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+         <div class="carousel-inner">
+             <div class="carousel-item active">
+                 <img class="d-block w-100" src="https://wallpapermemory.com/uploads/641/perfume-background-hd-2560x1440-301965.jpg" alt="Responsive image">
              </div>
+             <div class="carousel-item">
+                 <img class="d-block w-100" src="http://wallpaperstock.net/purple-flowers_wallpapers_55102_1920x1080.jpg" alt="Responsive image">
+             </div>
+             <div class="carousel-item">
+                 <img class="d-block w-100" src="https://www.teahub.io/photos/full/306-3063216_benefits-of-aloe-vera-aloe-vera-gel.jpg" alt="Responsive image">
+             </div>
+
          </div>
-         </div>
- <hr class="bg-primary w-25">
- <hr class="bg-primary w-50">
- <hr class="bg-primary w-75">
- <form method="get">
-    
+     </div>
+      @if (User.IsAdmin())
+      {
+     <ul class="list-group list-group-flush " >
+         <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example" method="post">
+             @if (!Model.CategoryAny)
+             {
+                <a asp-area="Admin" asp-controller="Categories" asp-action="Start" class="btn btn-primary text-xl-center  text-break">Category Start</a>
+             }
+             @if (!Model.LrProducts.Any())
+             {
+                 <a class="btn btn-success text-xl-center text-break"
+                  asp-area="Admin" asp-controller="LrProducts"
+                  asp-action="Start">
+                   LrProdukt Start
+                 </a> 
+             }
+         </li>
+     </ul>
+      }
+ </div>
+  
+      <hr class="bg-primary w-25">
+      <hr class="bg-primary w-50">
+      <hr class="bg-primary w-75">
+      <form method="get">
 
-         <div class="row">
-             <div class="form-group col-md-4">
-                 <div class="form-group">
-                     <label asp-for="Brand"></label>
-                     <h class="text-success">•</h>
-                     <select asp-for="Brand" class="form-control">
-                         <option value="">All</option>
 
-                         @foreach (var brand in Model.Brands)
-                         {
-                            <option value="@brand">@brand</option>
-                         }
-                     </select>
-                 </div>
-             </div>
+          <div class="row">
+              <div class="form-group col-md-4">
+                  <div class="form-group">
+                      <label asp-for="Brand"></label>
+                      <h class="text-success">•</h>
+                      <select asp-for="Brand" class="form-control">
+                          <option value="">All</option>
 
-             <div class="form-group col-md-4">
-                 <label asp-for="SearchTerm"></label>
-                 <h class="text-success">•</h>
-                 <input asp-for="SearchTerm" class="form-control" placeholder="парфюм,крем,гел">
-             </div>
-             <div class="form-group col-md-4">
-                 <div class="form-group">
-                     <label asp-for="Sorting"></label>
-                     <h class="text-success">•</h>
-                     <select asp-for="Sorting" class="form-control">
-                         <option value="0" selected>Volume</option>
-                         <option value="1">Brand And Price</option>
-                     </select>
-                 </div>
-             </div>
-         </div>
- </form>
+                          @foreach (var brand in Model.Brands)
+                          {
+              <option value="@brand">@brand</option>}
+                      </select>
+                  </div>
+              </div>
 
-@{
-    var previousPage = Model.CurrentPage - 1;
-    if (previousPage < 1)
-    {
-        previousPage = 1;
-    }
+              <div class="form-group col-md-4">
+                  <label asp-for="SearchTerm"></label>
+                  <h class="text-success">•</h>
+                  <input asp-for="SearchTerm" class="form-control" placeholder="парфюм,крем,гел">
+              </div>
+              <div class="form-group col-md-4">
+                  <div class="form-group">
+                      <label asp-for="Sorting"></label>
+                      <h class="text-success">•</h>
+                      <select asp-for="Sorting" class="form-control">
+                          <option value="0" selected>Volume</option>
+                          <option value="1">Brand And Price</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+      </form>
 
-    var maxPage = Math.Ceiling((double)Model.TotalProducts / AllProductsQueryModel.ProductsPerPage);
-}
+      @{ var previousPage = Model.CurrentPage - 1;
+                      if (previousPage < 1)
+                      {
+                          previousPage = 1;
+                      }
 
-<div class="row mb-4">
-    <div class="col-md-12">
-        
-        <a type="button" class="btn btn-primary  float-left  @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
-           asp-controller="LrProducts"
-           asp-action="All"
-           asp-route-currentPage="@previousPage"
-           asp-route-brand="@Model.Brand"
-           asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.Sorting)"><< </a>        
-            
-        <a class="btn btn-primary  float-right  @(Model.CurrentPage == maxPage ? "disabled" : string.Empty)"
-           asp-controller="LrProducts"
-           asp-action="All"
-           asp-route-currentPage="@(Model.CurrentPage + 1)"
-           asp-route-brand="@Model.Brand"
-           asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.Sorting)">>></a>
-    </div>
-</div>
+                      var maxPage = Math.Ceiling((double)Model.TotalProducts / AllProductsQueryModel.ProductsPerPage); }
 
-@if (!Model.LrProducts.Any() && !User.IsAdmin())
-{
-  <h3 class="text-center">No products found by the given criteria!</h3>
-}
+      <div class="row mb-4">
+          <div class="col-md-12">
 
-<div class="row justify-content-center">
-    @foreach (var product in Model.LrProducts)
-    {
-    <div class=" col-md-4 ">
-        <div class="form-group card mb-3 ">
-            <a class="btn btn-outline-warning text-sm text-break"
-               asp-controller="LrProducts"
-               asp-action="Details"
-               asp-route-id="@product.Id">
-                @product.Model
-            </a>
-            <img class="card-img-top" src="@product.PictureUrl" alt="@product.Price">
-            <div class="card-body text-center">
-                <ul class="list-group list-group-flush ">
-                    <li class="list-group-item text-xl-center text-white">@product.Price lv.</li>
-                </ul>
-                <ul class="list-group list-group-flush ">
-                    <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example">
-                        <a asp-controller="LrProducts" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-primary text-xl-center  text-break">favorit♥</a>
-                        <a class="btn btn-success text-xl-center text-break"
-                           asp-controller="LrProducts"
-                           asp-action="Favorits"
-                           asp-route-id="@product.Id">
-                            количка
-                        </a>
-                        <a class="btn btn-success text-xl-center text-break"
-                           asp-area="Admin"
-                           asp-controller="LrProducts"
-                           asp-action="Add"
-                           asp-route-id="@product.Id">
-                            Update
-                        </a>
-                    </li>
-                </ul>
-            </div>
+              <a type="button" class="btn btn-primary  float-left  @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+                 asp-controller="LrProducts"
+                 asp-action="All"
+                 asp-route-currentPage="@previousPage"
+                 asp-route-brand="@Model.Brand"
+                 asp-route-searchTerm="@Model.SearchTerm"
+                 asp-route-sorting="@((int)Model.Sorting)"><< </a>
 
-        </div>
-    </div>
-    }
-</div>
+              <a class="btn btn-primary  float-right  @(Model.CurrentPage == maxPage ? "disabled" : string.Empty)"
+                 asp-controller="LrProducts"
+                 asp-action="All"
+                 asp-route-currentPage="@(Model.CurrentPage + 1)"
+                 asp-route-brand="@Model.Brand"
+                 asp-route-searchTerm="@Model.SearchTerm"
+                 asp-route-sorting="@((int)Model.Sorting)">>></a>
+          </div>
+      </div>
+
+      @if (!Model.LrProducts.Any() && !User.IsAdmin())
+      {
+  <h3 class="text-center">No products found by the given criteria!</h3>}
+
+      <div class="row justify-content-center">
+          @foreach (var product in Model.LrProducts)
+          {
+  <div class=" col-md-4 ">
+      <div class="form-group card mb-3 ">
+          <a class="btn btn-outline-warning text-sm text-break"
+             asp-controller="LrProducts"
+             asp-action="Details"
+             asp-route-id="@product.Id">
+              @product.Model
+          </a>
+          <img class="card-img-top" src="@product.PictureUrl" alt="@product.Price">
+          <div class="card-body text-center">
+              <ul class="list-group list-group-flush ">
+                  <li class="list-group-item text-xl-center text-white">@product.Price lv.</li>
+              </ul>
+              <ul class="list-group list-group-flush ">
+                  <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example">
+                      <a asp-controller="LrProducts" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-primary text-xl-center  text-break">favorit♥</a>
+                      <a class="btn btn-success text-xl-center text-break"
+                         asp-controller="LrProducts"
+                         asp-action="Favorits"
+                         asp-route-id="@product.Id">
+                          количка
+                      </a>
+                      <a class="btn btn-success text-xl-center text-break"
+                         asp-area="Admin"
+                         asp-controller="LrProducts"
+                         asp-action="Add"
+                         asp-route-id="@product.Id">
+                          Update
+                      </a>
+                  </li>
+              </ul>
+          </div>
+
+      </div>
+  </div>}
+      </div>
 
 
 
