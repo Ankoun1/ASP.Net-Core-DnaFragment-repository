@@ -25,7 +25,6 @@
             this._userManager = _userManager;
         }
 
-
         public void SendmailForgotPassword(string email)
         {
             Random generator = new Random();
@@ -69,8 +68,7 @@
         public void DeleteUsersDb(string userId,bool isAdmin)
         {
             if (UserIsRegister(userId)) 
-            {  
-                
+            {                 
                 var user = data.Users.Find(userId);
                 if (isAdmin)
                 {
@@ -117,7 +115,6 @@
 
                 if (lrUser.Email != "unknown@city.com")
                 {
-
                     var userDb = data.Users.Where(x => !x.IsAdministrator).OrderBy(x => x.Email).FirstOrDefault();
                     if (userDb == null)
                     {
@@ -128,18 +125,9 @@
                             Email = lrUser.Email,
                             PhoneNumber = null,
                             IsDanger = lrUser.IsDanger,
-                            CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
-                            
+                            CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,                            
                         };
-
-                        foreach (var item in statisticsProduct)
-                        {
-                            var product = data.StatisticsProducts.Where(x => x.Id == item.StatisticsProductId).FirstOrDefault();
-                            sb.Append($"<{product.PlateNumber}({item.ProductVisitsCount})>");
-
-                        }
-                        user.ProductsVisitsCount = sb.ToString();
-                        users.Add(user);
+                        AddUserProductsCount(users, statisticsProduct, sb, user);
                     }
                     else
                     {
@@ -150,19 +138,10 @@
                             Email = lrUser.Email,
                             PhoneNumber = userDb.PhoneNumber,
                             CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
-                            
                         };
-                        foreach (var item in statisticsProduct)
-                        {
-                            var product = data.StatisticsProducts.Where(x => x.Id == item.StatisticsProductId).FirstOrDefault();
-                            sb.Append($"<{product.PlateNumber}({item.ProductVisitsCount})>");
-
-                        }
-                        user.ProductsVisitsCount = sb.ToString();
-                   
-                        users.Add(user);
+                        AddUserProductsCount(users, statisticsProduct, sb, user);
                     }
-                    
+
                 }
                 else
                 {                   
@@ -171,22 +150,24 @@
                         Username = "Users not registration",
                         Email = lrUser.Email,
                         PhoneNumber = null,
-                        CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
-                        
+                        CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,                        
                     };
-                    foreach (var item in statisticsProduct)
-                    {
-                        var product = data.StatisticsProducts.Where(x => x.Id == item.StatisticsProductId).FirstOrDefault();
-                        sb.Append($"<{product.PlateNumber} ({item.ProductVisitsCount})>  ");
-
-                    }
-                    user.ProductsVisitsCount = sb.ToString();
-                    
-                    users.Add(user);
+                    AddUserProductsCount(users, statisticsProduct, sb, user);
                 }
             }         
                         
             return users;
+        }
+
+        private void AddUserProductsCount(List<LrUsersStatisticsFormModel> users, List<LrUserStatisticsProduct> statisticsProduct, StringBuilder sb, LrUsersStatisticsFormModel user)
+        {
+            foreach (var item in statisticsProduct)
+            {
+                var product = data.StatisticsProducts.Where(x => x.Id == item.StatisticsProductId).FirstOrDefault();
+                sb.Append($"<{product.PlateNumber} ({item.ProductVisitsCount})>");
+            }
+            user.ProductsVisitsCount = sb.ToString();
+            users.Add(user);
         }
 
         public async Task UpdateDb(string userId, string fullName, string email, string phoneNumber, string password)
@@ -195,7 +176,7 @@
             
             var lrUser = data.LrUsers.Where(x => x.Email == user.Email).FirstOrDefault();
 
-          var curentUser =  await CorrectUpdate(lrUser, fullName, email, phoneNumber, password, user);
+            var curentUser =  await CorrectUpdate(lrUser, fullName, email, phoneNumber, password, user);
         }
 
         public  async Task GeneratorPassword(string password,User user)
@@ -215,11 +196,9 @@
             {
                 if (!data.LrUsersOldEmails.Any(x => x.LrUserId == lrUser.Id && x.Email == email))
                 {
-
                     var oldEmails = new LrUserOldEmails { Email = lrUser.Email, LrUserId = lrUser.Id };
                     data.LrUsersOldEmails.Add(oldEmails);
                     data.SaveChanges();
-
                 }
 
                 lrUser.Email = email;
@@ -244,15 +223,13 @@
         }
 
         public void AddNewLrUserInfoDb(LrUser lrUser)       
-        {          
-
+        {         
             var lrUserStatisticsProduct = new List<LrUserStatisticsProduct>();
             for (int i = 1; i <= 7; i++)
             {
                 foreach (var item in data.StatisticsProducts.Where(x => x.StatisticsCategoryId == i).Select(x => x.Id).ToList())
                 {
                     lrUserStatisticsProduct.Add(new LrUserStatisticsProduct { LrUserId = lrUser.Id, LrUser = lrUser, StatisticsProductId = item });
-
                 }
             }
             data.LrUserStatisticsProducts.AddRange(lrUserStatisticsProduct);

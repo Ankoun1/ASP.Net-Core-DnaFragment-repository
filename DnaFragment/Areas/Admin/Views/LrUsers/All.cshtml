@@ -34,7 +34,8 @@
         <li class="list-group-item text-center text-break">@Model[i].Username</li>
         <li class="list-group-item text-center text-break">@Model[i].Email</li>
         <li class="list-group-item text-center text-break">@Model[i].PhoneNumber</li>
-        <li class="list-group-item text-center">@Model[i].CategoryVisitsCount  @Model[i].ProductsVisitsCount</li>
+        <li class="list-group-item text-center">Nc:(@Model[i].CategoryVisitsCount)</li>
+        <li class="list-group-item text-center">Np: @Model[i].ProductsVisitsCount</li>
         <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
             @if (Model[i].Id != null)
             {

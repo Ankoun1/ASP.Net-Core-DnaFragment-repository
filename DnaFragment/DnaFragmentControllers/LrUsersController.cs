@@ -81,7 +81,7 @@
             var user = usersService.UsersDb(userId);
             if(user == null)
             {
-                return Redirect(RedirectToLogin);
+                return Redirect(RedirectToRegister);
             }
             return View(user);
         } 

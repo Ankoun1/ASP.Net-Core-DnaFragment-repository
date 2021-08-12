@@ -113,19 +113,23 @@
                 var oldUser = data.LrUsers.Where(x => x.Id == oldEmailUserId).FirstOrDefault();
                 if (oldUser == null)
                 {
-                    var lrUser = new LrUser();
+                    var lrUsers = new List<LrUser>();
                     if (data.LrUsers.Any())
                     {
-                        lrUser.Email = email;                                                
+                        lrUsers.Add(new LrUser { Email = email });                                                
                     }
                     else
                     {
-                        lrUser.Email = "unknown@city.com";                                              
+                        lrUsers.Add( new LrUser { Email = email });
+                        lrUsers.Add(new LrUser { Email = "unknown@city.com" });                                              
                     }
-                    data.LrUsers.Add(lrUser);
+                    data.LrUsers.AddRange(lrUsers);
                     data.SaveChanges();
-
-                    usersService.AddNewLrUserInfoDb(lrUser);
+                    foreach (var lrUser in lrUsers)
+                    {
+                        usersService.AddNewLrUserInfoDb(lrUser);
+                    }
+                    
 
                     result = await this.userManager.CreateAsync(user, Input.Password);                
                 }

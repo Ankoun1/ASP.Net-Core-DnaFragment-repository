@@ -36,7 +36,6 @@
                 {
                     category.CountCategoryProducts = data.LrProducts.Where(x => x.CategoryId == category.Id).Count();
                 }
-
             }
             categories = categories.OrderBy(x => x.Id).ToList();
 
@@ -60,15 +59,18 @@
                  new Category { Name = "КОЗМЕТИКА LR" ,PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/lr-colours-lipstick-care-balm-maglr.jpg"},
                  new Category { Name = "ПАРФЮМИ ЗА МЪЖЕ LR", PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/full_ocean_parfum.jpg" }
              });
-
             data.SaveChanges();
 
+            StartStatisticsCategory();
+        }
+
+        private void StartStatisticsCategory()
+        {
             for (int i = 1; i <= 7; i++)
             {
                 data.StatisticsCategories.Add(new StatisticsCategory());
                 data.SaveChanges();
             }
-
         }
     }
 }

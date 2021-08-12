@@ -9,13 +9,12 @@
 <h1 class="text-center mt-2 text-white">▪</h1>
 @{if (User.Identity.IsAuthenticated)
     {
-
     <form class="form-inline mx-auto w-75" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
        
         <div class="card">
 
             <div class="card-body">                
-                <button type="submit" class="nav-link btn btn-link  btn-primary float-center text-white  small w-25">@ViewBag.Title</button>
+                <button type="submit" class="nav-link btn btn-link  btn-secondary  float-right text-primary  small w-25">@ViewBag.Title</button>
                 <img src="https://i0.wp.com/godofindia.com/wp-content/uploads/2017/08/romantic-hd-wallpapers.jpg" class="card-img-top" alt="...">
                 <p class="card-text"></p>
 

@@ -5,7 +5,7 @@
 <h2 class="text-center mt-2 text-white">@ViewBag.Title</h2>
 @if (Model.Questions.Count == 0)
 {    
-    <h1 class="text-center mt-2 text-danger">▪</h1> 
+    <h1 class="text-center mt-2 text-secondary">▪</h1> 
 }
 else
 {    
@@ -14,19 +14,29 @@ else
 
 <form class="mx-auto w-75" method="post">
     <img src="https://sfs.jobs/sfs-group/sfs-group-dna_basicteaserimagehighlightmobile.jpg"
-             class="img-fluid  d-block w-100 "
-             alt="Responsive image" />
-            
+         class="img-fluid  d-block w-100 "
+         alt="Responsive image" />
+    @if (Model.Questions.Count == 0)
+    {
+        <div class="form-group ">
+            <ul class="list-group list-group-flush ">
+                <li class="list-group-item text-center text-success">
+                    The database is activated!
+                    <hr class="bg-success w-75">
+                </li>
+            </ul>
+        </div>
+    }
     @if (!User.IsAdmin())
     {
-        <div class="form-group">
-          <textarea asp-for="Description" rows="4" type="text" class="form-control" id="description-input"></textarea>
-          <span asp-validation-for="Description" class="small text-danger"></span>
-        </div>
+         <div class="form-group">
+             <textarea asp-for="Description" rows="4" type="text" class="form-control" id="description-input"></textarea>
+             <span asp-validation-for="Description" class="small text-danger"></span>
+         </div>
 
-        <div class="button-holder d-flex justify-content-center">
-          <button type="submit" class="btn btn-block btn-primary text-white w-auto">Add Question</button>           
-        </div>
+         <div class="button-holder d-flex justify-content-center">
+             <button type="submit" class="btn btn-block btn-primary text-white w-auto">Add Question</button>
+         </div>
     }
 </form>
 
