@@ -1,6 +1,7 @@
 ﻿namespace DnaFragment.DnaFragmentControllers
 {
-    using System.Linq;     
+    using System.Linq;
+    using System.Threading.Tasks;
     using DnaFragment.Services.Categories;
     using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +16,10 @@
             this.categoriesService = categoriesService;
         }
        
-        public IActionResult All()
+        public async  Task<IActionResult> All()
         {
-            var categories = categoriesService.AllCategoriesDb();
-            return View(categories);
+            var categories = await categoriesService.AllCategoriesDb();
+            return  View(categories);
         }
       
     }

@@ -1,13 +1,6 @@
 ﻿namespace DnaFragment.Areas.Admin.Controllers
 {
-    using System.Threading.Tasks;
-    using DnaFragment.Data.Models;
-    using DnaFragment.Models.Messages;
-    using DnaFragment.Services.LrProducts.Models;
-    using DnaFragment.Services.Mail;
-    using DnaFragment.Services.Messages;
     using DnaFragment.Services.Users;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     public class LrUsersController : AdminController
@@ -19,9 +12,10 @@
         {
             this.usersService = usersService;            
         }
-        public IActionResult All()
+        public IActionResult All(bool sort)
         {
-            var users = usersService.UsersStatistics();
+           
+            var users =  usersService.UsersStatistics(sort);
 
             return View(users);
         } 
@@ -29,8 +23,6 @@
         {           
 
             return View();
-        }
-        
-
+        }     
     }
 }

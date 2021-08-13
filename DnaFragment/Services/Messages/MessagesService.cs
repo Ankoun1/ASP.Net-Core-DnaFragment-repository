@@ -54,7 +54,7 @@
                 }
             }
 
-            return messageModels;
+            return messageModels.OrderByDescending(x => x.CreatedOn ).ToList();
         }
 
         public void DeleteMessageDb(string messageId)

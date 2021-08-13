@@ -4,12 +4,14 @@ namespace DnaFragment.Services.LrProducts
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using DnaFragment.Data;
     using DnaFragment.Data.Models;
     using DnaFragment.Models;
     using DnaFragment.Services.LrProducts.Models;
+    using Microsoft.EntityFrameworkCore;
 
     public class LrProductsService : ILrProductsService
     {
@@ -279,13 +281,13 @@ namespace DnaFragment.Services.LrProducts
         }
 
 
-        public LrProductQueryServiceModel All(string brand,string searchTerm, LrProductSorting sorting,int currentPage,int productsPerPage)
+        public async Task<LrProductQueryServiceModel> All(string brand,string searchTerm, LrProductSorting sorting,int currentPage,int productsPerPage)
         {
-            var productsQuery = this.data.LrProducts.AsQueryable();
+            var productsQuery =  this.data.LrProducts.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(brand))
             {
-                productsQuery = productsQuery.Where(c => c.Category.Name == brand);
+                productsQuery =   productsQuery.Where(c => c.Category.Name == brand);
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -296,14 +298,14 @@ namespace DnaFragment.Services.LrProducts
 
             productsQuery = sorting switch
             {
-                LrProductSorting.Volume => productsQuery.OrderByDescending(c => c.PackagingVolume),
+                LrProductSorting.Volume =>   productsQuery.OrderByDescending(c => c.PackagingVolume),
                 LrProductSorting.BrandAndPrice or _ => productsQuery.OrderBy(c => c.Price).ThenBy(c => c.Model)
                 //LrProductSorting.DateCreated or _ => productsQuery.OrderByDescending(c => c.Id)
             };
 
-            var totalLrProducts = productsQuery.Count();
+            var totalLrProducts = await productsQuery.CountAsync();
 
-            var products = productsQuery
+            var products = await productsQuery
                 .Skip((currentPage - 1) * productsPerPage)
                 .Take(productsPerPage).Select(c => new LrProductServiceModel
                 {
@@ -314,19 +316,19 @@ namespace DnaFragment.Services.LrProducts
                     PictureUrl = c.PictureUrl,
                     //Category = c.Category.Name
                 })
-                .ToList();
-            var lrProductQueryServiceModel = new LrProductQueryServiceModel
+                .ToListAsync();
+            var lrProductQueryServiceModel =   new LrProductQueryServiceModel
             {
-                TotalProducts = totalLrProducts,
+                TotalProducts =  totalLrProducts,
                 CurrentPage = currentPage,
                 ProductsPerPage = productsPerPage,
                 LrProducts = products
             };
-            if (data.Categories.Any())
+            if (await data.Categories.AnyAsync())
             {
                 lrProductQueryServiceModel.CategoryAny = true;
             }
-            return lrProductQueryServiceModel;
+             return   lrProductQueryServiceModel;
         }
 
         public List<LrProductServiceModel> AllProductsByCategory(int categoryId)

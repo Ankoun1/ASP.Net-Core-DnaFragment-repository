@@ -1,12 +1,13 @@
 ﻿namespace DnaFragment.Services.Categories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using DnaFragment.Models.Categories;
 
     public interface ICategoriesService
     {
-        List<ListingCategoryModel> AllCategoriesDb();
+        Task<List<ListingCategoryModel>> AllCategoriesDb();
 
-        void StartCategoryDb();
+        Task StartCategoryDb();
     }
 }

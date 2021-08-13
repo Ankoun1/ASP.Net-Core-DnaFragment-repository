@@ -1,15 +1,14 @@
 ﻿namespace DnaFragment.DnaFragmentControllers
 {    
     using DnaFragment.Infrastructure;   
-    using DnaFragment.Models.LrProducts;   
-    
-    using DnaFragment.Services.Administrators;
-    
-    using System.Linq;
-    using static WebConstants;
+    using DnaFragment.Models.LrProducts;  
+    using DnaFragment.Services.Administrators;   
+    using System.Linq;   
     using DnaFragment.Services.LrProducts;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    using static WebConstants;
+    using System.Threading.Tasks;
 
     //using AutoMapper;
 
@@ -78,9 +77,9 @@
             return View(products);
         }
 
-        public IActionResult All([FromQuery] AllProductsQueryModel query)
+        public async Task<IActionResult> All([FromQuery] AllProductsQueryModel query)
         {
-            var queryResult = this.lrProducts.All(query.Brand, query.SearchTerm, query.Sorting, query.CurrentPage, AllProductsQueryModel.ProductsPerPage);
+            var queryResult = await this.lrProducts.All(query.Brand, query.SearchTerm, query.Sorting, query.CurrentPage, AllProductsQueryModel.ProductsPerPage);
             var lrBrands = this.lrProducts.AllLrBrands();
 
             query.TotalProducts = queryResult.TotalProducts;

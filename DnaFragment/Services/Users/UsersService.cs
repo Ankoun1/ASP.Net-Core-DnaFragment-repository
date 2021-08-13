@@ -101,7 +101,7 @@
         public User ValidEmail(string email)
         => data.Users.Where(x => x.Email == email).FirstOrDefault();
 
-        public List<LrUsersStatisticsFormModel> UsersStatistics()
+        public List<LrUsersStatisticsFormModel> UsersStatistics(bool sort)
         {
             AutomaticDeleteDb();
             var lrUsers =  data.LrUsers.OrderBy(x => x.Email).ToList();
@@ -115,7 +115,7 @@
 
                 if (lrUser.Email != "unknown@city.com")
                 {
-                    var userDb = data.Users.Where(x => !x.IsAdministrator).OrderBy(x => x.Email).FirstOrDefault();
+                    var userDb = data.Users.Where(x => !x.IsAdministrator).Where(x => x.Email == lrUser.Email).Select(x => new {Id = x.Id,FullName = x.FullName,PhoneNumber = x.PhoneNumber }).FirstOrDefault();
                     if (userDb == null)
                     {
                         var user = new LrUsersStatisticsFormModel
@@ -154,8 +154,16 @@
                     };
                     AddUserProductsCount(users, statisticsProduct, sb, user);
                 }
-            }         
-                        
+            }
+            users = users.OrderByDescending(x => x.Username).ToList();
+            if (sort)
+            {
+                users = users.OrderBy(x => x.Username).ToList();
+            }            
+            else
+            {
+                users = users.OrderByDescending(x => x.Id).ToList();
+            }     
             return users;
         }
 
@@ -234,6 +242,6 @@
             }
             data.LrUserStatisticsProducts.AddRange(lrUserStatisticsProduct);
             data.SaveChanges();
-        }
+        }       
     }
 }

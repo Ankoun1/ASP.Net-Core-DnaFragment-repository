@@ -3,7 +3,8 @@
 
 namespace DnaFragment.DnaFragmentControllers.Api
 {
-    using System.Linq;    
+    using System.Linq;
+    using System.Threading.Tasks;
     using DnaFragment.Models.Api.LrProducts;
     using DnaFragment.Services.LrProducts;
     using DnaFragment.Services.LrProducts.Models;
@@ -21,9 +22,9 @@ namespace DnaFragment.DnaFragmentControllers.Api
         }
 
         [HttpGet]
-        public LrProductQueryServiceModel All([FromQuery] AllLrProductsApiRequestModel query)
+        public async Task<LrProductQueryServiceModel> All([FromQuery] AllLrProductsApiRequestModel query)
         {
-            return lrProducts.All(query.Brand, query.SearchTerm, query.Sorting, query.CurrentPage, query.ProductsPerPage);        
+            return await lrProducts.All(query.Brand, query.SearchTerm, query.Sorting, query.CurrentPage, query.ProductsPerPage);        
         }
     }
 }

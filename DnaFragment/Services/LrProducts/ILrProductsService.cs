@@ -3,6 +3,7 @@ namespace DnaFragment.Services.LrProducts
 {
    
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using DnaFragment.Models;
     using DnaFragment.Services.LrProducts.Models;
 
@@ -25,7 +26,7 @@ namespace DnaFragment.Services.LrProducts
 
         bool Update(string description, decimal price, string image, string plateNumber, int productId, int categoryId);
                     
-        LrProductQueryServiceModel All(string brand, string searchTerm, LrProductSorting sorting, int currentPage, int productsPerPage);
+        Task<LrProductQueryServiceModel> All(string brand, string searchTerm, LrProductSorting sorting, int currentPage, int productsPerPage);
                     
         LrProductDetailsServiceModel Details(int Id);
                     

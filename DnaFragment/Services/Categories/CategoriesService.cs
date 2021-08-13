@@ -2,9 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using DnaFragment.Data;
     using DnaFragment.Data.Models;
     using DnaFragment.Models.Categories;
+    using Microsoft.EntityFrameworkCore;
 
     public class CategoriesService : ICategoriesService
     {
@@ -15,14 +17,14 @@
             this.data = data;
         }
 
-        public List<ListingCategoryModel> AllCategoriesDb()
+        public async Task<List<ListingCategoryModel>> AllCategoriesDb()
         {
-            var categories = data.Categories.Select(x => new ListingCategoryModel
+            var categories =  await data.Categories.Select(x => new ListingCategoryModel
             {
                 Id = x.Id,
                 Name = x.Name,
                 Image = x.PictureUrl
-            }).ToList();
+            }).ToListAsync();
 
             categories.Add(new ListingCategoryModel { Name = "ВСИЧКИ ПРОДУКТИ", Image = "https://mms.businesswire.com/media/20210315005417/en/865102/5/LR_logo_invCMYK.jpg" });
 
@@ -30,26 +32,26 @@
             {
                 if (category.Id == null)
                 {
-                    category.CountCategoryProducts = data.LrProducts.Count();
+                    category.CountCategoryProducts = await data.LrProducts.CountAsync();
                 }
                 else
                 {
-                    category.CountCategoryProducts = data.LrProducts.Where(x => x.CategoryId == category.Id).Count();
+                    category.CountCategoryProducts =  await data.LrProducts.Where(x => x.CategoryId == category.Id).CountAsync();
                 }
             }
-            categories = categories.OrderBy(x => x.Id).ToList();
+            categories =    categories.OrderBy(x => x.Id).ToList();
 
-            return categories;
+            return   categories;
         }
 
-        public void StartCategoryDb()
+        public async  Task StartCategoryDb()
         {
             if (data.Categories.Any())
             {
-                return;
+                 return;
             }
 
-            data.Categories.AddRange(new[]
+            await data.Categories.AddRangeAsync(new[]
             {
                  new Category { Name = "ПАРФЮМИ ЗА ЖЕНИ LR", PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/guido-maria-kretscher-lr-woman.jpg" },
                  new Category { Name = "ТЕРАПИЯ ЗА ТЯЛО LR" ,PictureUrl = "https://primelr.ru/wp-content/uploads/2017/08/thumb_body-3.jpg"},
@@ -59,7 +61,7 @@
                  new Category { Name = "КОЗМЕТИКА LR" ,PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/lr-colours-lipstick-care-balm-maglr.jpg"},
                  new Category { Name = "ПАРФЮМИ ЗА МЪЖЕ LR", PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/full_ocean_parfum.jpg" }
              });
-            data.SaveChanges();
+            await data.SaveChangesAsync();
 
             StartStatisticsCategory();
         }

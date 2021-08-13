@@ -1,6 +1,5 @@
 ﻿namespace DnaFragment.Areas.Admin.Controllers
 {
-    using DnaFragment.Infrastructure;
     using DnaFragment.Models.LrProducts;
     using DnaFragment.Services.LrProducts;
     using Microsoft.AspNetCore.Mvc;
@@ -50,13 +49,7 @@
 
         [HttpPost]      
         public IActionResult Add(int id, AddProductFormModel lrProduct)
-        {
-
-            if (!User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
+        {           
             if (!lrProducts.CategoryExsists(lrProduct.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(lrProduct.CategoryId), "Category does not exist.");

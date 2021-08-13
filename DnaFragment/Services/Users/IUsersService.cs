@@ -23,7 +23,7 @@
 
         User ValidEmail(string email);
 
-        List<LrUsersStatisticsFormModel> UsersStatistics();
+        List<LrUsersStatisticsFormModel> UsersStatistics(bool sort);
 
         Task UpdateDb(string userId, string fullName, string email, string phoneNumber, string password);
 
@@ -32,6 +32,8 @@
         Task GeneratorPassword(string password, User user);
 
         void AddNewLrUserInfoDb(LrUser lrUser);
+
+       
 
        
 
