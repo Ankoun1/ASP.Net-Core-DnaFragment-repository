@@ -121,9 +121,9 @@
                         var user = new LrUsersStatisticsFormModel
                         {
                             Id = null,
-                            Username = null,
+                            Username = "---",
                             Email = lrUser.Email,
-                            PhoneNumber = null,
+                            PhoneNumber = "---",
                             IsDanger = lrUser.IsDanger,
                             CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,                            
                         };
@@ -149,7 +149,7 @@
                     {                                           
                         Username = "Users not registration",
                         Email = lrUser.Email,
-                        PhoneNumber = null,
+                        PhoneNumber = "---",
                         CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,                        
                     };
                     AddUserProductsCount(users, statisticsProduct, sb, user);

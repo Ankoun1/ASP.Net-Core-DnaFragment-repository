@@ -29,19 +29,27 @@ else
     }
     else
     {
-       <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">     
-           <a class="btn btn-outline-light "
-              asp-controller="Questions"
-              asp-action="All"
-              asp-route-sort=1>Date ascending order</a>
-            @if (User.IsAdmin())
-            {
-           <a class="btn btn-outline-light "
-              asp-controller="Questions"
-              asp-action="All"
-              asp-route-sort=2>Name ascending order</a>
-            }
-       </div>    
+<div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
+    @if (User.IsAdmin())
+    {
+        <a class="btn  text-primary text-left bg-white"
+           asp-controller="Questions"
+           asp-action="All"
+           asp-route-sort=1>DATE ASCENDING ORDER</a>
+
+        <a class="btn  text-primary text-right bg-white"
+           asp-controller="Questions"
+           asp-action="All"
+           asp-route-sort=2>NAME ASCENDING ORDER</a>
+    }
+    else
+    {
+        <a class="btn  text-primary text-center bg-white"
+           asp-controller="Questions"
+           asp-action="All"
+           asp-route-sort=1>DATE ASCENDING ORDER</a>
+    }
+</div>    
     }
     @if (!User.IsAdmin())
     {

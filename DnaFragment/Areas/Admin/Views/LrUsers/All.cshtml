@@ -10,16 +10,16 @@
    
    <img class="d-block w-100 " src="https://chamlinlaw.com/wp-content/uploads/2016/01/Assault_CR.jpg" alt="Responsive image">
    <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">     
-      <a class="btn btn-outline-light "                  
+      <a class="btn  text-primary text-left bg-white"                  
          asp-controller="LrUsers"
          asp-action="All"
          asp-route-sort=1
-         >Sort by Name</a>
-      <a class="btn btn-outline-light "                   
+         >SORT BY NAME</a>
+      <a class="btn  text-primary text-right bg-white"                   
          asp-controller="LrUsers"
          asp-action="All"
          asp-route-sort=2
-         >Sort by Id</a>            
+         >SORT BY ID</a>            
    </div>    
 
     @for (int i = 0; i < Model.Count; i++)
