@@ -3,28 +3,24 @@
 
 <hr class="bg-primary w-75">
 <hr class="bg-primary w-50">
-
 <h2 class="text-center mt-2 text-white">@ViewBag.Title</h2>
 <h1 class="text-center mt-2 text-success">▪</h1>
 
 <form class="mx-auto w-75">
    
-        <img class="d-block w-100 " src="https://chamlinlaw.com/wp-content/uploads/2016/01/Assault_CR.jpg" alt="Responsive image">
-        <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
-          
-                <a class="btn btn-outline-light "                  
-                   asp-controller="LrUsers"
-                   asp-action="All"
-                   asp-route-sort=true
-                   >Sort by Name</a>
-                <a class="btn btn-outline-light "                   
-                   asp-controller="LrUsers"
-                   asp-action="All"
-                   asp-route-sort=false
-                   >Sort by Id</a>             
-            
-        </div>
-    
+   <img class="d-block w-100 " src="https://chamlinlaw.com/wp-content/uploads/2016/01/Assault_CR.jpg" alt="Responsive image">
+   <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">     
+      <a class="btn btn-outline-light "                  
+         asp-controller="LrUsers"
+         asp-action="All"
+         asp-route-sort=1
+         >Sort by Name</a>
+      <a class="btn btn-outline-light "                   
+         asp-controller="LrUsers"
+         asp-action="All"
+         asp-route-sort=2
+         >Sort by Id</a>            
+   </div>    
 
     @for (int i = 0; i < Model.Count; i++)
     {

@@ -23,12 +23,12 @@
         }
 
         [Authorize]
-        public IActionResult All()
+        public IActionResult All(byte sort)
         {
             var userId = User.GetId();
             bool isAdmin = User.IsAdmin();
 
-            var questions = questionsService.AllQuestions(userId, isAdmin);
+            var questions = questionsService.AllQuestions(sort,userId, isAdmin);
             var questionModel = new AddQuestionModel { Description = "ask a question ...", Questions = questions };
             return View(questionModel);
         }
@@ -36,7 +36,7 @@
 
         [Authorize]
         [HttpPost]
-        public IActionResult All(AddQuestionModel questionModel)
+        public IActionResult All(byte sort,AddQuestionModel questionModel)
         {
             var userId = this.User.GetId();
             bool isAdmin = User.IsAdmin();

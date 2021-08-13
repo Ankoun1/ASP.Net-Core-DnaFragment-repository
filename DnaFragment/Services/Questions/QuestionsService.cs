@@ -35,7 +35,7 @@ namespace DnaFragment.Services.Questions
          
         }
 
-        public List<QuestionListingViewModel> AllQuestions(string userId,bool isAdmin)
+        public List<QuestionListingViewModel> AllQuestions(byte sort,string userId,bool isAdmin)
         {
             var questions = data.Questions.AsQueryable();
             var questionsId = data.Questions.Where(x => x.UserId == userId).Select(x => x.Id).ToList(); ///
@@ -114,8 +114,17 @@ namespace DnaFragment.Services.Questions
 
                 }
 
-            }           
-            return (answerModels.OrderByDescending(x => x.CreatedOn).ThenBy(x => x.Name).ToList());
+            }
+            answerModels = answerModels.OrderBy(x => x.CreatedOn).ThenBy(x => x.Name).ToList();
+            if (sort == 1)
+            {
+                answerModels = answerModels.OrderByDescending(x => x.CreatedOn).ThenBy(x => x.Name).ToList();
+            }
+            else if(sort == 2)
+            {
+                answerModels = answerModels.OrderBy(x => x.Name).ThenByDescending(x => x.CreatedOn).ToList();
+            }
+            return answerModels;
         }
 
         public void AutomaticDeleteQuest(string questId)

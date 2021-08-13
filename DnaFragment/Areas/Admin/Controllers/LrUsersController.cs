@@ -12,7 +12,7 @@
         {
             this.usersService = usersService;            
         }
-        public IActionResult All(bool sort)
+        public IActionResult All(byte sort)
         {
            
             var users =  usersService.UsersStatistics(sort);

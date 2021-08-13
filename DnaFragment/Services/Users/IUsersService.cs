@@ -23,7 +23,7 @@
 
         User ValidEmail(string email);
 
-        List<LrUsersStatisticsFormModel> UsersStatistics(bool sort);
+        List<LrUsersStatisticsFormModel> UsersStatistics(byte sort);
 
         Task UpdateDb(string userId, string fullName, string email, string phoneNumber, string password);
 

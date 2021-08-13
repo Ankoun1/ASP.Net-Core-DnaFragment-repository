@@ -4,11 +4,11 @@
 <hr class="bg-primary w-50">
 <h2 class="text-center mt-2 text-white">@ViewBag.Title</h2>
 @if (Model.Questions.Count == 0)
-{    
+{
     <h1 class="text-center mt-2 text-secondary">▪</h1> 
 }
 else
-{    
+{
     <h1 class="text-center mt-2 text-success">▪</h1>
 }
 
@@ -26,6 +26,22 @@ else
                 </li>
             </ul>
         </div>
+    }
+    else
+    {
+       <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">     
+           <a class="btn btn-outline-light "
+              asp-controller="Questions"
+              asp-action="All"
+              asp-route-sort=1>Date ascending order</a>
+            @if (User.IsAdmin())
+            {
+           <a class="btn btn-outline-light "
+              asp-controller="Questions"
+              asp-action="All"
+              asp-route-sort=2>Name ascending order</a>
+            }
+       </div>    
     }
     @if (!User.IsAdmin())
     {

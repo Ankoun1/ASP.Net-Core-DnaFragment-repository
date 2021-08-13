@@ -101,7 +101,7 @@
         public User ValidEmail(string email)
         => data.Users.Where(x => x.Email == email).FirstOrDefault();
 
-        public List<LrUsersStatisticsFormModel> UsersStatistics(bool sort)
+        public List<LrUsersStatisticsFormModel> UsersStatistics(byte sort)
         {
             AutomaticDeleteDb();
             var lrUsers =  data.LrUsers.OrderBy(x => x.Email).ToList();
@@ -156,13 +156,13 @@
                 }
             }
             users = users.OrderByDescending(x => x.Username).ToList();
-            if (sort)
+            if (sort == 1)
             {
                 users = users.OrderBy(x => x.Username).ToList();
             }            
-            else
+            else if(sort == 2)
             {
-                users = users.OrderByDescending(x => x.Id).ToList();
+                users = users.OrderBy(x => x.Id).ToList();
             }     
             return users;
         }
