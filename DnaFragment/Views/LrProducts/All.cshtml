@@ -38,15 +38,15 @@
 
          </div>
      </div>
-      @if (User.IsAdmin())
-      {
+    @if (User.IsAdmin())
+     {
      <ul class="list-group list-group-flush " >
          <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example" method="post">
-             @if (!Model.CategoryAny)
+            @if (!Model.CategoryAny)
              {
                 <a asp-area="Admin" asp-controller="Categories" asp-action="Start" class="btn btn-primary text-xl-center  text-break">Category Start</a>
              }
-             @if (!Model.LrProducts.Any())
+            @if (!Model.LrProducts.Any())
              {
                  <a class="btn btn-success text-xl-center text-break"
                   asp-area="Admin" asp-controller="LrProducts"
@@ -56,15 +56,12 @@
              }
          </li>
      </ul>
-      }
- </div>
-  
+     }
+ </div>  
       <hr class="bg-primary w-25">
       <hr class="bg-primary w-50">
       <hr class="bg-primary w-75">
       <form method="get">
-
-
           <div class="row">
               <div class="form-group col-md-4">
                   <div class="form-group">
@@ -75,11 +72,11 @@
 
                           @foreach (var brand in Model.Brands)
                           {
-              <option value="@brand">@brand</option>}
+                              <option value="@brand">@brand</option>
+                          }
                       </select>
                   </div>
-              </div>
-
+              </div>             
               <div class="form-group col-md-4">
                   <label asp-for="SearchTerm"></label>
                   <h class="text-success">•</h>
@@ -99,12 +96,11 @@
       </form>
 
       @{ var previousPage = Model.CurrentPage - 1;
-                      if (previousPage < 1)
-                      {
-                          previousPage = 1;
-                      }
-
-                      var maxPage = Math.Ceiling((double)Model.TotalProducts / AllProductsQueryModel.ProductsPerPage); }
+       if (previousPage < 1)
+       {
+           previousPage = 1;
+       }
+       var maxPage = Math.Ceiling((double)Model.TotalProducts / AllProductsQueryModel.ProductsPerPage); }
 
       <div class="row mb-4">
           <div class="col-md-12">
@@ -129,11 +125,12 @@
 
       @if (!Model.LrProducts.Any() && !User.IsAdmin())
       {
-  <h3 class="text-center">No products found by the given criteria!</h3>}
+         <h3 class="text-center">No products found by the given criteria!</h3>
+      }
 
-      <div class="row justify-content-center">
-          @foreach (var product in Model.LrProducts)
-          {
+  <div class="row justify-content-center">
+     @foreach (var product in Model.LrProducts)
+      {
   <div class=" col-md-4 ">
       <div class="form-group card mb-3 ">
           <a class="btn btn-outline-warning text-sm text-break"
@@ -142,34 +139,38 @@
              asp-route-id="@product.Id">
               @product.Model
           </a>
-          <img class="card-img-top" src="@product.PictureUrl" alt="@product.Price">
+         <img class="card-img-top" src="@product.PictureUrl" alt="@product.Price" title="LR">
           <div class="card-body text-center">
               <ul class="list-group list-group-flush ">
                   <li class="list-group-item text-xl-center text-white">@product.Price lv.</li>
               </ul>
               <ul class="list-group list-group-flush ">
                   <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example">
-                      <a asp-controller="LrProducts" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-primary text-xl-center  text-break">favorit♥</a>
-                      <a class="btn btn-success text-xl-center text-break"
-                         asp-controller="LrProducts"
-                         asp-action="Favorits"
-                         asp-route-id="@product.Id">
-                          количка
-                      </a>
-                      <a class="btn btn-success text-xl-center text-break"
+                     
+                      @if (User.IsAdmin())
+                      {
+                      <a class="btn btn-primary text-xl-center text-break"
                          asp-area="Admin"
                          asp-controller="LrProducts"
                          asp-action="Add"
-                         asp-route-id="@product.Id">
-                          Update
-                      </a>
+                         asp-route-id="@product.Id">Update</a>                                                                     
+                      }
+                      else
+                      {
+                      <a asp-controller="LrProducts" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-primary text-xl-center  text-break">favorit♥</a>
+                      <a class="btn btn-success text-xl-center text-break"
+                         asp-controller="LrProducts"
+                         asp-action="ForBag"
+                         asp-route-id="@product.Id">Bag</a>                                              
+                      }
                   </li>
               </ul>
           </div>
 
       </div>
-  </div>}
-      </div>
+  </div>
+      }
+  </div>
 
 
 

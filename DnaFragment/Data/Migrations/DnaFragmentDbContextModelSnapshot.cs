@@ -359,6 +359,15 @@ namespace DnaFragment.Data.Migrations
                     b.Property<int>("LrProductId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("InFavorits")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InTheBag")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LrProductsCount")
+                        .HasColumnType("int");
+
                     b.HasKey("UserId", "LrProductId");
 
                     b.HasIndex("LrProductId");

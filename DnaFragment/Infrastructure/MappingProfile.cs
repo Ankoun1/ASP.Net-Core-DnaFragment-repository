@@ -11,7 +11,7 @@
         public MappingProfile()
         {
             CreateMap<LrProductDetailsServiceModel, AddProductUpdateFormModel>();
-            //CreateMap<LrProduct, LrProductServiceModel>();
+            CreateMap<LrProduct, LrProductServiceModel>();
             CreateMap<LrProduct, LrProductDetailsServiceModel>();
 
             CreateMap<Question, QuestionListingViewModel>();

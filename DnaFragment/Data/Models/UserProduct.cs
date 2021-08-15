@@ -6,13 +6,20 @@ namespace DnaFragment.Data.Models
     {       
 
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; init; }
 
-        public User User { get; set; }
+        public User User { get; init; }
 
         
-        public int LrProductId { get; set; }
+        public int LrProductId { get; init; }
 
-        public LrProduct LrProduct { get; set; }
+        public LrProduct LrProduct { get; init; }
+
+        public bool InTheBag { get; set; }
+
+        public bool InFavorits { get; set; }
+
+        public int LrProductsCount { get; set; }
+
     }
 }

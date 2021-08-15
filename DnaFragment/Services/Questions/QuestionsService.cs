@@ -41,7 +41,7 @@ namespace DnaFragment.Services.Questions
             var questionsId = data.Questions.Where(x => x.UserId == userId).Select(x => x.Id).ToList(); ///
             List<Question> questionsTrue = new List<Question>();
             if (data.Users.Any(x => x.Id == userId) && !isAdmin)
-            {                
+            {
                 foreach (var quest in questions)
                 {
                     foreach (var qustId in questionsId)
@@ -51,7 +51,7 @@ namespace DnaFragment.Services.Questions
                             questionsTrue.Add(quest);
                         }
                     }
-                }               
+                }
             }
             else
             {
@@ -70,7 +70,7 @@ namespace DnaFragment.Services.Questions
                     CreatedOn = quest.CreatedOn,
                     Description = quest.Description,
                     QuestionId = quest.Id,
-                    StopAtomaticDelete = quest.StopAutomaticDelete,                    
+                    StopAtomaticDelete = quest.StopAutomaticDelete,
                     UserId = quest.UserId
                 };
 
@@ -107,7 +107,7 @@ namespace DnaFragment.Services.Questions
                         if (data.Users.Any(x => x.Id == userId) && isAdmin)
                         {
                             questionModel.IsAdministrator = true;
-                        }                    
+                        }
 
                         answerModels.Add(questionModel);
                     }
@@ -115,12 +115,17 @@ namespace DnaFragment.Services.Questions
                 }
 
             }
+            return Sorting(sort, ref answerModels);
+        }
+
+        private static List<QuestionListingViewModel> Sorting(byte sort, ref List<QuestionListingViewModel> answerModels)
+        {
             answerModels = answerModels.OrderBy(x => x.CreatedOn).ThenBy(x => x.Name).ToList();
             if (sort == 1)
             {
                 answerModels = answerModels.OrderByDescending(x => x.CreatedOn).ThenBy(x => x.Name).ToList();
             }
-            else if(sort == 2)
+            else if (sort == 2)
             {
                 answerModels = answerModels.OrderBy(x => x.Name).ThenByDescending(x => x.CreatedOn).ToList();
             }

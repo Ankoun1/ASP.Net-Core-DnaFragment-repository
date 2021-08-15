@@ -2,10 +2,10 @@
 
 @{ ViewBag.Title = "Favorits♡"; }
 
-<hr class="bg-primary w-25">
+<hr class="bg-primary w-75">
 <hr class="bg-primary w-50">
 <hr class="bg-primary w-25">
- <h2 class="text-center mt-2">@ViewBag.Title</h2>
+ 
  @if (Model.Any())
  {
     <h1 class="text-center mt-2 text-success">▪</h1>   
@@ -17,19 +17,20 @@
  }
 <div class="container w-75">    
       <img class="d-block w-100" src="https://i.pinimg.com/originals/16/7d/45/167d45c1fdb2cc5c50f6fed50e76e46b.jpg" alt="Responsive image">
-</div>     
+</div>
+<h2 class="text-center mt-2">@ViewBag.Title</h2> 
 <hr class="bg-primary w-25">
 <hr class="bg-primary w-50">
-<hr class="bg-primary w-25">
+<hr class="bg-primary w-75">
 
 @if (!Model.Any())
 {
 <h3 class="text-center">No products found by the given criteria!</h3>
 }
-
-<div class="row justify-content-center">
-@foreach (var product in Model)
-{
+<form class="mx-auto w-100" method="post">
+    <div class="row justify-content-center">
+        @foreach (var product in Model)
+        {
 <div class=" col-md-4 ">
     <div class="form-group card mb-3 ">
         <a class="btn btn-outline-warning text-sm text-break"
@@ -44,7 +45,7 @@
                 <li class="list-group-item text-xl-center text-white">@product.Price lv.</li>
             </ul>
             <ul class="list-group list-group-flush ">
-                <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example">                   
+                <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example">
                     <a class="btn btn-success text-break text-white text-xl-center"
                        asp-controller="LrProducts"
                        asp-action="Details"
@@ -56,7 +57,6 @@
         </div>
 
     </div>
-</div>
-}
-</div>
-
+</div>}
+    </div>
+    </form>

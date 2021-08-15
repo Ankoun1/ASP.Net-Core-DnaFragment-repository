@@ -39,19 +39,19 @@
                     category.CountCategoryProducts =  await data.LrProducts.Where(x => x.CategoryId == category.Id).CountAsync();
                 }
             }
-            categories =    categories.OrderBy(x => x.Id).ToList();
+            categories = categories.OrderBy(x => x.Id).ToList();
 
-            return   categories;
+            return  categories;
         }
 
-        public async  Task StartCategoryDb()
+        public void StartCategoryDb()
         {
             if (data.Categories.Any())
             {
                  return;
             }
 
-            await data.Categories.AddRangeAsync(new[]
+             data.Categories.AddRangeAsync(new[]
             {
                  new Category { Name = "ПАРФЮМИ ЗА ЖЕНИ LR", PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/guido-maria-kretscher-lr-woman.jpg" },
                  new Category { Name = "ТЕРАПИЯ ЗА ТЯЛО LR" ,PictureUrl = "https://primelr.ru/wp-content/uploads/2017/08/thumb_body-3.jpg"},
@@ -61,9 +61,7 @@
                  new Category { Name = "КОЗМЕТИКА LR" ,PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/lr-colours-lipstick-care-balm-maglr.jpg"},
                  new Category { Name = "ПАРФЮМИ ЗА МЪЖЕ LR", PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/full_ocean_parfum.jpg" }
              });
-            await data.SaveChangesAsync();
-
-            StartStatisticsCategory();
+             StartStatisticsCategory();                       
         }
 
         private void StartStatisticsCategory()

@@ -37,16 +37,16 @@ else
         @Model.Price lv.
     </a>
     <ul class="list-group list-group-flush ">
-                    <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example">
-                        <a asp-controller="LrProducts" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-light text-xl-center  text-break">favorit♥</a>
-                        <a class="btn btn-success text-xl-center text-break"
-                           asp-controller="LrProducts"
-                           asp-action="Favorits"
-                           asp-route-id="@Model.Id">
-                            количка
-                        </a>
-                    </li>
-                </ul>
+        <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example">
+            <a asp-controller="LrProducts" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-light text-xl-center  text-break">favorit♥</a>
+            <a class="btn btn-outline-success text-xl-center text-break"
+               asp-controller="LrProducts"
+               asp-action="ForBag"
+               asp-route-id="@Model.Id">
+                Bag
+            </a>
+        </li>
+    </ul>
 }
 <hr class="bg-primary w-100">
 @if (Model != null)
@@ -57,13 +57,13 @@ else
 {   
 <h1 class="text-xl-left font-italic text-secondary">✦ ChemicalIngredients</h1>
 }
-        <ul class="list-group list-group-flush ">
-            <li class="list-group-item text-left  text-break ">@Model.ChemicalIngredients</li>
-        </ul> 
-        <hr class="bg-primary w-100">
-        <h class="text-xl-left font-italic text-primary">✦ Description</h>
-        <ul class="list-group list-group-flush ">
-            <li class="list-group-item text-left  text-break"> @Model.Description</li>       
-        </ul>
+    <ul class="list-group list-group-flush ">
+        <li class="list-group-item text-left  text-break ">@Model.ChemicalIngredients</li>
+    </ul> 
+    <hr class="bg-primary w-100">
+    <h class="text-xl-left font-italic text-primary">✦ Description</h>
+    <ul class="list-group list-group-flush ">
+        <li class="list-group-item text-left  text-break"> @Model.Description</li>       
+    </ul>
     <hr class="bg-primary w-100">
 </form>

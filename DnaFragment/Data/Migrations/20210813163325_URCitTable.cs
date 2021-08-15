@@ -332,7 +332,10 @@ namespace DnaFragment.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LrProductId = table.Column<int>(type: "int", nullable: false)
+                    LrProductId = table.Column<int>(type: "int", nullable: false),
+                    InTheBag = table.Column<bool>(type: "bit", nullable: false),
+                    InFavorits = table.Column<bool>(type: "bit", nullable: false),
+                    LrProductsCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

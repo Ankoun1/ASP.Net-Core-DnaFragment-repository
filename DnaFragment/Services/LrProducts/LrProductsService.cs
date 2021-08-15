@@ -12,17 +12,23 @@ namespace DnaFragment.Services.LrProducts
     using DnaFragment.Models;
     using DnaFragment.Services.LrProducts.Models;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.Memory;
 
     public class LrProductsService : ILrProductsService
     {
         private readonly DnaFragmentDbContext data;
-        private readonly IConfigurationProvider mapper;
-
-        public LrProductsService(DnaFragmentDbContext data, IMapper mapper)
+        private readonly IConfigurationProvider mapper;       
+        private IMemoryCache memoryCache;
+        public LrProductsService(DnaFragmentDbContext data, IMapper mapper,IMemoryCache memoryCache)
         {
             this.data = data;
             this.mapper = mapper.ConfigurationProvider;
+            this.memoryCache = memoryCache;
+          
+            
         }
+
+     
 
         public void StartLrProduktDb()
         {
@@ -38,7 +44,7 @@ namespace DnaFragment.Services.LrProducts
             {            
                 new LrProduct
                 {
-                    Model = "Мъжки парфюм LR Bruce Willis",
+                    Model = "Парфюм LR Bruce Willis",
                     PackagingVolume = "50",
                     Year = 1999,
                     Price = 80,
@@ -51,7 +57,7 @@ namespace DnaFragment.Services.LrProducts
                 },
                 new LrProduct
                 {
-                    Model = "Мъжки парфюм Guido Maria Kretschmer LR",
+                    Model = "Парфюм Guido Maria Kretschmer",
                     PackagingVolume = "50",
                     Year = 1999,
                     Price = 70,
@@ -77,7 +83,7 @@ namespace DnaFragment.Services.LrProducts
                 },
                 new LrProduct
                 {
-                    Model = "Дамски парфюм LR Lovingly by Bruce WillIis",
+                    Model = "Парфюм LR Lovingly by Bruce WillIis",
                     PackagingVolume = "50",
                     Year = 1999,
                     Price = 80,
@@ -91,7 +97,7 @@ namespace DnaFragment.Services.LrProducts
                 },
                 new LrProduct
                 {
-                    Model = "Дамски парфюм Guido Maria Kretschmer LR",
+                    Model = "Парфюм Guido Maria Kretschmer",
                     PackagingVolume = "50",
                     Year = 1999,
                     Price = 80,
@@ -156,7 +162,7 @@ namespace DnaFragment.Services.LrProducts
                 },
                 new LrProduct
                 {
-                    Model = "Алое Вера Хидратиращ лосион за тяло",
+                    Model = "Алое Хидратиращ лосион за тяло",
                     PackagingVolume = "200",
                     Year = 1999,
                     Price = 29.39m,
@@ -281,13 +287,13 @@ namespace DnaFragment.Services.LrProducts
         }
 
 
-        public async Task<LrProductQueryServiceModel> All(string brand,string searchTerm, LrProductSorting sorting,int currentPage,int productsPerPage)
+        public async Task<LrProductQueryServiceModel> All(string brand, string searchTerm, LrProductSorting sorting, int currentPage, int productsPerPage)
         {
-            var productsQuery =  this.data.LrProducts.AsQueryable();
+            var productsQuery = this.data.LrProducts.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(brand))
             {
-                productsQuery =   productsQuery.Where(c => c.Category.Name == brand);
+                productsQuery = productsQuery.Where(c => c.Category.Name == brand);
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -298,7 +304,7 @@ namespace DnaFragment.Services.LrProducts
 
             productsQuery = sorting switch
             {
-                LrProductSorting.Volume =>   productsQuery.OrderByDescending(c => c.PackagingVolume),
+                LrProductSorting.Volume => productsQuery.OrderByDescending(c => c.PackagingVolume),
                 LrProductSorting.BrandAndPrice or _ => productsQuery.OrderBy(c => c.Price).ThenBy(c => c.Model)
                 //LrProductSorting.DateCreated or _ => productsQuery.OrderByDescending(c => c.Id)
             };
@@ -306,20 +312,20 @@ namespace DnaFragment.Services.LrProducts
             var totalLrProducts = await productsQuery.CountAsync();
 
             var products = await productsQuery
-                .Skip((currentPage - 1) * productsPerPage)
-                .Take(productsPerPage).Select(c => new LrProductServiceModel
-                {
-                    Id = c.Id,
-                    Model = c.Model,
-                    PackagingVolume = c.PackagingVolume,
-                    Price = c.Price,
-                    PictureUrl = c.PictureUrl,
-                    //Category = c.Category.Name
-                })
-                .ToListAsync();
-            var lrProductQueryServiceModel =   new LrProductQueryServiceModel
+               .Skip((currentPage - 1) * productsPerPage)
+               .Take(productsPerPage).Select(c => new LrProductServiceModel
+               {
+                   Id = c.Id,
+                   Model = c.Model,
+                   PackagingVolume = c.PackagingVolume,
+                   Price = c.Price,
+                   PictureUrl = c.PictureUrl,
+                       //Category = c.Category.Name
+                   }).ToListAsync();
+
+            var lrProductQueryServiceModel = new LrProductQueryServiceModel
             {
-                TotalProducts =  totalLrProducts,
+                TotalProducts = totalLrProducts,
                 CurrentPage = currentPage,
                 ProductsPerPage = productsPerPage,
                 LrProducts = products
@@ -328,7 +334,8 @@ namespace DnaFragment.Services.LrProducts
             {
                 lrProductQueryServiceModel.CategoryAny = true;
             }
-             return   lrProductQueryServiceModel;
+
+            return lrProductQueryServiceModel;
         }
 
         public List<LrProductServiceModel> AllProductsByCategory(int categoryId)
@@ -336,14 +343,18 @@ namespace DnaFragment.Services.LrProducts
             var products = new List<LrProductServiceModel>();
             if (categoryId != 0)
             {
-                products = data.LrProducts.Where(x => x.CategoryId == categoryId).OrderBy(x => x.Price).ProjectTo<LrProductServiceModel>(mapper).ToList();
-                products.Insert(0, AddImageModel());
+                products = memoryCache.Get<List<LrProductServiceModel>>(categoryId);
+                if (products == null)
+                {
+                    products = data.LrProducts.Where(x => x.CategoryId == categoryId).OrderBy(x => x.Price).ProjectTo<LrProductServiceModel>(mapper).ToList();
+                    products.Insert(0, AddImageModel());
+                    memoryCache.Set(categoryId, products);
+                }
             }
             else
             {
                 products.Add(AddImageModel());
-            }           
-
+            }         
             return products;
         }
 
@@ -387,7 +398,7 @@ namespace DnaFragment.Services.LrProducts
         }).FirstOrDefault();
 
         public List<LrProductDetailsServiceModel> Favorits(string id)
-        =>data.LrProducts.Where(x => x.UserProducts.Where(y => y.UserId == id).Select(y => y.UserId)
+        =>data.LrProducts.Where(x => x.UserProducts.Where(y => y.UserId == id && y.InFavorits).Select(y => y.UserId)
             .FirstOrDefault() == id)
             .OrderBy(x => x.CategoryId)
             .ThenBy(x => x.Price)
@@ -410,12 +421,25 @@ namespace DnaFragment.Services.LrProducts
         public bool ExistUserProduct(int productId, string userId)
         => data.UserProducts.Any(x => x.LrProductId == productId && x.UserId == userId);
 
-        public void CreateUserProduct(int productId, string userId)
+        public void CreateUserProductBag(int productId, string userId)
         {
             var userProduct = new UserProduct
             {
-                UserId = userId,                
-                LrProductId = productId
+                UserId = userId,
+                LrProductId = productId,
+                InTheBag = true
+            };
+
+            data.UserProducts.Add(userProduct);
+            data.SaveChanges();
+        }
+        public void CreateUserProductFavorite(int productId, string userId)
+        {
+            var userProduct = new UserProduct
+            {
+                UserId = userId,
+                LrProductId = productId,
+                InFavorits = true
             };
 
             data.UserProducts.Add(userProduct);
@@ -424,24 +448,62 @@ namespace DnaFragment.Services.LrProducts
 
         public void UpdateCountVisitsCategory(string userName,int categoryId)
         {
-            var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
-            var statisticsCategory = data.StatisticsCategories.Where(x => x.Id == categoryId).FirstOrDefault();
-            var statisticsProducts = data.LrUserStatisticsProducts.Where(x => x.StatisticsProduct.StatisticsCategoryId == statisticsCategory.Id).ToList();
-
-            foreach (var statisticsProduct in statisticsProducts)
+            if(data.LrUsers.Any(x => x.Email == userName))
             {
-                statisticsProduct.CategoryVisitsCount++;
-                data.SaveChanges();
-            }                     
+                var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
+                var statisticsCategory = data.StatisticsCategories.Where(x => x.Id == categoryId).FirstOrDefault();
+                var statisticsProducts = data.LrUserStatisticsProducts.Where(x => x.StatisticsProduct.StatisticsCategoryId == statisticsCategory.Id).ToList();
+
+                foreach (var statisticsProduct in statisticsProducts)
+                {
+                    statisticsProduct.CategoryVisitsCount++;
+                    data.SaveChanges();
+                }
+            }
+            
         }
 
         public void UpdateCountVisitsProduct(string userName,int id)
         {
-            var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
-            var statisticsProduct = data.LrUserStatisticsProducts.Where(x => x.LrUserId == userId && x.StatisticsProductId == id).FirstOrDefault();
-            
-            statisticsProduct.ProductVisitsCount++;
-            data.SaveChanges();
-        }        
+            if (data.LrUsers.Any(x => x.Email == userName))
+            {
+                var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
+                var statisticsProduct = data.LrUserStatisticsProducts.Where(x => x.LrUserId == userId && x.StatisticsProductId == id).FirstOrDefault();
+
+                statisticsProduct.ProductVisitsCount++;
+                data.SaveChanges();
+            }
+           
+        }
+
+        public void ProductIsBag(int productId, string userId)
+        {
+            var product = data.UserProducts.Where(x => x.LrProductId == productId && x.UserId == userId && !x.InTheBag).FirstOrDefault();
+            if (product != null)
+            {
+                product.InTheBag = true;
+                data.SaveChanges();
+            }
+           
+        }
+        
+        public void ProductIsFavorite(int productId, string userId)
+        {
+            var product = data.UserProducts.Where(x => x.LrProductId == productId && x.UserId == userId && !x.InFavorits).FirstOrDefault();
+            if(product != null)
+            {
+                product.InFavorits = true;
+                data.SaveChanges();
+            }
+        }       
+
+        public List<LrProductDetailsServiceModel> LrBag(string id)                
+          => data.LrProducts.Where(x => x.UserProducts.Where(y => y.UserId == id && y.InTheBag).Select(y => y.UserId)
+             .FirstOrDefault() == id)
+             .OrderBy(x => x.CategoryId)
+             .ThenBy(x => x.Price)
+             .ProjectTo<LrProductDetailsServiceModel>(mapper)
+             .ToList();           
+                
     }
 }

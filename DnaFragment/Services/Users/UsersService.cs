@@ -104,18 +104,18 @@
         public List<LrUsersStatisticsFormModel> UsersStatistics(byte sort)
         {
             AutomaticDeleteDb();
-            var lrUsers =  data.LrUsers.OrderBy(x => x.Email).ToList();
+            var lrUsers = data.LrUsers.OrderBy(x => x.Email).ToList();
             var users = new List<LrUsersStatisticsFormModel>();
             foreach (var lrUser in lrUsers)
             {
-               
-               
+
+
                 var statisticsProduct = data.LrUserStatisticsProducts.Where(y => y.LrUserId == lrUser.Id).ToList();
                 StringBuilder sb = new StringBuilder();
 
                 if (lrUser.Email != "unknown@city.com")
                 {
-                    var userDb = data.Users.Where(x => !x.IsAdministrator).Where(x => x.Email == lrUser.Email).Select(x => new {Id = x.Id,FullName = x.FullName,PhoneNumber = x.PhoneNumber }).FirstOrDefault();
+                    var userDb = data.Users.Where(x => !x.IsAdministrator).Where(x => x.Email == lrUser.Email).Select(x => new { Id = x.Id, FullName = x.FullName, PhoneNumber = x.PhoneNumber }).FirstOrDefault();
                     if (userDb == null)
                     {
                         var user = new LrUsersStatisticsFormModel
@@ -125,7 +125,7 @@
                             Email = lrUser.Email,
                             PhoneNumber = "---",
                             IsDanger = lrUser.IsDanger,
-                            CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,                            
+                            CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
                         };
                         AddUserProductsCount(users, statisticsProduct, sb, user);
                     }
@@ -144,26 +144,31 @@
 
                 }
                 else
-                {                   
-                    var user =  new LrUsersStatisticsFormModel
-                    {                                           
+                {
+                    var user = new LrUsersStatisticsFormModel
+                    {
                         Username = "Users not registration",
                         Email = lrUser.Email,
                         PhoneNumber = "---",
-                        CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,                        
+                        CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
                     };
                     AddUserProductsCount(users, statisticsProduct, sb, user);
                 }
             }
+            return Sorting(sort, ref users);
+        }
+
+        private static List<LrUsersStatisticsFormModel> Sorting(byte sort, ref List<LrUsersStatisticsFormModel> users)
+        {
             users = users.OrderByDescending(x => x.Username).ToList();
             if (sort == 1)
             {
                 users = users.OrderBy(x => x.Username).ToList();
-            }            
-            else if(sort == 2)
+            }
+            else if (sort == 2)
             {
                 users = users.OrderBy(x => x.Id).ToList();
-            }     
+            }
             return users;
         }
 

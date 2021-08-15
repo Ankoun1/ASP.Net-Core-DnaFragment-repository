@@ -1,0 +1,66 @@
+﻿@model List<LrProductDetailsServiceModel>
+
+@{ ViewBag.Title = "Shop♡"; }
+
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+<hr class="bg-primary w-25">
+
+@if (Model.Any())
+{
+<h1 class="text-center mt-2 text-success">▪</h1> 
+}
+else
+{
+<h1 class="text-center mt-2 text-danger">▪</h1>
+}
+<form class="mx-auto w-75" method="post">   
+    <div class="form-group w-100">
+        <!--Mask color-->
+        <div class="view ">
+            <!--Video source-->
+            <video class="video-fluid w-100" autoplay loop muted>
+                <source src="https://mdbootstrap.com/img/video/animation-intro.mp4" type="video/mp4" />
+
+            </video>
+            <div class="mask rgba-purple-slight"></div>
+        </div>
+    </div>  
+
+    <h2 class="text-center mt-2">@ViewBag.Title</h2>
+    <hr class="bg-primary w-25">
+    <hr class="bg-primary w-50">
+    <hr class="bg-primary w-75">
+
+    @if (!Model.Any())
+    {
+<h3 class="text-center">No products found by the given criteria!</h3>}
+
+    <div class="row justify-content-center ">
+        @foreach (var product in Model)
+        {
+<div class=" col-md-4 ">
+    <div class="form-group card mb-3 ">
+       
+        <img class="card-img-top" src="@product.PictureUrl" alt="@product.Price" title="@product.Model">
+        <div class="card-body text-center">
+            <ul class="list-group list-group-flush ">
+                <li class="list-group-item text-xl-center text-white">@product.Price lv.</li>
+            </ul>
+            <ul class="list-group list-group-flush ">
+                <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example">
+                    <a class="btn btn-success text-break text-white text-xl-center"
+                       asp-controller="LrProducts"
+                       asp-action="Details"
+                       asp-route-id="@product.Id">
+                        $hop
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+        }
+    </div>
+</form>

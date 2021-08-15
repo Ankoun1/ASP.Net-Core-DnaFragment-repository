@@ -8,6 +8,6 @@
     {
         Task<List<ListingCategoryModel>> AllCategoriesDb();
 
-        Task StartCategoryDb();
+        void StartCategoryDb();
     }
 }

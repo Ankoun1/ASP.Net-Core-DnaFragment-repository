@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnaFragment.Data.Migrations
 {
     [DbContext(typeof(DnaFragmentDbContext))]
-    [Migration("20210812142010_URCitTable")]
+    [Migration("20210813163325_URCitTable")]
     partial class URCitTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -359,6 +359,15 @@ namespace DnaFragment.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("LrProductId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("InFavorits")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InTheBag")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LrProductsCount")
                         .HasColumnType("int");
 
                     b.HasKey("UserId", "LrProductId");

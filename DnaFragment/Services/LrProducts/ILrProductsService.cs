@@ -4,12 +4,15 @@ namespace DnaFragment.Services.LrProducts
    
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using DnaFragment.Data.Models;
     using DnaFragment.Models;
     using DnaFragment.Services.LrProducts.Models;
 
     public interface ILrProductsService
     {
-        void StartLrProduktDb();
+       
+
+     void StartLrProduktDb();
 
         public int Create(
                string Model,
@@ -22,7 +25,13 @@ namespace DnaFragment.Services.LrProducts
                string PlateNumber,
                int CategoryId);       
 
-        void CreateUserProduct(int productId,string userId);
+        void CreateUserProductBag(int productId,string userId);
+
+        void CreateUserProductFavorite(int productId,string userId);
+
+        void ProductIsBag(int productId, string userId);
+
+        void ProductIsFavorite(int productId, string userId);
 
         bool Update(string description, decimal price, string image, string plateNumber, int productId, int categoryId);
                     
@@ -31,9 +40,9 @@ namespace DnaFragment.Services.LrProducts
         LrProductDetailsServiceModel Details(int Id);
                     
         List<LrProductDetailsServiceModel> Favorits(string Id);
-                  
-        bool ExistUserProduct(int productId, string userId);
 
+        List<LrProductDetailsServiceModel> LrBag(string id);                 
+        
         List<LrProductServiceModel> AllProductsByCategory(int categoryId);
 
         IEnumerable<string> AllLrBrands();
@@ -45,5 +54,8 @@ namespace DnaFragment.Services.LrProducts
         void UpdateCountVisitsCategory(string userName,int categoryId);
 
         void UpdateCountVisitsProduct(string userName,int id);
+
+        bool ExistUserProduct(int productId, string userId);
+        
     }
 }
