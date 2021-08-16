@@ -1,0 +1,37 @@
+﻿@model BagsInformationsModel
+
+@{ ViewBag.Title = "Delivery Information"; }
+
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+<hr class="bg-primary w-25">
+<h2 class="text-center mt-2">@ViewBag.Title</h2>
+
+<div class="row mt-4 mb-4">
+
+    <form class="mx-auto w-50" method="get">
+
+        <div class="form-group mx-auto ">
+            <p1 class="text-success">▪▪▪▪</p1>
+            <img class="d-block w-100 " src="https://images.template.net/wp-content/uploads/2014/10/face-sketche18.jpg" alt="Responsive image">
+        </div>
+
+        <div class="form-group">
+            <label asp-for="City">City</label>
+            <input asp-for="City" type="text" class="form-control" id="city-input">
+            <span asp-validation-for="City" class="small text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address">Address</label>
+            <input asp-for="Address" type="text" class="form-control" id="address-input">
+            <span asp-validation-for="Address" class="small text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber">Phone number</label>
+            <input asp-for="PhoneNumber" type="text" class="form-control" id="phoneNumber-input">
+            <span asp-validation-for="PhoneNumber" class="small text-danger"></span>
+        </div>     
+
+        <button type="submit" class="btn btn-block btn-primary">Add Information</button>
+    </form>
+</div>

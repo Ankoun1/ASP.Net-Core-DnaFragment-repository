@@ -29,6 +29,7 @@ namespace DnaFragment.Data.Migrations
                     FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     IsAdministrator = table.Column<bool>(type: "bit", nullable: false),
                     ResetPasswordId = table.Column<int>(type: "int", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -47,6 +48,23 @@ namespace DnaFragment.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bags", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -328,6 +346,31 @@ namespace DnaFragment.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BagProducts",
+                columns: table => new
+                {
+                    BagId = table.Column<int>(type: "int", nullable: false),
+                    LrProductId = table.Column<int>(type: "int", nullable: false),
+                    CountProducts = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BagProducts", x => new { x.BagId, x.LrProductId });
+                    table.ForeignKey(
+                        name: "FK_BagProducts_Bags_BagId",
+                        column: x => x.BagId,
+                        principalTable: "Bags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BagProducts_LrProducts_LrProductId",
+                        column: x => x.LrProductId,
+                        principalTable: "LrProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserProducts",
                 columns: table => new
                 {
@@ -335,7 +378,9 @@ namespace DnaFragment.Data.Migrations
                     LrProductId = table.Column<int>(type: "int", nullable: false),
                     InTheBag = table.Column<bool>(type: "bit", nullable: false),
                     InFavorits = table.Column<bool>(type: "bit", nullable: false),
-                    LrProductsCount = table.Column<int>(type: "int", nullable: false)
+                    Bought = table.Column<bool>(type: "bit", nullable: false),
+                    LrProductsCount = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -426,6 +471,11 @@ namespace DnaFragment.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BagProducts_LrProductId",
+                table: "BagProducts",
+                column: "LrProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LrProducts_CategoryId",
                 table: "LrProducts",
                 column: "CategoryId");
@@ -482,6 +532,9 @@ namespace DnaFragment.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BagProducts");
+
+            migrationBuilder.DropTable(
                 name: "LrUsersOldEmails");
 
             migrationBuilder.DropTable(
@@ -498,6 +551,9 @@ namespace DnaFragment.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Bags");
 
             migrationBuilder.DropTable(
                 name: "LrUsers");

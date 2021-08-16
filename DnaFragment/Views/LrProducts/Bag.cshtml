@@ -1,4 +1,4 @@
-﻿@model List<LrProductDetailsServiceModel>
+﻿@model AddNewInfoProductFormModel
 
 @{ ViewBag.Title = "Shop♡"; }
 
@@ -6,15 +6,15 @@
 <hr class="bg-primary w-50">
 <hr class="bg-primary w-25">
 
-@if (Model.Any())
+@if (Model.Products != null)
 {
-<h1 class="text-center mt-2 text-success">▪</h1> 
+<h1 class="text-center mt-2 text-white">▪</h1> 
 }
 else
 {
 <h1 class="text-center mt-2 text-danger">▪</h1>
 }
-<form class="mx-auto w-75" method="post">   
+<form class="mx-auto w-75" method="post">
     <div class="form-group w-100">
         <!--Mask color-->
         <div class="view ">
@@ -25,42 +25,67 @@ else
             </video>
             <div class="mask rgba-purple-slight"></div>
         </div>
-    </div>  
-
+    </div>
     <h2 class="text-center mt-2">@ViewBag.Title</h2>
     <hr class="bg-primary w-25">
     <hr class="bg-primary w-50">
+    <div class="alert alert-secondary mx-auto w-75 small ">
+        <strong>За вашите поръчки използваме услугите на Speedy с включена цена 3.90 лв.</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
+    </div>
+    <div class="alert alert-secondary mx-auto w-75 small ">
+        <strong>За поръчки над 5 артикула печелите различен процент отстъпка от крайната цена.</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
+    </div>
+    <div class="alert alert-secondary mx-auto w-75 small ">
+        <strong>При всеки закупен продукт печелите 1 Lr point.</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
+    </div>
     <hr class="bg-primary w-75">
 
-    @if (!Model.Any())
+    @if (Model.Products == null)
     {
 <h3 class="text-center">No products found by the given criteria!</h3>}
-
+<div class="form-group mx-auto w-75 ">
+    <ul class="list-group list-group-flush ">
+        <li class="list-group-item text-xl-center text-white">Total: @Model.Amount</li>
+    </ul>
+    <ul class="list-group list-group-flush ">
+        <li class="list-group-item text-xl-center text-white">
+            Delivery to:
+        </li>
+    </ul>
+    @if (Model.Products != null && Model.ProductsCountIsNotEmpty)
+    {
+<button class="btn btn-outline-primary small w-100" asp-controller="LrProducts" asp-action="BagsInformation">Complete the Order</button>
+}
+else
+{
+<h1 class="text-center mt-2 text-success">▪▪▪</h1>
+}
+</div>
+    <div class="form-group mx-auto w-25">      
+        <input asp-for="ProductsCount" type="text" class="form-control mx-auto w-50" placeholder="" id="productsCount-input " aria-label="Example text with two button addons">
+    </div>
     <div class="row justify-content-center ">
-        @foreach (var product in Model)
+        @if (Model.Products != null)
         {
+
+@foreach (var product in Model.Products)
+{
 <div class=" col-md-4 ">
     <div class="form-group card mb-3 ">
-       
+
         <img class="card-img-top" src="@product.PictureUrl" alt="@product.Price" title="@product.Model">
-        <div class="card-body text-center">
-            <ul class="list-group list-group-flush ">
-                <li class="list-group-item text-xl-center text-white">@product.Price lv.</li>
-            </ul>
-            <ul class="list-group list-group-flush ">
-                <li class="btn-group btn-group d-flex justify-content-center " role="group" aria-label="Button group example">
-                    <a class="btn btn-success text-break text-white text-xl-center"
-                       asp-controller="LrProducts"
-                       asp-action="Details"
-                       asp-route-id="@product.Id">
-                        $hop
-                    </a>
-                </li>
-            </ul>
+
+        <ul class="list-group list-group-flush ">
+            <li class="list-group-item text-xl-center text-white">@product.Price lv.</li>
+        </ul>
+        <div class="input-group mb-3 small">
+            <button class="btn btn-danger " type="button" asp-controller="LrProducts" asp-action="DeleteFromTheBag" asp-route-id="@product.Id">Delete</button>
+            <button class="btn btn-success " type="submit" asp-controller="LrProducts" asp-action="Bag" asp-route-id="@product.Id">$hop</button>
+
         </div>
 
     </div>
-</div>
-        }
+</div>}}
+
     </div>
 </form>

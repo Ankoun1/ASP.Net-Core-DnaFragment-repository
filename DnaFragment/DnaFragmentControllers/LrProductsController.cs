@@ -11,8 +11,9 @@
     using System.Threading.Tasks;
     using System.Collections.Generic;
     using DnaFragment.Services.LrProducts.Models;
- 
-   
+    using DnaFragment.Services.Users;
+
+
 
     //using AutoMapper;
 
@@ -20,14 +21,16 @@
     {    
         private readonly ILrProductsService lrProducts;
         private readonly IAdministratorService administrator;
+        private readonly IUsersService userService;
        
         //private readonly IMapper mapper;
         
         public LrProductsController(         
-               ILrProductsService lrProducts, IAdministratorService administrator)
+               ILrProductsService lrProducts, IAdministratorService administrator, IUsersService userService)
         {           
             this.lrProducts = lrProducts;
             this.administrator = administrator;
+            this.userService = userService;
             
            
             //this.mapper = mapper;
@@ -110,7 +113,57 @@
             }           
             var  products = lrProducts.LrBag(User.GetId());         
 
-            return View(products);
+            return View(new AddNewInfoProductFormModel {Amount = userService.Amount(User.GetId()).Item1,ProductsCountIsNotEmpty = userService.Amount(User.GetId()).Item2, Products = products });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Bag(int id, AddNewInfoProductFormModel product)
+        {
+            if (User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+            if(product.ProductsCount <= 0)
+            {
+                return Redirect("/LrProducts/Bag");
+            }
+            if (!ModelState.IsValid)
+            {
+             
+                return View(product);
+            }
+            userService.UpdateUserProducts(User.GetId(), id, product.ProductsCount);
+
+            return Redirect("/LrProducts/Bag");
+        }
+               [Authorize]
+        public IActionResult BagsInformation()
+        {
+            if (User.IsAdmin())
+            {
+                return Unauthorized();
+            }               
+
+            return View();
+        }
+        
+      
+         [HttpGet]
+         [Authorize]
+        public IActionResult BagsInformation(BagsInformationsModel userBag)
+        {
+            if (User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+            if (!ModelState.IsValid)
+            {
+
+                return View(userBag);
+            }
+            userService.Order(User.GetId(), userBag.City, userBag.Address, userBag.PhoneNumber);
+            return Redirect("/LrProducts/Bag");
         } 
 
         public IActionResult Details(int id)
@@ -130,6 +183,23 @@
                 
             }
             return View(product);
+        }
+
+        [Authorize]
+        public IActionResult DeleteFromTheBag(int id)
+        {
+            var product = lrProducts.Details(id);
+
+            if (!User.IsAdmin())
+            {               
+               lrProducts.BagDelete(id,User.GetId());
+
+            }
+            else
+            {
+                return Unauthorized();
+            }
+            return Redirect("/LrProducts/Bag");
         }
 
         public IActionResult AllProductsByCategory(int categoryId)

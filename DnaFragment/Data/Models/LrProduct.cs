@@ -41,6 +41,8 @@
 
         public ICollection<UserProduct> UserProducts { get; init; } = new List<UserProduct>();
 
+        public ICollection<BagProduct> BagProducts { get; init; } = new List<BagProduct>();
+
         //[Required]
         public int CategoryId { get; set; }
 

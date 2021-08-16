@@ -1,6 +1,4 @@
-﻿
-
-namespace DnaFragment.Services.LrProducts
+﻿namespace DnaFragment.Services.LrProducts
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -23,12 +21,8 @@ namespace DnaFragment.Services.LrProducts
         {
             this.data = data;
             this.mapper = mapper.ConfigurationProvider;
-            this.memoryCache = memoryCache;
-          
-            
-        }
-
-     
+            this.memoryCache = memoryCache;                    
+        }     
 
         public void StartLrProduktDb()
         {
@@ -447,10 +441,10 @@ namespace DnaFragment.Services.LrProducts
         }
 
         public void UpdateCountVisitsCategory(string userName,int categoryId)
-        {
-            if(data.LrUsers.Any(x => x.Email == userName))
+        {            
+            var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
+            if (userId != 0)
             {
-                var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
                 var statisticsCategory = data.StatisticsCategories.Where(x => x.Id == categoryId).FirstOrDefault();
                 var statisticsProducts = data.LrUserStatisticsProducts.Where(x => x.StatisticsProduct.StatisticsCategoryId == statisticsCategory.Id).ToList();
 
@@ -459,21 +453,19 @@ namespace DnaFragment.Services.LrProducts
                     statisticsProduct.CategoryVisitsCount++;
                     data.SaveChanges();
                 }
-            }
-            
+            }            
         }
 
         public void UpdateCountVisitsProduct(string userName,int id)
-        {
-            if (data.LrUsers.Any(x => x.Email == userName))
+        {          
+            var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
+            if (userId != 0)
             {
-                var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
                 var statisticsProduct = data.LrUserStatisticsProducts.Where(x => x.LrUserId == userId && x.StatisticsProductId == id).FirstOrDefault();
 
                 statisticsProduct.ProductVisitsCount++;
                 data.SaveChanges();
-            }
-           
+            }           
         }
 
         public void ProductIsBag(int productId, string userId)
@@ -483,8 +475,7 @@ namespace DnaFragment.Services.LrProducts
             {
                 product.InTheBag = true;
                 data.SaveChanges();
-            }
-           
+            }           
         }
         
         public void ProductIsFavorite(int productId, string userId)
@@ -503,7 +494,16 @@ namespace DnaFragment.Services.LrProducts
              .OrderBy(x => x.CategoryId)
              .ThenBy(x => x.Price)
              .ProjectTo<LrProductDetailsServiceModel>(mapper)
-             .ToList();           
-                
+             .ToList();
+
+        public void BagDelete(int productId, string userId)
+        {
+            var product = data.UserProducts.Where(x => x.LrProductId == productId && x.UserId == userId && x.InTheBag).FirstOrDefault();
+            if(product != null)
+            {
+                product.InTheBag = false;
+                data.SaveChanges();
+            }           
+        }
     }
 }

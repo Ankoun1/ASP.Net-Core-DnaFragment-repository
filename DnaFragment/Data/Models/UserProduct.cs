@@ -19,7 +19,11 @@ namespace DnaFragment.Data.Models
 
         public bool InFavorits { get; set; }
 
+        public bool Bought { get; set; }
+
         public int LrProductsCount { get; set; }
+
+        public decimal Amount { get; set; }
 
     }
 }

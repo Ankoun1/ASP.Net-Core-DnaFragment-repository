@@ -33,9 +33,11 @@
 
         void AddNewLrUserInfoDb(LrUser lrUser);
 
-       
+        (decimal, bool) Amount(string lrUserId);
 
-       
+        void UpdateUserProducts(string lrUserId,int productId,int productsCount);
+
+        void Order(string lrUserId,string city,string address,string phoneNumber);     
 
     }
 }

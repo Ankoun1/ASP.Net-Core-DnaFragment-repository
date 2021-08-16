@@ -56,6 +56,8 @@ namespace DnaFragment.Services.LrProducts
         void UpdateCountVisitsProduct(string userName,int id);
 
         bool ExistUserProduct(int productId, string userId);
+
+        void BagDelete(int productId, string userId);
         
     }
 }

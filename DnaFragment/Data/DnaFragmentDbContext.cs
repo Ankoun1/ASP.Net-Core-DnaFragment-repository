@@ -25,9 +25,11 @@ namespace DnaFragment.Data
 
         public DbSet<LrProduct> LrProducts { get; init; }
 
-        public DbSet<Category> Categories { get; init; }
+        public DbSet<BagProduct> BagProducts { get; init; }
 
-        // public DbSet<Issue> Issues { get; init; }
+        public DbSet<Bag> Bags { get; init; }
+
+        public DbSet<Category> Categories { get; init; }       
 
         public DbSet<Question> Questions { get; init; }
 
@@ -42,6 +44,7 @@ namespace DnaFragment.Data
         {         
             builder.Entity<UserProduct>().HasKey(up => new { up.UserId, up.LrProductId });
             builder.Entity<LrUserStatisticsProduct>().HasKey(up => new { up.LrUserId, up.StatisticsProductId });
+            builder.Entity<BagProduct>().HasKey(up => new { up.BagId, up.LrProductId });
 
             builder.Entity<UserProduct>()
             .HasOne<User>(tm => tm.User)

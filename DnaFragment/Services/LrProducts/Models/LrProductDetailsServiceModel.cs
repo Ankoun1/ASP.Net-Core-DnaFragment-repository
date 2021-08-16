@@ -9,5 +9,7 @@
         public string PlateNumber { get; init; }
 
         public string LrUserId { get; init; }
+
+        
     }
 }

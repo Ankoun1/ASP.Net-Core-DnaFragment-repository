@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnaFragment.Data.Migrations
 {
     [DbContext(typeof(DnaFragmentDbContext))]
-    [Migration("20210813163325_URCitTable")]
+    [Migration("20210816214710_URCitTable")]
     partial class URCitTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,55 @@ namespace DnaFragment.Data.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Answers");
+                });
+
+            modelBuilder.Entity("DnaFragment.Data.Models.Bag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShippingAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bags");
+                });
+
+            modelBuilder.Entity("DnaFragment.Data.Models.BagProduct", b =>
+                {
+                    b.Property<int>("BagId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LrProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountProducts")
+                        .HasColumnType("int");
+
+                    b.HasKey("BagId", "LrProductId");
+
+                    b.HasIndex("LrProductId");
+
+                    b.ToTable("BagProducts");
                 });
 
             modelBuilder.Entity("DnaFragment.Data.Models.Category", b =>
@@ -286,6 +335,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -360,6 +412,12 @@ namespace DnaFragment.Data.Migrations
 
                     b.Property<int>("LrProductId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("Bought")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("InFavorits")
                         .HasColumnType("bit");
@@ -523,6 +581,25 @@ namespace DnaFragment.Data.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("DnaFragment.Data.Models.BagProduct", b =>
+                {
+                    b.HasOne("DnaFragment.Data.Models.Bag", "Bag")
+                        .WithMany("BagProducts")
+                        .HasForeignKey("BagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DnaFragment.Data.Models.LrProduct", "LrProduct")
+                        .WithMany("BagProducts")
+                        .HasForeignKey("LrProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bag");
+
+                    b.Navigation("LrProduct");
+                });
+
             modelBuilder.Entity("DnaFragment.Data.Models.LrProduct", b =>
                 {
                     b.HasOne("DnaFragment.Data.Models.Category", "Category")
@@ -667,6 +744,11 @@ namespace DnaFragment.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DnaFragment.Data.Models.Bag", b =>
+                {
+                    b.Navigation("BagProducts");
+                });
+
             modelBuilder.Entity("DnaFragment.Data.Models.Category", b =>
                 {
                     b.Navigation("LrProducts");
@@ -674,6 +756,8 @@ namespace DnaFragment.Data.Migrations
 
             modelBuilder.Entity("DnaFragment.Data.Models.LrProduct", b =>
                 {
+                    b.Navigation("BagProducts");
+
                     b.Navigation("UserProducts");
                 });
 

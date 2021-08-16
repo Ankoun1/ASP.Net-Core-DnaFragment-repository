@@ -21,6 +21,8 @@
 
         public IEnumerable<Message> Messages { get; init; } = new List<Message>();
 
+        public decimal Amount { get; set; }     
+        
     }
 }
 

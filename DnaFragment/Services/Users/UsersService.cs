@@ -240,13 +240,84 @@
             var lrUserStatisticsProduct = new List<LrUserStatisticsProduct>();
             for (int i = 1; i <= 7; i++)
             {
-                foreach (var item in data.StatisticsProducts.Where(x => x.StatisticsCategoryId == i).Select(x => x.Id).ToList())
+                var statisticsProducts = data.StatisticsProducts.Where(x => x.StatisticsCategoryId == i).Select(x => x.Id).ToList();
+                foreach (var item in statisticsProducts)
                 {
                     lrUserStatisticsProduct.Add(new LrUserStatisticsProduct { LrUserId = lrUser.Id, LrUser = lrUser, StatisticsProductId = item });
                 }
             }
             data.LrUserStatisticsProducts.AddRange(lrUserStatisticsProduct);
             data.SaveChanges();
-        }       
+        }
+
+        public (decimal,bool) Amount(string lrUserId)
+        {
+            var userAmount = data.Users.Where(x => x.Id == lrUserId).Select(x => x.Amount).FirstOrDefault();
+            
+
+            var productBought = data.UserProducts.Where(x => x.UserId == lrUserId && x.Bought).Select(x => x.Bought).FirstOrDefault();
+
+            return (userAmount, productBought);
+        }
+
+        public void UpdateUserProducts(string lrUserId, int productId,int productsCount)
+        {
+            var userProduct = data.UserProducts.Where(x => x.UserId == lrUserId && x.LrProductId == productId).FirstOrDefault();
+            userProduct.LrProductsCount = productsCount;
+            userProduct.Bought = true;
+
+            var price = data.LrProducts.Where(x => x.Id == userProduct.LrProductId).Select(x => x.Price).FirstOrDefault();
+            decimal amount = price * productsCount;
+            decimal amountWithDiscount = 0;
+            if (productsCount > 50)
+            {
+                amountWithDiscount = amount * 0.87m;
+            }
+            else if (productsCount > 10)
+            {
+                amountWithDiscount = amount * 0.92m;
+            }
+            else if (productsCount > 5)
+            {
+                amountWithDiscount = amount * 0.95m;
+            }
+            else
+            {
+                amountWithDiscount = amount;
+            }
+            userProduct.Amount = amountWithDiscount;
+            data.SaveChanges();
+            var user = data.Users.Where(x => x.Id == lrUserId).FirstOrDefault();
+
+            decimal amounthProducts = data.UserProducts.Where(x => x.UserId == lrUserId && x.Bought).Select(x => x.Amount).Sum();     
+           
+            user.Amount = amounthProducts;
+            data.SaveChanges();
+        }
+
+        public void Order(string lrUserId, string city, string address, string phoneNumber)
+        {
+            var user = data.Users.Where(x => x.Id == lrUserId).FirstOrDefault();
+
+            var userBag = new Bag { UserId = lrUserId, City = city, ShippingAddress = address, PhoneNumber = phoneNumber, Total = user.Amount };
+            data.Bags.Add(userBag);
+            data.SaveChanges();
+
+            var products = data.UserProducts.Where(x => x.UserId == lrUserId && x.Bought).ToList();
+            var bagProducts = products.Select(x => new BagProduct { BagId = userBag.Id, LrProductId = x.LrProductId, CountProducts = x.LrProductsCount }).ToList();
+            data.BagProducts.AddRange(bagProducts);
+            user.Amount = 0;
+            
+            
+            data.SaveChanges();
+            var lrUser = data.LrUsers.Where(x => x.Email == user.Email).FirstOrDefault();
+            foreach (var product in products)
+            {
+                lrUser.LrPoints += product.LrProductsCount;
+                product.Bought = false;
+                product.LrProductsCount = 0;
+                data.SaveChanges();
+            }
+        }
     }
 }

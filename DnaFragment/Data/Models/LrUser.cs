@@ -11,9 +11,9 @@
         [EmailAddress]
         public string Email { get; set; }
 
-        public decimal TotalSum { get; set; } = 0;
+        public decimal TotalSum { get; set; }
 
-        public int LrPoints { get; set; } = 0;
+        public int LrPoints { get; set; }
 
         public bool IsDanger { get; set; }
 
