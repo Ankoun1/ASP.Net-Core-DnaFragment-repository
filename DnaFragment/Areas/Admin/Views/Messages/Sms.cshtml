@@ -1,0 +1,27 @@
+﻿@model SmsFormModel
+@{ ViewBag.Title = "SMS"; }
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+<h2 class="text-center mt-2">@ViewBag.Title</h2>
+<h1 class="text-center mt-2 text-white">▪</h1>
+<form class="mx-auto w-75" method="post">
+    <div class="form-group">
+        <div class="form-group">
+            <label asp-for="To">To</label>
+            <input asp-for="To" type="text" class="form-control" id="to-input">
+            <span asp-validation-for="To" class="small text-danger"></span>
+        </div>
+        <div class="label-holder text-white d-flex justify-content-center">
+            <label asp-for="Body">Body</label>
+        </div>
+        <textarea asp-for="Body" rows="4" type="text" class="form-control" id="body-input"></textarea>
+    </div>
+
+    <div class="button-holder d-flex justify-content-center">
+        <button type="submit" class="btn btn-block btn-primary text-white mb-3">Add SMS</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

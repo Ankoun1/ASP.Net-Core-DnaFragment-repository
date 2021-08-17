@@ -5,6 +5,7 @@
     using DnaFragment.Services.Answers;
     using DnaFragment.Services.Mail;
     using DnaFragment.Services.Messages;
+    using DnaFragment.Services.Users;
     using Microsoft.AspNetCore.Mvc;
 
     public class MessagesController : AdminController
@@ -12,11 +13,13 @@
         private readonly IMessagesService messageService;
         private readonly ISendMailService sendMail;
         private readonly IAnswersService answersService;
-        public MessagesController(IMessagesService messageService, ISendMailService sendMail, IAnswersService answersService)
+        private readonly IUsersService usersService;
+        public MessagesController(IMessagesService messageService, ISendMailService sendMail, IAnswersService answersService,IUsersService usersService)
         {
             this.sendMail = sendMail;
             this.messageService = messageService;
             this.answersService = answersService;
+            this.usersService = usersService;
         }
 
         public IActionResult AddAnswer(string questId) => View();
@@ -69,10 +72,17 @@
             return View(new SendMailMessageModel { To = emailUser, Subject = mailModel.Subject, Body = mailModel.Body });
         }
         
-        public IActionResult Sms()
+        public IActionResult Sms(string userId)
         {
-            sendMail.SmsMessanger();
-            return Redirect("/LrUsers/All");
+            var phoneNumber = usersService.GetPhoneNumber(userId);
+            return View(new SmsFormModel { To = phoneNumber });
+        }
+
+        [HttpPost]
+        public IActionResult Sms(SmsFormModel sms)
+        {
+            sendMail.SmsMessanger(sms.To,sms.Body);
+            return Redirect("/Admin/LrUsers/All");
         }       
     }
 }

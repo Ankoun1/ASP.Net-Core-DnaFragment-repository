@@ -488,13 +488,22 @@
             }
         }       
 
-        public List<LrProductDetailsServiceModel> LrBag(string id)                
-          => data.LrProducts.Where(x => x.UserProducts.Where(y => y.UserId == id && y.InTheBag).Select(y => y.UserId)
-             .FirstOrDefault() == id)
-             .OrderBy(x => x.CategoryId)
-             .ThenBy(x => x.Price)
-             .ProjectTo<LrProductDetailsServiceModel>(mapper)
-             .ToList();
+        public List<LrProductDetailsServiceModel> LrBag(string id)
+        {
+            var products = data.LrProducts.Where(x => x.UserProducts.Where(y => y.UserId == id && y.InTheBag).Select(y => y.UserId)
+            .FirstOrDefault() == id)
+            .OrderBy(x => x.CategoryId)
+            .ThenBy(x => x.Price)
+            .ProjectTo<LrProductDetailsServiceModel>(mapper)
+            .ToList();
+
+            foreach (var product in products)
+            {
+                product.Bought = data.UserProducts.Where(x => x.LrProductId == product.Id).Select(x => x.Bought).FirstOrDefault();
+            }
+            return products;
+        }                
+         
 
         public void BagDelete(int productId, string userId)
         {

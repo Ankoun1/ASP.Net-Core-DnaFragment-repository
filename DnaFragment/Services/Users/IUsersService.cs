@@ -37,7 +37,15 @@
 
         void UpdateUserProducts(string lrUserId,int productId,int productsCount);
 
-        void Order(string lrUserId,string city,string address,string phoneNumber);     
+        void Order(string lrUserId,string city,string address,string phoneNumber);
+        
+        bool IsSuperUser(string lrUserId);
+        
+        List<UserOrderFormModel> ShippingOrders(string lrUserId);
+        
+        void Received(int bagId);
+        
+        string GetPhoneNumber(string userId);     
 
     }
 }

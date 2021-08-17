@@ -21,7 +21,9 @@
 
         public IEnumerable<Message> Messages { get; init; } = new List<Message>();
 
-        public decimal Amount { get; set; }     
+        public decimal Amount { get; set; } 
+        
+        public bool IsSuperUser { get; set; }     
         
     }
 }

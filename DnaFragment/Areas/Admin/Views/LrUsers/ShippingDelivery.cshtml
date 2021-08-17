@@ -1,0 +1,41 @@
+﻿@model List<UserOrderFormModel>
+@{ ViewBag.Title = "LR Users"; }
+
+<hr class="bg-primary w-75">
+<hr class="bg-primary w-50">
+<h2 class="text-center mt-2 text-white">@ViewBag.Title</h2>
+<h1 class="text-center mt-2 text-success">▪</h1>
+
+<form class="mx-auto w-75">
+
+    <img class="d-block w-100 " src="https://chamlinlaw.com/wp-content/uploads/2016/01/Assault_CR.jpg" alt="Responsive image">
+    @if (Model != null)
+    {
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="form-group">
+                <hr class="bg-success w-50">
+                <ul class="list-group list-group-flush ">
+                    <li class="list-group-item text-center text-break">@Model[i].FullName</li>
+                    <li class="list-group-item text-center text-break">@Model[i].Total</li>
+                    <li class="list-group-item text-center text-break">@Model[i].City</li>
+                    <li class="list-group-item text-center text-break">@Model[i].ShippingAddress</li>
+                    <li class="list-group-item text-center text-break">@Model[i].PhoneNumber</li>
+                    <li class="list-group-item text-center">@Model[i].DeliveryNumber</li>
+                    <li class="list-group-item text-center">@Model[i].BagProducts</li>
+                    <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
+                        
+                            <a class="btn btn-outline-primary "
+                               asp-area="Admin"
+                               asp-controller="LrUsers"
+                               asp-action="SendingTheRequest"
+                               asp-route-bagId="@Model[i].BagId">Complete</a>
+
+                        
+                    </li>
+                </ul>
+            </div>
+
+        }
+    }
+    </form>

@@ -8,6 +8,6 @@
 
         Task SendEmailAsync(string userId, string subject, string content);
 
-        void SmsMessanger();
+        void SmsMessanger(string to, string body);
     }
 }

@@ -20,7 +20,11 @@
         [Required]
         public string PhoneNumber { get; init; }
 
+        public int DeliveryNumber { get; init; }
+
         public decimal Total { get; init; }
+
+        public bool IsSent { get; set; }
 
         public ICollection<BagProduct> BagProducts { get; init; } = new List<BagProduct>();
     }

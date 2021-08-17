@@ -45,47 +45,59 @@ else
 <h3 class="text-center">No products found by the given criteria!</h3>}
 <div class="form-group mx-auto w-75 ">
     <ul class="list-group list-group-flush ">
-        <li class="list-group-item text-xl-center text-white">TOTAL: @Model.Amount</li>
-    </ul>
-    <ul class="list-group list-group-flush ">
-        <li class="list-group-item text-xl-center text-white">
-            Delivery to:
-        </li>
-    </ul>
+        <li class="list-group-item text-xl-center text-white bg-primary">TOTAL: @Model.Amount lv.</li>
+    </ul>    
     @if (Model.Products != null && Model.ProductsCountIsNotEmpty)
     {
-<button class="btn btn-outline-primary small w-100" asp-controller="LrProducts" asp-action="BagsInformation">Complete the Order</button>
-}
-else
-{
-<h1 class="text-center mt-2 text-success">▪▪▪</h1>
-}
+    <button class="btn btn-outline-primary small w-100" asp-controller="LrProducts" asp-action="BagsInformation">Complete the Order</button>
+    }
+    else
+    {
+    <h1 class="text-center mt-2 text-success">▪▪▪</h1>
+    }
 </div>
     <div class="form-group mx-auto w-25">      
         <input asp-for="ProductsCount" type="text" class="form-control mx-auto w-50" placeholder="" id="productsCount-input " aria-label="Example text with two button addons">
-    </div>
-    <div class="row justify-content-center ">
-        @if (Model.Products != null)
-        {
-
-@foreach (var product in Model.Products)
-{
-<div class=" col-md-4 ">
-    <div class="form-group card mb-3 ">
-
-        <img class="card-img-top" src="@product.PictureUrl" alt="@product.Price" title="@product.Model">
-
-        <ul class="list-group list-group-flush ">
-            <li class="list-group-item text-xl-center text-white">@product.Price lv.</li>
-        </ul>
-        <div class="input-group mb-3 small ">
-            <button class="btn btn-outline-danger w-50" type="submit" asp-controller="LrProducts" asp-action="DeleteFromTheBag" asp-route-id="@product.Id">Delete</button>
-            <button class="btn btn-success w-50 " type="submit" asp-controller="LrProducts" asp-action="Bag" asp-route-id="@product.Id">$hop</button>
-
+        <div class="form-group mx-auto w-50">
+           @foreach (var product in Model.Products)
+           {
+                if (product.Bought)
+                {
+                    <p1 class="text-success text-center ">▪</p1>
+                }
+                else
+                {
+                    <p1 class="text-white text-center ">▪</p1>
+                }
+           }
         </div>
-
     </div>
-</div>}}
+    
+    <div class="row justify-content-center ">
+ @if (Model.Products != null)
+ {
+
+    @foreach (var product in Model.Products)
+    {
+        
+        <div class=" col-md-4 ">
+            <div class="form-group card mb-3 ">
+        
+                <img class="card-img-top" src="@product.PictureUrl" alt="@product.Price" title="@product.Model">
+        
+                <ul class="list-group list-group-flush ">
+                    <li class="list-group-item text-xl-center text-white">@product.Price lv.</li>
+                </ul>
+                <div class="input-group mb-3 small ">
+                    <button class="btn btn-outline-danger w-50" type="submit" asp-controller="LrProducts" asp-action="DeleteFromTheBag" asp-route-id="@product.Id">Delete</button>
+                    <button class="btn btn-success w-50 " type="submit" asp-controller="LrProducts" asp-action="Bag" asp-route-id="@product.Id">$hop</button>
+        
+                </div>
+        
+            </div>
+        </div>
+    }
+  }
 
     </div>
 </form>

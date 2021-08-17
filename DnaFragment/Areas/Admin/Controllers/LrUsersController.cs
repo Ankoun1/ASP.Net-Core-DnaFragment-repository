@@ -18,11 +18,21 @@
             var users =  usersService.UsersStatistics(sort);
 
             return View(users);
-        } 
-        public IActionResult Index()
-        {           
+        }                    
 
-            return View();
-        }     
+        public IActionResult ShippingDelivery(string userId)
+        {
+            var users = usersService.ShippingOrders(userId);
+
+                return View(users);
+        }
+
+        public IActionResult SendingTheRequest(int bagId)
+        {
+
+            usersService.Received(bagId);
+            return Redirect("/Admin/LrUsers/ShippingDelivery");
+        }
+
     }
 }

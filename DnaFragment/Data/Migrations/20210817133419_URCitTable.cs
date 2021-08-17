@@ -30,6 +30,7 @@ namespace DnaFragment.Data.Migrations
                     IsAdministrator = table.Column<bool>(type: "bit", nullable: false),
                     ResetPasswordId = table.Column<int>(type: "int", nullable: true),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsSuperUser = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -60,7 +61,9 @@ namespace DnaFragment.Data.Migrations
                     ShippingAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    DeliveryNumber = table.Column<int>(type: "int", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsSent = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

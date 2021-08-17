@@ -36,15 +36,15 @@
         public string UserEmail(string userId)
         => data.Users.Where(x => x.Id == userId).Select(x => x.Email).FirstOrDefault();
 
-        public void SmsMessanger()
+        public void SmsMessanger(string to, string body)
         {
-            string accountSid = Environment.GetEnvironmentVariable("");
-            string authToken = Environment.GetEnvironmentVariable("");
+            string accountSid = Environment.GetEnvironmentVariable("AccountSID");
+            string authToken = Environment.GetEnvironmentVariable("AuthToken");
 
             TwilioClient.Init(accountSid, authToken);
 
             var message = MessageResource.Create(
-                body: "Test message from DnaFragment",
+                body: body,
                 from: new Twilio.Types.PhoneNumber("+12515806588"),
                 to: new Twilio.Types.PhoneNumber("+359877668490")
             );

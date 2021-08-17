@@ -9,7 +9,7 @@
 
         public int? LrPoints { get; set; }
 
-        public int? CategoryVisitsCount { get; init; }
+        public string CategoriesVisitsCount { get; set; }
 
         public string ProductsVisitsCount { get; set; }
        

@@ -115,12 +115,15 @@
             {
 
 
-                var statisticsProduct = data.LrUserStatisticsProducts.Where(y => y.LrUserId == lrUser.Id).ToList();
+                var statisticsProduct = data.LrUserStatisticsProducts.Where(y => y.LrUserId == lrUser.Id).OrderBy(x => x.StatisticsProduct.StatisticsCategoryId).Distinct().ToList();
+           
                 StringBuilder sb = new StringBuilder();
 
                 if (lrUser.Email != "unknown@city.com")
                 {
                     var userDb = data.Users.Where(x => !x.IsAdministrator).Where(x => x.Email == lrUser.Email).Select(x => new { Id = x.Id, FullName = x.FullName, PhoneNumber = x.PhoneNumber }).FirstOrDefault();
+                    
+
                     if (userDb == null)
                     {
                         var user = new LrUsersStatisticsFormModel
@@ -130,7 +133,7 @@
                             Email = lrUser.Email,
                             PhoneNumber = "---",
                             IsDanger = lrUser.IsDanger,
-                            CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
+                            CategoriesVisitsCount = GetCategoriesCount(),
                         };
                         AddUserProductsCount(users, statisticsProduct, sb, user);
                     }
@@ -141,8 +144,9 @@
                             Id = userDb.Id,
                             Username = userDb.FullName,
                             Email = lrUser.Email,
+                            LrPoints = lrUser.LrPoints,
                             PhoneNumber = userDb.PhoneNumber,
-                            CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
+                            CategoriesVisitsCount = GetCategoriesCount(),
                         };
                         AddUserProductsCount(users, statisticsProduct, sb, user);
                     }
@@ -155,12 +159,33 @@
                         Username = "Users not registration",
                         Email = lrUser.Email,
                         PhoneNumber = "---",
-                        CategoryVisitsCount = statisticsProduct[0].CategoryVisitsCount,
+                        CategoriesVisitsCount = GetCategoriesCount(),
                     };
                     AddUserProductsCount(users, statisticsProduct, sb, user);
                 }
             }
             return Sorting(sort, ref users);
+        }
+
+        private string GetCategoriesCount()
+        {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 1; i <= 7; i++)
+            {
+
+                foreach (var item in data.StatisticsProducts.ToList())
+                {
+                    if (item.StatisticsCategoryId == i)
+                    {
+                        var categoruVisitsCount = data.LrUserStatisticsProducts.Where(x => x.StatisticsProductId == item.Id).Select(x => x.ProductVisitsCount).FirstOrDefault();
+                        builder.Append($"{i} ({categoruVisitsCount}) ");
+                        break;
+                    }
+
+                }
+
+            }
+            return builder.ToString();
         }
 
         private static List<LrUsersStatisticsFormModel> Sorting(byte sort, ref List<LrUsersStatisticsFormModel> users)
@@ -308,20 +333,25 @@
         public void Order(string lrUserId, string city, string address, string phoneNumber)
         {
             var user = data.Users.Where(x => x.Id == lrUserId).FirstOrDefault();
-
-            var userBag = new Bag { UserId = lrUserId, City = city, ShippingAddress = address, PhoneNumber = phoneNumber, Total = user.Amount };
+            int r = SerialNumberGenerator();
+            var userBag = new Bag { UserId = lrUserId, City = city, ShippingAddress = address, PhoneNumber = phoneNumber,DeliveryNumber = r, Total = user.Amount };
             data.Bags.Add(userBag);
             data.SaveChanges();
 
             var products = data.UserProducts.Where(x => x.UserId == lrUserId && x.Bought).ToList();
-            var bagProducts = products.Select(x => new BagProduct { BagId = userBag.Id, LrProductId = x.LrProductId, CountProducts = x.LrProductsCount }).ToList();
-            data.BagProducts.AddRange(bagProducts);           
-                                   
+            var bagProducts = products.Select(x => new BagProduct { BagId = userBag.Id, LrProductId = x.LrProductId,LrProduct = x.LrProduct,CountProducts = x.LrProductsCount }).ToList();
+            data.BagProducts.AddRange(bagProducts);
+
+            var subject = "Delivery Information from DnaFragment";
+            var body = $"Благодарим ви ,че се доверихте на нашети висококачествени немски продукти,LR иновации за дълголетие.Вашата поръчка е потвърдена! Номер за идентификация на пратката {r}.";
+
+
+            sendMail.SendEmailAsync(lrUserId, subject, body).Wait();
+
             var lrUser = data.LrUsers.Where(x => x.Email == user.Email).FirstOrDefault();
-            if (user.Amount > 100)
-            {
-                lrUser.LrPoints += 2;
-            }
+           
+            lrUser.LrPoints += (int)user.Amount / 100;
+            
             user.Amount = 0;
 
             data.SaveChanges();
@@ -342,5 +372,35 @@
 
         public bool IsSuperUser(string lrUserId)
         => data.Users.Any(x => x.Id == lrUserId && x.IsSuperUser);
+
+        public List<UserOrderFormModel> ShippingOrders(string lrUserId)
+        {
+            var userInfoOrders = data.Bags.Where(x => x.UserId == lrUserId && !x.IsSent).ToList()
+            .Select(x => new UserOrderFormModel {Total = x.Total,City = x.City,ShippingAddress = x.ShippingAddress,PhoneNumber = x.PhoneNumber,DeliveryNumber = x.DeliveryNumber,BagId = x.Id }).ToList();
+           
+            foreach (var order in userInfoOrders)
+            {
+                StringBuilder sb = new StringBuilder();               
+                foreach (var item in data.BagProducts.Where(x => x.BagId == order.BagId).ToList())
+                {
+                    var productNumber = data.LrProducts.Where(x => x.Id == item.LrProductId).Select(x => x.PlateNumber).FirstOrDefault();
+                    sb.Append($"P: <PN: ({productNumber}) Cp: ({item.CountProducts})> ");
+                }
+                order.BagProducts = sb.ToString();
+                order.FullName = data.Users.Where(x => x.Id == lrUserId).Select(x => x.FullName).FirstOrDefault();
+            }
+
+            return userInfoOrders;           
+        }
+
+        public void Received(int bagId)
+        {
+            var bag = data.Bags.Find(bagId);
+            bag.IsSent = true;
+            data.SaveChanges();
+        }
+
+        public string GetPhoneNumber(string userId)
+        => data.Users.Where(x => x.Id == userId).Select(x => x.PhoneNumber).FirstOrDefault();
     }
 }

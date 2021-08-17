@@ -137,7 +137,8 @@
 
             return Redirect("/LrProducts/Bag");
         }
-               [Authorize]
+
+        [Authorize]
         public IActionResult BagsInformation()
         {
             if (User.IsAdmin())

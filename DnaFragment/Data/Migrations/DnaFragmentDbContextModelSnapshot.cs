@@ -58,6 +58,12 @@ namespace DnaFragment.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("DeliveryNumber")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsSent")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -352,6 +358,9 @@ namespace DnaFragment.Data.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsAdministrator")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuperUser")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")

@@ -93,7 +93,6 @@
             {
                 return BadRequest();
             }
-
            
             return View();
         }
@@ -123,7 +122,6 @@
         [Authorize]
         public async Task<IActionResult> DeleteUser(string userId)
         {
-
             if (!usersService.UserIsRegister(userId))
             {
                 return BadRequest();
