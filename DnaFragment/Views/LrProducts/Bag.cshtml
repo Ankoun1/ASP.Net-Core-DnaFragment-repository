@@ -45,7 +45,7 @@ else
 <h3 class="text-center">No products found by the given criteria!</h3>}
 <div class="form-group mx-auto w-75 ">
     <ul class="list-group list-group-flush ">
-        <li class="list-group-item text-xl-center text-white">Total: @Model.Amount</li>
+        <li class="list-group-item text-xl-center text-white">TOTAL: @Model.Amount</li>
     </ul>
     <ul class="list-group list-group-flush ">
         <li class="list-group-item text-xl-center text-white">
@@ -78,9 +78,9 @@ else
         <ul class="list-group list-group-flush ">
             <li class="list-group-item text-xl-center text-white">@product.Price lv.</li>
         </ul>
-        <div class="input-group mb-3 small">
-            <button class="btn btn-danger " type="button" asp-controller="LrProducts" asp-action="DeleteFromTheBag" asp-route-id="@product.Id">Delete</button>
-            <button class="btn btn-success " type="submit" asp-controller="LrProducts" asp-action="Bag" asp-route-id="@product.Id">$hop</button>
+        <div class="input-group mb-3 small ">
+            <button class="btn btn-outline-danger w-50" type="submit" asp-controller="LrProducts" asp-action="DeleteFromTheBag" asp-route-id="@product.Id">Delete</button>
+            <button class="btn btn-success w-50 " type="submit" asp-controller="LrProducts" asp-action="Bag" asp-route-id="@product.Id">$hop</button>
 
         </div>
 

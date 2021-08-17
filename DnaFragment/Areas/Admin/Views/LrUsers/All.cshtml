@@ -65,7 +65,12 @@
                            asp-area="DnaFragmentControllers"
                            asp-controller="LrUsers"
                            asp-action="DeleteUser"
-                           asp-route-userId="@Model[i].Id">Delete DB</a>
+                           asp-route-userId="@Model[i].Id">Delete DB</a> 
+                        <a class="btn btn-success " title="The feature will immediately delete all your account data except the accumulated points!"
+                           asp-area="Admin"
+                           asp-controller="LrUsers"
+                           asp-action="ShippingDelivery"
+                           asp-route-userId="@Model[i].Id">Orders</a>
                     }
                 </li>
             </ul>

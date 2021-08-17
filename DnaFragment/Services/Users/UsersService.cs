@@ -27,17 +27,22 @@
 
         public void SendmailForgotPassword(string email)
         {
-            Random generator = new Random();
-            int r = generator.Next(100000, 1000000);
+            int r = SerialNumberGenerator();
 
             var user = ValidEmail(email);
-            
-                user.ResetPasswordId = r;
-                data.SaveChanges();
-                sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {r} Follow the link " +
-                    $"https://localhost:44350/LrUsers/ResetPassword to reset your password").Wait();            
+
+            user.ResetPasswordId = r;
+            data.SaveChanges();
+            sendMail.SendEmailAsync(user.Id, "Reset Password from DnaFragment", $"Hello {user.UserName},your identification number is {r} Follow the link " +
+                $"https://localhost:44350/LrUsers/ResetPassword to reset your password").Wait();
         }
 
+        private static int SerialNumberGenerator()
+        {
+            Random generator = new Random();
+            int r = generator.Next(100000, 1000000);
+            return r;
+        }
 
         public async Task ResetPasswordDb(int? code, string password)
         {            
@@ -269,7 +274,12 @@
             var price = data.LrProducts.Where(x => x.Id == userProduct.LrProductId).Select(x => x.Price).FirstOrDefault();
             decimal amount = price * productsCount;
             decimal amountWithDiscount = 0;
-            if (productsCount > 50)
+
+            if (IsSuperUser(lrUserId))
+            {
+                amountWithDiscount = amount * 0.92m;
+            }
+            else if (productsCount > 50)
             {
                 amountWithDiscount = amount * 0.87m;
             }
@@ -305,19 +315,32 @@
 
             var products = data.UserProducts.Where(x => x.UserId == lrUserId && x.Bought).ToList();
             var bagProducts = products.Select(x => new BagProduct { BagId = userBag.Id, LrProductId = x.LrProductId, CountProducts = x.LrProductsCount }).ToList();
-            data.BagProducts.AddRange(bagProducts);
-            user.Amount = 0;
-            
-            
-            data.SaveChanges();
+            data.BagProducts.AddRange(bagProducts);           
+                                   
             var lrUser = data.LrUsers.Where(x => x.Email == user.Email).FirstOrDefault();
+            if (user.Amount > 100)
+            {
+                lrUser.LrPoints += 2;
+            }
+            user.Amount = 0;
+
+            data.SaveChanges();
+
             foreach (var product in products)
             {
-                lrUser.LrPoints += product.LrProductsCount;
+                lrUser.LrPoints += product.LrProductsCount;               
                 product.Bought = false;
                 product.LrProductsCount = 0;
                 data.SaveChanges();
             }
+            if(lrUser.LrPoints > 750)
+            {
+                user.IsSuperUser = true;
+                data.SaveChanges();
+            }            
         }
+
+        public bool IsSuperUser(string lrUserId)
+        => data.Users.Any(x => x.Id == lrUserId && x.IsSuperUser);
     }
 }
