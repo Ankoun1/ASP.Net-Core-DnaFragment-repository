@@ -189,6 +189,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<int>("LrPoints")
                         .HasColumnType("int");
 
+                    b.Property<int>("Reverse50Points")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("TotalSum")
                         .HasColumnType("decimal(18,2)");
 
@@ -345,6 +348,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Count")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

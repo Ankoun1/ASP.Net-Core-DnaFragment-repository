@@ -357,12 +357,12 @@
             return new LrProductServiceModel
             {
                 Photos = new List<string> { "https://c4.wallpaperflare.com/wallpaper/74/530/410/sweet-girl-pic-3840x2160-wallpaper-preview.jpg",
-                "https://media.gettyimages.com/photos/bikini-woman-napping-in-a-hammock-at-the-caribbean-beach-picture-id125145258?k=6&m=125145258&s=612x612&w=0&h=kyver0PULttVYsRqiFCCwQ66DySg3SJj7bodsSMG83A=",
+                "https://images.hdqwalls.com/download/women-in-nature-4k-so-1920x1080.jpg",
                 "https://c4.wallpaperflare.com/wallpaper/577/412/12/hot-girl-pic-1920x1200-wallpaper-preview.jpg",
                 "https://c4.wallpaperflare.com/wallpaper/869/515/658/pic-girl-2560x1600-wallpaper-preview.jpg",
                 "https://wallup.net/wp-content/uploads/2019/09/473320-landscape-view-height-city-dal-beauty-wind-girl-sunset.jpg",
-                "https://c4.wallpaperflare.com/wallpaper/898/902/381/pic-girl-2560x1600-wallpaper-thumb.jpg",
-                "https://c4.wallpaperflare.com/wallpaper/898/902/381/pic-girl-2560x1600-wallpaper-thumb.jpg" }
+                "https://wallpaperbat.com/img/34192-princess-girl-4k-hd-girls-4k-wallpaper-image-background.jpg",
+                "https://pavbca.com/walldb/original/9/f/c/533386.jpg" }
             };
         }
 

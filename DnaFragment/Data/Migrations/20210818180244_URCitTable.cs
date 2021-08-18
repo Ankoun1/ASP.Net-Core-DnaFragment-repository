@@ -30,6 +30,7 @@ namespace DnaFragment.Data.Migrations
                     IsAdministrator = table.Column<bool>(type: "bit", nullable: false),
                     ResetPasswordId = table.Column<int>(type: "int", nullable: true),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Count = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsSuperUser = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -92,6 +93,7 @@ namespace DnaFragment.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TotalSum = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Reverse50Points = table.Column<int>(type: "int", nullable: false),
                     LrPoints = table.Column<int>(type: "int", nullable: false),
                     IsDanger = table.Column<bool>(type: "bit", nullable: false)
                 },

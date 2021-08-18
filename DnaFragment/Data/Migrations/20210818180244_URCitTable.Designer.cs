@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnaFragment.Data.Migrations
 {
     [DbContext(typeof(DnaFragmentDbContext))]
-    [Migration("20210817133419_URCitTable")]
+    [Migration("20210818180244_URCitTable")]
     partial class URCitTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,6 +191,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<int>("LrPoints")
                         .HasColumnType("int");
 
+                    b.Property<int>("Reverse50Points")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("TotalSum")
                         .HasColumnType("decimal(18,2)");
 
@@ -347,6 +350,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Count")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

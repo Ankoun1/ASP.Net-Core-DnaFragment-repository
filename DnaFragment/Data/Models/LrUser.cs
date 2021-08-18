@@ -13,6 +13,8 @@
 
         public decimal TotalSum { get; set; }
 
+        public int Reverse50Points { get; set; }
+
         public int LrPoints { get; set; }
 
         public bool IsDanger { get; set; }

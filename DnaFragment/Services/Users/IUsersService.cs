@@ -45,7 +45,9 @@
         
         void Received(int bagId);
         
-        string GetPhoneNumber(string userId);     
+        string GetPhoneNumber(string userId);
+        
+        bool ResetRevers50Points(string userId);     
 
     }
 }
