@@ -87,6 +87,10 @@
                 data.Users.Remove(user);
                 data.SaveChanges();
             }
+
+            var bagInformation = data.Bags.Where(x => x.UserId == userId).ToList();
+            data.Bags.RemoveRange(bagInformation);
+            data.SaveChanges();
         }
         
         public bool UserIsRegister(string userId)
