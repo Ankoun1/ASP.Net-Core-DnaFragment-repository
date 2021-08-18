@@ -32,7 +32,7 @@
         public IActionResult SendingTheRequest(int bagId)
         {
             usersService.Received(bagId);
-            sendMail.SmsMessanger("0876408508","Очквайте доставка до 1 ден и потвърдете с кода за идентификация на поръчката!DnaFragment♡");
+            //sendMail.SmsMessanger("0876408508","Очквайте доставка до 1 ден и потвърдете с кода за идентификация на поръчката!DnaFragment♡");
             return Redirect("/Admin/LrUsers/ShippingDelivery");
         }
 

@@ -499,7 +499,7 @@
 
             foreach (var product in products)
             {
-                product.Bought = data.UserProducts.Where(x => x.LrProductId == product.Id).Select(x => x.Bought).FirstOrDefault();
+                product.Bought = data.UserProducts.Where(x => x.LrProductId == product.Id && x.UserId == id).Select(x => x.Bought).FirstOrDefault();
             }
             return products;
         }                
