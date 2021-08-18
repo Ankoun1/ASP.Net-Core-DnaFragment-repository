@@ -9,6 +9,7 @@
     using DnaFragment.Data.Models;
     using DnaFragment.Models.Users;
     using DnaFragment.Services.Mail;
+    using DnaFragment.Services.Messages;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.WebUtilities;
 
@@ -16,12 +17,15 @@
     {
         private readonly DnaFragmentDbContext data; 
         private readonly ISendMailService sendMail;
+        private readonly IMessagesService messageService;
         private readonly UserManager<User> _userManager;
+      
 
-        public UsersService(DnaFragmentDbContext data, ISendMailService sendMail, UserManager<User> _userManager)
+        public UsersService(DnaFragmentDbContext data, ISendMailService sendMail, UserManager<User> _userManager, IMessagesService messageService)
         {
             this.data = data;
             this.sendMail = sendMail;
+            this.messageService = messageService;
             this._userManager = _userManager;
         }
 
@@ -113,8 +117,6 @@
             var users = new List<LrUsersStatisticsFormModel>();
             foreach (var lrUser in lrUsers)
             {
-
-
                 var statisticsProduct = data.LrUserStatisticsProducts.Where(y => y.LrUserId == lrUser.Id).OrderBy(x => x.StatisticsProduct.StatisticsCategoryId).Distinct().ToList();
            
                 StringBuilder sb = new StringBuilder();
@@ -172,7 +174,6 @@
             StringBuilder builder = new StringBuilder();
             for (int i = 1; i <= 7; i++)
             {
-
                 foreach (var item in data.StatisticsProducts.ToList())
                 {
                     if (item.StatisticsCategoryId == i)
@@ -181,9 +182,7 @@
                         builder.Append($"{i} ({categoruVisitsCount}) ");
                         break;
                     }
-
                 }
-
             }
             return builder.ToString();
         }
@@ -229,9 +228,7 @@
             var Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code2));
             var userReset = await _userManager.FindByEmailAsync(user.Email);
             await _userManager.ResetPasswordAsync(userReset, Code, password);
-        }
-
-       
+        }       
 
         public async Task<User> CorrectUpdate(LrUser lrUser, string fullName,string email, string phoneNumber, string password,User user)
         {
@@ -322,11 +319,28 @@
             }
             userProduct.Amount = amountWithDiscount;
             data.SaveChanges();
-            var user = data.Users.Where(x => x.Id == lrUserId).FirstOrDefault();
 
-            decimal amounthProducts = data.UserProducts.Where(x => x.UserId == lrUserId && x.Bought).Select(x => x.Amount).Sum();     
-           
-            user.Amount = amounthProducts;
+            var user = data.Users.Where(x => x.Id == lrUserId).FirstOrDefault();
+            var localUserCount = user.Count;
+
+            decimal amounthProducts = data.UserProducts.Where(x => x.UserId == lrUserId && x.Bought).Select(x => x.Amount).Sum();
+            var localAmount = amounthProducts + 3.9m;
+          
+            if (ResetRevers50Points(lrUserId))
+            {
+                localAmount -= localUserCount;
+                if(localAmount < 0)
+                {
+                    localUserCount = Math.Abs(localAmount);
+                    localAmount = 0;
+                }
+                else
+                {
+                    localUserCount = 0;
+                }
+            }
+            user.Amount = localAmount;
+            user.Count = localUserCount;
             data.SaveChanges();
         }
 
@@ -349,11 +363,12 @@
             sendMail.SendEmailAsync(lrUserId, subject, body).Wait();
 
             var lrUser = data.LrUsers.Where(x => x.Email == user.Email).FirstOrDefault();
-           
-            lrUser.LrPoints += (int)user.Amount / 100;
-            
+           if(user.Amount > 0)
+            {
+                lrUser.LrPoints += (int)user.Amount / 60;
+                lrUser.Reverse50Points += (int)user.Amount / 60;
+            }           
             user.Amount = 0;
-
             data.SaveChanges();
 
             foreach (var product in products)
@@ -363,7 +378,7 @@
                 product.LrProductsCount = 0;
                 data.SaveChanges();
             }
-            if(lrUser.LrPoints > 750)
+            if(lrUser.LrPoints > 600)
             {
                 user.IsSuperUser = true;
                 data.SaveChanges();
@@ -402,5 +417,20 @@
 
         public string GetPhoneNumber(string userId)
         => data.Users.Where(x => x.Id == userId).Select(x => x.PhoneNumber).FirstOrDefault();
+
+        public bool ResetRevers50Points(string userId)
+        {
+            bool reset = false;
+            var user = data.Users.Find(userId);
+            var lrUser = data.LrUsers.Where(x => x.Email == user.Email && x.Reverse50Points >= 50).FirstOrDefault();
+            if (lrUser != null)
+            {
+                messageService.AddMessageDb(userId, "Вашите LR points се увеличиха с 50.Печелите продукти по избор на обща стойност 60 лв.");
+                lrUser.Reverse50Points = 0;
+                user.Count = 60;
+                reset = true;
+            }
+            return reset;
+        }        
     }
 }

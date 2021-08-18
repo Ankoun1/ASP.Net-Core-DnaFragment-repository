@@ -27,8 +27,7 @@
 
         [HttpPost]       
         public IActionResult AddAnswer(string questId, AddAnswerModel model)
-        {
-           
+        {           
             answersService.AddAnswerDb(questId, model.Description);
 
             return Redirect("/Questions/All");
@@ -39,8 +38,7 @@
 
         [HttpPost]       
         public IActionResult Add(string lrUserId, AddMessagesModel model)
-        {           
-
+        {         
             messageService.AddMessageDb(lrUserId, model.Description);
 
             return Redirect("/Messages/All");
@@ -48,8 +46,7 @@
 
       
         public IActionResult Delete(string answerId)
-        {
-            
+        {            
             answersService.DeleteAnswerDb(answerId);
 
             return this.Redirect("/Questions/All");
@@ -81,6 +78,10 @@
         [HttpPost]
         public IActionResult Sms(SmsFormModel sms)
         {
+            if (!ModelState.IsValid)
+            {                
+                return View(sms);
+            }
             sendMail.SmsMessanger(sms.To,sms.Body);
             return Redirect("/Admin/LrUsers/All");
         }       
