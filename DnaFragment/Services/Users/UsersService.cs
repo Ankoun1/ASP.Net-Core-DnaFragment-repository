@@ -89,8 +89,12 @@
             }
 
             var bagInformation = data.Bags.Where(x => x.UserId == userId).ToList();
-            data.Bags.RemoveRange(bagInformation);
-            data.SaveChanges();
+            if(bagInformation != null)
+            {
+                data.Bags.RemoveRange(bagInformation);
+                data.SaveChanges();
+            }
+           
         }
         
         public bool UserIsRegister(string userId)
