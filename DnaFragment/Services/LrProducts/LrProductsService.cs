@@ -125,7 +125,8 @@
                     "При ежедневна употреба стяга коремната област,придава еластичност на кожата и прави тъканите по - еластични",
                     ChemicalIngredients = "Алое Вера гел 30%,eкстракт от зелен чай.Патентован състав на съставките InterSlim.",
                     PictureUrl = "https://primelr.ru/wp-content/uploads/2017/08/thumb_body-3.jpg",
-                    PlateNumber = "27536",
+                    PlateNumber = "2754" +
+                    "6",
                     CategoryId = 2
                 },
                 new LrProduct
@@ -184,13 +185,13 @@
 
             data.SaveChanges();
 
-            string userId = data.Users.Select(x => x.Id).FirstOrDefault();
+            /*string userId = data.Users.Select(x => x.Id).FirstOrDefault();
             foreach (var productId in data.LrProducts.Select(x => x.Id).ToList())
             {
                 var userProduct = new UserProduct { UserId = userId, LrProductId = productId };
                 data.UserProducts.Add(userProduct);
                 data.SaveChanges();
-            }
+            }*/
 
             StartStatisticsProduct();
         }
@@ -198,15 +199,13 @@
         private void StartStatisticsProduct()
         {
             var statisticsProducts = new List<StatisticsProduct>();
-            for (int i = 1; i <= 7; i++)
-            {
-                var category = data.Categories.Where(x => x.Id == i).FirstOrDefault();
-
+            foreach (var category in data.Categories.ToList())
+            {            
                 for (int j = 0; j < category.LrProducts.Count(); j++)
                 {
-                    var product = data.LrProducts.Select(x => new { Id = x.Id, PlateNumber = x.PlateNumber }).Skip(j).FirstOrDefault();
+                    var product = data.LrProducts.Where(x => x.CategoryId == category.Id).Select(x => new { Id = x.Id, PlateNumber = x.PlateNumber }).Skip(j).FirstOrDefault();
 
-                    statisticsProducts.Add(new StatisticsProduct { StatisticsCategoryId = i, PlateNumber = product.PlateNumber });
+                    statisticsProducts.Add(new StatisticsProduct { StatisticsCategoryId = category.Id, PlateNumber = product.PlateNumber });
                 }
             }
             data.StatisticsProducts.AddRange(statisticsProducts);

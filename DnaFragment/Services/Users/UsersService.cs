@@ -143,7 +143,7 @@
                             Email = lrUser.Email,
                             PhoneNumber = "---",
                             IsDanger = lrUser.IsDanger,
-                            CategoriesVisitsCount = GetCategoriesCount(),
+                            CategoriesVisitsCount = GetCategoriesCount(lrUser.Id),
                         };
                         AddUserProductsCount(users, statisticsProduct, sb, user);
                     }
@@ -156,7 +156,7 @@
                             Email = lrUser.Email,
                             LrPoints = lrUser.LrPoints,
                             PhoneNumber = userDb.PhoneNumber,
-                            CategoriesVisitsCount = GetCategoriesCount(),
+                            CategoriesVisitsCount = GetCategoriesCount(lrUser.Id),
                         };
                         AddUserProductsCount(users, statisticsProduct, sb, user);
                     }
@@ -169,7 +169,7 @@
                         Username = "Users not registration",
                         Email = lrUser.Email,
                         PhoneNumber = "---",
-                        CategoriesVisitsCount = GetCategoriesCount(),
+                        CategoriesVisitsCount = GetCategoriesCount(lrUser.Id),
                     };
                     AddUserProductsCount(users, statisticsProduct, sb, user);
                 }
@@ -177,7 +177,7 @@
             return Sorting(sort, ref users);
         }
 
-        private string GetCategoriesCount()
+        private string GetCategoriesCount(int lrUserId)
         {
             StringBuilder builder = new StringBuilder();
             for (int i = 1; i <= 7; i++)
@@ -186,7 +186,7 @@
                 {
                     if (item.StatisticsCategoryId == i)
                     {
-                        var categoruVisitsCount = data.LrUserStatisticsProducts.Where(x => x.StatisticsProductId == item.Id).Select(x => x.ProductVisitsCount).FirstOrDefault();
+                        var categoruVisitsCount = data.LrUserStatisticsProducts.Where(x => x.StatisticsProductId == item.Id && x.LrUserId == lrUserId).Select(x => x.CategoryVisitsCount).FirstOrDefault();
                         builder.Append($"{i} ({categoruVisitsCount}) ");
                         break;
                     }
