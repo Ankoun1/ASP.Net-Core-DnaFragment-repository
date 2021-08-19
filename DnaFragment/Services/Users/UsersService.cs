@@ -368,7 +368,7 @@
             var body = $"Благодарим ви ,че се доверихте на нашети висококачествени немски продукти,LR иновации за дълголетие.Вашата поръчка е потвърдена! Номер за идентификация на пратката {r}.";
 
 
-            sendMail.SendEmailAsync(lrUserId, subject, body).Wait();
+            //sendMail.SendEmailAsync(lrUserId, subject, body).Wait();
 
             var lrUser = data.LrUsers.Where(x => x.Email == user.Email).FirstOrDefault();
            if(user.Amount > 0)

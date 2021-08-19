@@ -26,7 +26,11 @@
     {
 
         <div class="form-group">
-            @if (Model[i].Id != null)
+            @if (Model[i].LrPoints > 600)
+            {
+                <hr class="bg-info w-50">
+            }
+            else if (Model[i].Id != null)
             {
                 <hr class="bg-success w-50">
             }
@@ -40,11 +44,11 @@
             }
             <ul class="list-group list-group-flush ">
                 <li class="list-group-item text-center text-break">@Model[i].Username</li>
-                <li class="list-group-item text-center text-break">LR @Model[i].LrPoints</li>
+                <li class="list-group-item text-center text-break">LR: @Model[i].LrPoints</li>
                 <li class="list-group-item text-center text-break">@Model[i].Email</li>
-                <li class="list-group-item text-center text-break">@Model[i].PhoneNumber</li>
+                <li class="list-group-item text-center text-break">Tel: @Model[i].PhoneNumber</li>
                 <li class="list-group-item text-center">Nc:[ @Model[i].CategoriesVisitsCount]</li>
-                <li class="list-group-item text-center">Np: @Model[i].ProductsVisitsCount</li>
+                <li class="list-group-item text-center">Np:[ @Model[i].ProductsVisitsCount ]</li>
                 <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
                     @if (Model[i].Id != null)
                     {
