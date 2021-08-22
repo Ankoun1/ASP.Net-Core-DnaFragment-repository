@@ -10,8 +10,7 @@
             public const int IssueDescriptionMinLength = 5;
 
             public const int DefaultDescriptionMinLength = 10;
-            public const int DefaultDescriptionMaxLength = 150;
-
+            public const int DefaultDescriptionMaxLength = 140;
         }
 
 
@@ -44,9 +43,7 @@
             public const int PhoneNumberMinLength = 6;
             public const int PhoneNumberMaxLength = 30;
             public const int CodeNumber = 999999;
-        }    
-
-
+        }   
     }
 }
 

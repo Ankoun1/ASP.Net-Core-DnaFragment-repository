@@ -8,9 +8,8 @@
     {
         [Required]
         [StringLength(
-            DefaultDescriptionMaxLength,
-            MinimumLength = DefaultDescriptionMinLength,
-            ErrorMessage = "The field Description must be a string with a minimum length of {2}.")]
+            DefaultDescriptionMaxLength, ErrorMessage = "The field Description must be a string with a minimum length of {2}.",
+            MinimumLength = DefaultDescriptionMinLength)]          
         public string Description { get; set; }
 
         public List<QuestionListingViewModel> Questions { get; set; } = new List<QuestionListingViewModel>();

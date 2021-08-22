@@ -461,7 +461,7 @@
             var lrUser = data.LrUsers.Where(x => x.Email == user.Email && x.Reverse50Points >= 15).FirstOrDefault();
             if (lrUser != null)
             {
-                messageService.AddMessageDb(userId, "Вашите LR points се увеличиха с 50.Печелите продукти по избор на обща стойност 60 лв.");
+                messageService.AddMessageDb(userId, "Вашите LR points се увеличиха с 30.Печелите продукти по избор на обща стойност 60 лв.");
                 lrUser.Reverse50Points = 0;
                 user.Count = 60;
                 reset = true;
