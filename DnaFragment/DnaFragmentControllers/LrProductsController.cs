@@ -111,9 +111,9 @@
             {
                 return Unauthorized();
             }           
-            var  products = lrProducts.LrBag(User.GetId());         
-
-            return View(new AddNewInfoProductFormModel {Amount = userService.Amount(User.GetId()).Item1,ProductsCountIsNotEmpty = userService.Amount(User.GetId()).Item2, Products = products });
+            var  products = lrProducts.LrBag(User.GetId());
+            var user = userService.Amount(User.GetId());
+            return View(new AddNewInfoProductFormModel { Amount = user.Item1, PercentageDiscount = user.Item2, ProductsCountIsNotEmpty = user.Item3, Products = products });
         }
 
         [Authorize]

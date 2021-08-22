@@ -33,7 +33,7 @@
 
         void AddNewLrUserInfoDb(LrUser lrUser);
 
-        (decimal, bool) Amount(string lrUserId);
+        (decimal,decimal, bool) Amount(string lrUserId);
 
         void UpdateUserProducts(string lrUserId,int productId,int productsCount);
 
@@ -47,7 +47,9 @@
         
         string GetPhoneNumber(string userId);
         
-        bool ResetRevers50Points(string userId);     
+        bool ResetRevers50Points(string userId);
+
+        void UpdateUserTotal(string lrUserId);
 
     }
 }

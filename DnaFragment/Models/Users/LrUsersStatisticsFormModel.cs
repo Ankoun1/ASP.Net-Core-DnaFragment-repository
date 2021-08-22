@@ -3,11 +3,9 @@
     using System.Collections.Generic;
     public class LrUsersStatisticsFormModel : UserListingViewModel
     {  
-        public bool IsDanger { get; set; }
+        public bool IsDanger { get; init; }      
 
-        public decimal? TotalSum { get; set; }
-
-        public int? LrPoints { get; set; }
+        public string LrPoints { get; init; }
 
         public string CategoriesVisitsCount { get; set; }
 

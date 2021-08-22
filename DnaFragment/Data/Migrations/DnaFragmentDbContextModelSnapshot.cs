@@ -163,6 +163,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("TotalPurchasesCount")
+                        .HasColumnType("int");
+
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
@@ -191,9 +194,6 @@ namespace DnaFragment.Data.Migrations
 
                     b.Property<int>("Reverse50Points")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("TotalSum")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -386,6 +386,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("PercentageDiscount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -440,6 +443,9 @@ namespace DnaFragment.Data.Migrations
 
                     b.Property<int>("LrProductsCount")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("PercentageDiscount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("UserId", "LrProductId");
 

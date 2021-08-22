@@ -38,8 +38,8 @@
 
         public void SmsMessanger(string to, string body)
         {
-            string accountSid = Environment.GetEnvironmentVariable("AccountSID");
-            string authToken = Environment.GetEnvironmentVariable("AuthToken");
+            string accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
+            string authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH");
 
             TwilioClient.Init(accountSid, authToken);
 

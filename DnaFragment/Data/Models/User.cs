@@ -22,6 +22,8 @@
         public IEnumerable<Message> Messages { get; init; } = new List<Message>();
 
         public decimal Amount { get; set; }
+
+        public decimal PercentageDiscount { get; set; }
         
         public decimal Count { get; set; } 
         

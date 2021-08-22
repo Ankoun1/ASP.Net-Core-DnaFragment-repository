@@ -7,8 +7,8 @@
    @if (!Model.LrProducts.Any() && User.IsAdmin())
     {
 <form class="mx-auto w-50" size="3">
-    <div class="alert alert-danger  small ">
-        <strong>please import products by category in the database!</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
+    <div class="alert alert-danger">
+        <strong>Please import products by category in the database!</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
     </div>
 </form>
     } 
@@ -46,7 +46,7 @@
              {
                 <a asp-area="Admin" asp-controller="Categories" asp-action="Start" class="btn btn-primary text-xl-center  text-break">Category Start</a>
              }
-            @if (!Model.LrProducts.Any())
+            @if (!Model.LrProducts.Any() && Model.CategoryAny)
              {
                  <a class="btn btn-success text-xl-center text-break"
                   asp-area="Admin" asp-controller="LrProducts"

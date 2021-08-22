@@ -31,8 +31,7 @@
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             DnaFragmentDbContext data,
-            IUsersService usersService
-            )
+            IUsersService usersService)            
         {
            this.userManager = userManager;
            this.signInManager = signInManager;          
@@ -68,8 +67,7 @@
             [DataType(DataType.Password)]
             [Display(Name = "Confirm Password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
-            
+            public string ConfirmPassword { get; set; }            
         }
 
         public void OnGet(string returnUrl = null)
@@ -94,13 +92,11 @@
                 {
                     await this.signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
-
                 }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
-                }
-               
+                }               
             }            
             return Page();
         }
@@ -128,8 +124,7 @@
                     foreach (var lrUser in lrUsers)
                     {
                         usersService.AddNewLrUserInfoDb(lrUser);
-                    }
-                    
+                    }                    
 
                     result = await this.userManager.CreateAsync(user, Input.Password);                
                 }
@@ -140,10 +135,8 @@
                     {
                         user = await usersService.CorrectUpdate(oldUser,user.FullName, oldUser.Email, user.PhoneNumber, Input.Password, currentUser);
                         success = true;
-                    }
-                   
-                }
-                
+                    }                   
+                }                
             }
             return (success, result, user);
         }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnaFragment.Data.Migrations
 {
     [DbContext(typeof(DnaFragmentDbContext))]
-    [Migration("20210818180244_URCitTable")]
+    [Migration("20210821101352_URCitTable")]
     partial class URCitTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -165,6 +165,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("TotalPurchasesCount")
+                        .HasColumnType("int");
+
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
@@ -193,9 +196,6 @@ namespace DnaFragment.Data.Migrations
 
                     b.Property<int>("Reverse50Points")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("TotalSum")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -388,6 +388,9 @@ namespace DnaFragment.Data.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("PercentageDiscount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -442,6 +445,9 @@ namespace DnaFragment.Data.Migrations
 
                     b.Property<int>("LrProductsCount")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("PercentageDiscount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("UserId", "LrProductId");
 

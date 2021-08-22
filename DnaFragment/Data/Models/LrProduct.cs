@@ -11,6 +11,8 @@
         [Key]
         public int Id { get; init; }
 
+        public int TotalPurchasesCount { get; set; }
+
         [Required]
         [MaxLength(ModelMaxLength)]
         public string Model { get; set; }
@@ -46,8 +48,7 @@
         //[Required]
         public int CategoryId { get; set; }
 
-        public Category Category { get; set; }  
-
-        //public IEnumerable<Issue> Issues { get; init; } = new List<Issue>();
+        public Category Category { get; set; }        
+     
     }
 }

@@ -14,5 +14,7 @@
         public bool  ProductsCountIsNotEmpty { get; init; }
 
         public decimal? Amount { get; init; }
+
+        public decimal PercentageDiscount { get; init; }
     }
 }

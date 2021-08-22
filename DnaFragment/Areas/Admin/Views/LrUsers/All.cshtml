@@ -7,21 +7,34 @@
 <h1 class="text-center mt-2 text-success">▪</h1>
 
 <form class="mx-auto w-75">
-   
-   <img class="d-block w-100 " src="https://chamlinlaw.com/wp-content/uploads/2016/01/Assault_CR.jpg" alt="Responsive image">
-   <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">     
-      <a class="btn  text-primary text-left bg-white"                  
-         asp-controller="LrUsers"
-         asp-action="All"
-         asp-route-sort=1
-         >SORT BY NAME</a>
-      <a class="btn  text-primary text-right bg-white"                   
-         asp-controller="LrUsers"
-         asp-action="All"
-         asp-route-sort=2
-         >SORT BY ID</a>            
-   </div>    
 
+    <img class="d-block w-100 " src="https://chamlinlaw.com/wp-content/uploads/2016/01/Assault_CR.jpg" alt="Responsive image">
+
+    @if (!Model.Any())
+    {
+
+        <div class="form-group ">
+            <ul class="list-group list-group-flush ">
+                <li class="list-group-item text-center text-success">
+                    The database is activated!
+                    <hr class="bg-success w-75">
+                </li>
+            </ul>
+        </div>
+    }
+    else
+    {
+        <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
+            <a class="btn  text-primary text-left bg-white"
+               asp-controller="LrUsers"
+               asp-action="All"
+               asp-route-sort=1>SORT BY NAME</a>
+            <a class="btn  text-primary text-right bg-white"
+               asp-controller="LrUsers"
+               asp-action="All"
+               asp-route-sort=2>SORT BY ID</a>
+        </div>
+    }
     @for (int i = 0; i < Model.Count; i++)
     {
 
@@ -44,9 +57,9 @@
             }
             <ul class="list-group list-group-flush ">
                 <li class="list-group-item text-center text-break">@Model[i].Username</li>
-                <li class="list-group-item text-center text-break">LR: @Model[i].LrPoints</li>
+                <li class="list-group-item text-center text-break">@Model[i].LrPoints</li>
                 <li class="list-group-item text-center text-break">@Model[i].Email</li>
-                <li class="list-group-item text-center text-break">Tel: @Model[i].PhoneNumber</li>
+                <li class="list-group-item text-center text-break">@Model[i].PhoneNumber</li>
                 <li class="list-group-item text-center">Nc:[ @Model[i].CategoriesVisitsCount]</li>
                 <li class="list-group-item text-center">Np:[ @Model[i].ProductsVisitsCount ]</li>
                 <li class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Button group example">
@@ -71,7 +84,7 @@
                            asp-area="DnaFragmentControllers"
                            asp-controller="LrUsers"
                            asp-action="DeleteUser"
-                           asp-route-userId="@Model[i].Id">Delete DB</a> 
+                           asp-route-userId="@Model[i].Id">Delete DB</a>
                         <a class="btn btn-success " title="The feature will immediately delete all your account data except the accumulated points!"
                            asp-area="Admin"
                            asp-controller="LrUsers"

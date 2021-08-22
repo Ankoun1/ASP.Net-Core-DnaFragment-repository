@@ -1,6 +1,6 @@
 ﻿namespace DnaFragment.DnaFragmentControllers
-{ 
-    using System.Linq;
+{
+    using System;
     using System.Threading.Tasks;
     using DnaFragment.Data.Models;
     using DnaFragment.Infrastructure;
@@ -8,9 +8,8 @@
     using DnaFragment.Services.Users;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc;  
     using static WebConstants;
-
 
     public class LrUsersController : Controller
     {
@@ -83,6 +82,7 @@
             {
                 return Redirect(RedirectToRegister);
             }
+           
             return View(user);
         } 
 

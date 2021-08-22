@@ -1,5 +1,7 @@
 ﻿@model UserListingViewModel
 @{ ViewBag.Title = "Your profile"; }
+
+
 <hr class="bg-primary w-75">
 <hr class="bg-primary w-50">
 <h2 class="text-center mt-2 text-white">@ViewBag.Title</h2>
@@ -8,15 +10,16 @@
 <form class="mx-auto w-75">  
 <div class="card" >
     
-    <div class="card-body">  
+    <div class="card-body">
         <p2 class="card-text text-success  te">Hello @Model.Username!</p2>
-        <img src="https://docplayer.org/docs-images/104/164041053/images/29-8.jpg" class="card-img-top " alt="...">              
+        <img src="https://docplayer.org/docs-images/104/164041053/images/29-8.jpg" class="card-img-top " alt="...">      
+
     </div>
 </div>  
 <div class="form-group">
     <hr class="bg-white w-50">  
         <ul class="list-group list-group-flush ">
-        <li class="list-group-item text-center text-break">@Model.Username</li>
+        <li class="list-group-item text-center text-break">@Model.Username-@Model.LRPoints LRp </li>
         <li class="list-group-item text-center text-break">@Model.Email</li>
         <li class="list-group-item text-center text-break">@Model.PhoneNumber</li>
         <li class="list-group-item text-center">Nq:(@Model.NumberQuestions)   Nm:(@Model.NumberMessages)</li>

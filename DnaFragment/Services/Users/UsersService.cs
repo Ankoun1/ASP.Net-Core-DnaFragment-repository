@@ -56,7 +56,7 @@
         }
 
         public UserListingViewModel UsersDb(string userId)
-        {      
+        {
             var user = data.Users.Where(x => x.Id == userId).Select(x => new UserListingViewModel
             {
                 Id = x.Id,
@@ -65,9 +65,10 @@
                 PhoneNumber = x.PhoneNumber,
                 IsAdministrator = x.IsAdministrator,
                 NumberMessages = data.Messages.Where(x => x.UserId == userId).Count(),
-                NumberQuestions = data.Questions.Where(x => x.UserId == userId).Count()
+                NumberQuestions = data.Questions.Where(x => x.UserId == userId).Count(),
+                LRPoints = data.LrUsers.Where(y => y.Email == x.Email).Select(y => y.LrPoints).FirstOrDefault()
             }).FirstOrDefault();
-
+           
             return user;
         }
 
@@ -93,8 +94,7 @@
             {
                 data.Bags.RemoveRange(bagInformation);
                 data.SaveChanges();
-            }
-           
+            }           
         }
         
         public bool UserIsRegister(string userId)
@@ -131,7 +131,7 @@
 
                 if (lrUser.Email != "unknown@city.com")
                 {
-                    var userDb = data.Users.Where(x => !x.IsAdministrator).Where(x => x.Email == lrUser.Email).Select(x => new { Id = x.Id, FullName = x.FullName, PhoneNumber = x.PhoneNumber }).FirstOrDefault();
+                    var userDb = data.Users.Where(x => !x.IsAdministrator).Where(x => x.Email == lrUser.Email).Select(x => new { Id = x.Id, FullName = x.FullName, PhoneNumber = x.PhoneNumber ,IsSuperUser = x.IsSuperUser}).FirstOrDefault();
                     
 
                     if (userDb == null)
@@ -141,6 +141,7 @@
                             Id = null,
                             Username = "---",
                             Email = lrUser.Email,
+                            LrPoints = $"LR: { lrUser.LrPoints }",
                             PhoneNumber = "---",
                             IsDanger = lrUser.IsDanger,
                             CategoriesVisitsCount = GetCategoriesCount(lrUser.Id),
@@ -154,13 +155,13 @@
                             Id = userDb.Id,
                             Username = userDb.FullName,
                             Email = lrUser.Email,
-                            LrPoints = lrUser.LrPoints,
-                            PhoneNumber = userDb.PhoneNumber,
+                            IsSuperUser = userDb.IsSuperUser,
+                            LrPoints = $"LR: { lrUser.LrPoints }",
+                            PhoneNumber = $"Tel: {userDb.PhoneNumber}",
                             CategoriesVisitsCount = GetCategoriesCount(lrUser.Id),
                         };
                         AddUserProductsCount(users, statisticsProduct, sb, user);
                     }
-
                 }
                 else
                 {
@@ -168,6 +169,7 @@
                     {
                         Username = "Users not registration",
                         Email = lrUser.Email,
+                        LrPoints = "---",
                         PhoneNumber = "---",
                         CategoriesVisitsCount = GetCategoriesCount(lrUser.Id),
                     };
@@ -213,8 +215,9 @@
         {
             foreach (var item in statisticsProduct)
             {
-                var product = data.StatisticsProducts.Where(x => x.Id == item.StatisticsProductId).FirstOrDefault();
-                sb.Append($"<{product.PlateNumber} ({item.ProductVisitsCount})>");
+                var lrProduct = data.StatisticsProducts.Where(x => x.Id == item.StatisticsProductId).FirstOrDefault();
+                var product = data.LrProducts.Where(x => x.Id == item.StatisticsProductId).FirstOrDefault();
+                sb.Append($"<{lrProduct.PlateNumber} ({item.ProductVisitsCount}) $({item.PurchasesCount}) Total({product.TotalPurchasesCount})>");
             }
             user.ProductsVisitsCount = sb.ToString();
             users.Add(user);
@@ -285,14 +288,14 @@
             data.SaveChanges();
         }
 
-        public (decimal,bool) Amount(string lrUserId)
+        public (decimal,decimal,bool) Amount(string lrUserId)
         {
-            var userAmount = data.Users.Where(x => x.Id == lrUserId).Select(x => x.Amount).FirstOrDefault();
+            var user = data.Users.Where(x => x.Id == lrUserId).Select(x => new { Amount = x.Amount, PercentageDiscount = x.PercentageDiscount }).FirstOrDefault();
             
 
             var productBought = data.UserProducts.Where(x => x.UserId == lrUserId && x.Bought).Select(x => x.Bought).FirstOrDefault();
 
-            return (userAmount, productBought);
+            return (user.Amount,user.PercentageDiscount, productBought);
         }
 
         public void UpdateUserProducts(string lrUserId, int productId,int productsCount)
@@ -304,40 +307,51 @@
             var price = data.LrProducts.Where(x => x.Id == userProduct.LrProductId).Select(x => x.Price).FirstOrDefault();
             decimal amount = price * productsCount;
             decimal amountWithDiscount = 0;
-
+            decimal localPercentageDiscount = 1;
             if (IsSuperUser(lrUserId))
             {
-                amountWithDiscount = amount * 0.92m;
+                localPercentageDiscount = 0.92m;
             }
             else if (productsCount > 50)
             {
-                amountWithDiscount = amount * 0.87m;
+                localPercentageDiscount = 0.87m;
             }
             else if (productsCount > 10)
             {
-                amountWithDiscount = amount * 0.92m;
+                localPercentageDiscount = 0.92m;
             }
             else if (productsCount > 5)
             {
-                amountWithDiscount = amount * 0.95m;
+                localPercentageDiscount = 0.95m;
             }
-            else
-            {
-                amountWithDiscount = amount;
-            }
+
+            amountWithDiscount = amount * localPercentageDiscount;
             userProduct.Amount = amountWithDiscount;
+            userProduct.PercentageDiscount = (1 - localPercentageDiscount) * 100;
             data.SaveChanges();
 
+            UpdateUserTotal(lrUserId);
+        }
+
+        public void UpdateUserTotal(string lrUserId)
+        {
             var user = data.Users.Where(x => x.Id == lrUserId).FirstOrDefault();
             var localUserCount = user.Count;
 
-            decimal amounthProducts = data.UserProducts.Where(x => x.UserId == lrUserId && x.Bought).Select(x => x.Amount).Sum();
+            var userProducts = data.UserProducts.Where(x => x.UserId == lrUserId && x.Bought).ToList();
+            decimal amounthProducts = userProducts.Select(x => x.Amount).Sum();
+            decimal userPercentageDiscount = 0;
+            if(userProducts.Any())
+            {
+               userPercentageDiscount = userProducts.Select(x => x.PercentageDiscount).Average();
+            }
+            
             var localAmount = amounthProducts + 3.9m;
-          
-            if (ResetRevers50Points(lrUserId))
+
+            if (ResetRevers50Points(lrUserId) && userProducts.Any())
             {
                 localAmount -= localUserCount;
-                if(localAmount < 0)
+                if (localAmount < 0)
                 {
                     localUserCount = Math.Abs(localAmount);
                     localAmount = 0;
@@ -346,8 +360,15 @@
                 {
                     localUserCount = 0;
                 }
+
+                if (localAmount > 0)
+                {
+                    userPercentageDiscount += (user.Count * 100) / amounthProducts;
+                }
+
             }
             user.Amount = localAmount;
+            user.PercentageDiscount = userPercentageDiscount;
             user.Count = localUserCount;
             data.SaveChanges();
         }
@@ -365,28 +386,35 @@
             data.BagProducts.AddRange(bagProducts);
 
             var subject = "Delivery Information from DnaFragment";
-            var body = $"Благодарим ви ,че се доверихте на нашети висококачествени немски продукти,LR иновации за дълголетие.Вашата поръчка е потвърдена! Номер за идентификация на пратката {r}.";
+            var body = $"Благодарим ви за доверието!Вие избрахте висококачествените немски продукти,LR иновации за дълголетие.Вашата поръчка е потвърдена! Номер за идентификация на пратката {r}.";
 
 
-            //sendMail.SendEmailAsync(lrUserId, subject, body).Wait();
+            sendMail.SendEmailAsync(lrUserId, subject, body).Wait();
 
             var lrUser = data.LrUsers.Where(x => x.Email == user.Email).FirstOrDefault();
-           if(user.Amount > 0)
+            if(user.Amount > 0)
             {
-                lrUser.LrPoints += (int)user.Amount / 60;
-                lrUser.Reverse50Points += (int)user.Amount / 60;
+                lrUser.LrPoints += (int)user.Amount / 30;
+                lrUser.Reverse50Points += (int)user.Amount / 30;
             }           
             user.Amount = 0;
+            user.PercentageDiscount = 0;
             data.SaveChanges();
+
+           
 
             foreach (var product in products)
             {
+                var p = data.LrProducts.Where(x => x.Id == product.LrProductId).FirstOrDefault();     
+                var lrUserStatisticsProduct = data.LrUserStatisticsProducts.Where(x => x.LrUserId == lrUser.Id && x.StatisticsProductId == product.LrProductId).FirstOrDefault();
+                lrUserStatisticsProduct.PurchasesCount += product.LrProductsCount;
                 lrUser.LrPoints += product.LrProductsCount;               
+                p.TotalPurchasesCount += product.LrProductsCount;               
                 product.Bought = false;
                 product.LrProductsCount = 0;
                 data.SaveChanges();
             }
-            if(lrUser.LrPoints > 600)
+            if(lrUser.LrPoints > 500)
             {
                 user.IsSuperUser = true;
                 data.SaveChanges();
@@ -430,7 +458,7 @@
         {
             bool reset = false;
             var user = data.Users.Find(userId);
-            var lrUser = data.LrUsers.Where(x => x.Email == user.Email && x.Reverse50Points >= 50).FirstOrDefault();
+            var lrUser = data.LrUsers.Where(x => x.Email == user.Email && x.Reverse50Points >= 15).FirstOrDefault();
             if (lrUser != null)
             {
                 messageService.AddMessageDb(userId, "Вашите LR points се увеличиха с 50.Печелите продукти по избор на обща стойност 60 лв.");

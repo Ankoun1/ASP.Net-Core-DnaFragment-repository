@@ -1,15 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DnaFragment.Data.Models
+﻿namespace DnaFragment.Data.Models
 {
-    public class UserProduct
-    {       
+    using System.ComponentModel.DataAnnotations;
 
+    public class UserProduct
+    {      
         [Required]
         public string UserId { get; init; }
 
         public User User { get; init; }
-
         
         public int LrProductId { get; init; }
 
@@ -25,5 +23,6 @@ namespace DnaFragment.Data.Models
 
         public decimal Amount { get; set; }
 
+        public decimal PercentageDiscount { get; set; }
     }
 }

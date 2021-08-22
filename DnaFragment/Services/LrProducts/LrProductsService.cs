@@ -9,19 +9,23 @@
     using DnaFragment.Data.Models;
     using DnaFragment.Models;
     using DnaFragment.Services.LrProducts.Models;
+    using DnaFragment.Services.Users;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Caching.Memory;
 
     public class LrProductsService : ILrProductsService
     {
         private readonly DnaFragmentDbContext data;
-        private readonly IConfigurationProvider mapper;       
+        private readonly IConfigurationProvider mapper;
+        private readonly IUsersService usersService;
         private IMemoryCache memoryCache;
-        public LrProductsService(DnaFragmentDbContext data, IMapper mapper,IMemoryCache memoryCache)
+
+        public LrProductsService(DnaFragmentDbContext data, IMapper mapper,IMemoryCache memoryCache, IUsersService usersService)
         {
             this.data = data;
             this.mapper = mapper.ConfigurationProvider;
             this.memoryCache = memoryCache;                    
+            this.usersService = usersService;                    
         }     
 
         public void StartLrProduktDb()
@@ -34,7 +38,7 @@
                 return;
             }
 
-            data.LrProducts.AddRange(new[]
+            data.LrProducts.AddRange(new List<LrProduct>
             {            
                 new LrProduct
                 {
@@ -181,7 +185,7 @@
                     PictureUrl = "https://primelr.ru/wp-content/uploads/2017/03/thumb_tooth.jpg",
                     PlateNumber = "20690",
                     CategoryId = 2
-                } });
+                } }.OrderBy(x => x.CategoryId));
 
             data.SaveChanges();
 
@@ -197,19 +201,15 @@
         }
 
         private void StartStatisticsProduct()
-        {
-            var statisticsProducts = new List<StatisticsProduct>();
-            foreach (var category in data.Categories.ToList())
+        {            
+            for (int i = 1; i <= 7; i++)            
             {            
-                for (int j = 0; j < category.LrProducts.Count(); j++)
-                {
-                    var product = data.LrProducts.Where(x => x.CategoryId == category.Id).Select(x => new { Id = x.Id, PlateNumber = x.PlateNumber }).Skip(j).FirstOrDefault();
-
-                    statisticsProducts.Add(new StatisticsProduct { StatisticsCategoryId = category.Id, PlateNumber = product.PlateNumber });
+                foreach (var product in data.LrProducts.Where(x => x.CategoryId == i).OrderBy(x => x.Id).ToList())                
+                {                                             
+                    data.StatisticsProducts.Add(new StatisticsProduct { StatisticsCategoryId = i, PlateNumber = product.PlateNumber });
+                    data.SaveChanges();
                 }
-            }
-            data.StatisticsProducts.AddRange(statisticsProducts);
-            data.SaveChanges();
+            }            
         }
 
         public int Create(
@@ -444,8 +444,8 @@
             var userId = data.LrUsers.Where(x => x.Email == userName).Select(x => x.Id).FirstOrDefault();
             if (userId != 0)
             {
-                var statisticsCategory = data.StatisticsCategories.Where(x => x.Id == categoryId).FirstOrDefault();
-                var statisticsProducts = data.LrUserStatisticsProducts.Where(x => x.StatisticsProduct.StatisticsCategoryId == statisticsCategory.Id).ToList();
+                //var statisticsCategory = data.StatisticsCategories.Where(x => x.Id == categoryId).FirstOrDefault();
+                var statisticsProducts = data.LrUserStatisticsProducts.Where(x => x.StatisticsProduct.StatisticsCategoryId == categoryId && x.LrUserId == userId).ToList();
 
                 foreach (var statisticsProduct in statisticsProducts)
                 {
@@ -510,6 +510,19 @@
             if(product != null)
             {
                 product.InTheBag = false;
+                product.Bought = false;             
+                product.Amount = 0;
+                product.PercentageDiscount = 0;
+                product.LrProductsCount = 0;
+                data.SaveChanges();
+
+                var user = data.Users.Find(userId);
+              
+                if (user != null)
+                {
+                    usersService.UpdateUserTotal(userId);
+                }                
+                user.Amount -= product.Amount + 3.90m;
                 data.SaveChanges();
             }           
         }

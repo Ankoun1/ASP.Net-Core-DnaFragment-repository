@@ -14,10 +14,10 @@
         
         public StatisticsProduct StatisticsProduct { get; set; }
 
-        public int CategoryVisitsCount { get; set; } = 0;
+        public int CategoryVisitsCount { get; set; }
 
-        public int ProductVisitsCount { get; set; } = 0;
+        public int ProductVisitsCount { get; set; }
 
-        public int PurchasesCount { get; set; } = 0;
+        public int PurchasesCount { get; set; }
     }
 }

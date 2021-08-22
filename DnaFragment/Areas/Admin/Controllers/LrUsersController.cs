@@ -2,6 +2,7 @@
 {
     using DnaFragment.Services.Mail;
     using DnaFragment.Services.Users;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     public class LrUsersController : AdminController
@@ -28,11 +29,11 @@
 
             return View(users);
         }
-
+        [Authorize]
         public IActionResult SendingTheRequest(int bagId)
         {
             usersService.Received(bagId);
-            //sendMail.SmsMessanger("0876408508","Очквайте доставка до 1 ден и потвърдете с кода за идентификация на поръчката!DnaFragment♡");
+            sendMail.SmsMessanger("0876408508","Очквайте доставка до 1 ден и потвърдете с кода за идентификация на поръчката!DnaFragment♡");
             return Redirect("/Admin/LrUsers/ShippingDelivery");
         }
 

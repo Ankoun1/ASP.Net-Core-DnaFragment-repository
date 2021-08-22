@@ -6,55 +6,53 @@
 
 <hr class="bg-primary w-75">
 
-    @if (Model.Count == 1 && User.IsAdmin())
-    {
-<form class="mx-auto w-50" size="3">
-    <div class="alert alert-danger  small ">
-        <strong>please import products by category in the database!</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
-    </div>
-</form>
-    }
+@if (Model.Count == 1 && User.IsAdmin())
+{
+    <form class="mx-auto w-50" size="3">
+        <div class="alert alert-danger">
+            <strong>please import products by category in the database!</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
+        </div>
+    </form>
+}
 <hr class="bg-primary w-50">
 <h2 class="text-center mt-2">@ViewBag.Title</h2>
- 
- @if (Model[0].CountCategoryProducts != 0)
- {
-     <h1 class="text-center mt-2 text-success">▪</h1>
- }
- else
- {
-     <h1 class="text-center mt-2 text-danger">▪</h1>
- }
- @if (Model.Count > 1)
- {      
-      for (int i = 1; i <= 3; i++)
-      {
+
+@if (Model[0].CountCategoryProducts != 0)
+{
+    <h1 class="text-center mt-2 text-success">▪</h1>
+}
+else
+{
+    <h1 class="text-center mt-2 text-danger">▪</h1>
+}
+@if (Model.Count > 1)
+{
+    for (int i = 1; i <= 3; i++)
+    {
         @if (Model[i].CountCategoryProducts == 0)
-         {
+        {
             <h1 class="text-center mt-2 text-secondary">▪</h1>
-         }
-         else
-         {
+        }
+        else
+        {
             <h1 class="text-center mt-2 text-white">▪</h1>
-         } 
-      }
- }
- else
- {
+        }
+    }
+}
+else
+{
     <h1 class="text-center mt-2 text-secondary">▪</h1>
     <h1 class="text-center mt-2 text-secondary">▪</h1>
     <h1 class="text-center mt-2 text-secondary">▪</h1>
- }
+}
 
 <form class="mx-auto w-50" size="3">
     <img src="https://img5.goodfon.com/wallpaper/nbig/0/fb/devushka-shatenka-shliapa-priroda-lug-tsvety-peizazh.jpg"
          class="card-img-top img-fluid card-image rounded-left" data-toggle="tooltip"
          data-placement="bottom">
-     
-          
-         </a> 
+
     @if (Model.Count == 1)
-    {      
+    {
         <h1 class="text-center mt-2 text-secondary">▪</h1>
         <h1 class="text-center mt-2 text-secondary">▪</h1>
         <h1 class="text-center mt-2 text-secondary">▪</h1>
@@ -78,55 +76,55 @@
     {
         <div class="form-group col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
 
-    @if (category.Id == null)
-    {
-        <a class="btn btn-block btn--secondary text-white-50 text-lg-center font-italic"
-         asp-controller="LrProducts"
-         asp-action="All">
-         продукти: @category.CountCategoryProducts
-         </a> 
-     }
-     else
-     {
-        <a class="btn btn-block btn--secondary text-white-50 text-lg-center font-italic"
-           asp-controller="LrProducts"
-           asp-action="AllProductsByCategory"
-           asp-route-categoryId="@category.Id">
-            продукти: @category.CountCategoryProducts
-           </a>
-     }
-        <img src="@category.Image"
-         class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
-         data-placement="bottom" title="LR">
-    @if (category.Id == null)
-    {
-         <a class="btn btn-block btn-outline-warning font-italic"
-            asp-controller="LrProducts"
-            asp-action="All">
-             @category.Name
-         </a> 
-    }
-    else
-    {
-         <a class="btn btn-block btn-outline-warning font-italic text-break"
-            asp-controller="LrProducts"
-            asp-action="AllProductsByCategory"
-            asp-route-categoryId="@category.Id">
-             @category.Name
-         </a>
-    }
-        <h5 class="text-center mt-2 text-white ">▪ ▪</h5>
-    @if (category.CountCategoryProducts == 0)
-    {
-        <h5 class="text-center mt-2 text-danger ">▪</h5>
-    }
-    else
-    {        
-        <h5 class="text-center mt-2 text-success ">▪</h5>        
-    }
-        <h5 class="text-center mt-2 text-white ">▪ ▪</h5>
+            @if (category.Id == null)
+            {
+                <a class="btn btn-block btn--secondary text-white-50 text-lg-center font-italic"
+                   asp-controller="LrProducts"
+                   asp-action="All">
+                    продукти: @category.CountCategoryProducts
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-block btn--secondary text-white-50 text-lg-center font-italic"
+                   asp-controller="LrProducts"
+                   asp-action="AllProductsByCategory"
+                   asp-route-categoryId="@category.Id">
+                    продукти: @category.CountCategoryProducts
+                </a>
+            }
+            <img src="@category.Image"
+                 class="card-img-top img-fluid card-image rounded-left " data-toggle="tooltip"
+                 data-placement="bottom" title="LR">
+            @if (category.Id == null)
+            {
+                <a class="btn btn-block btn-outline-warning font-italic"
+                   asp-controller="LrProducts"
+                   asp-action="All">
+                    @category.Name
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-block btn-outline-warning font-italic text-break"
+                   asp-controller="LrProducts"
+                   asp-action="AllProductsByCategory"
+                   asp-route-categoryId="@category.Id">
+                    @category.Name
+                </a>
+            }
+            <h5 class="text-center mt-2 text-white ">▪ ▪</h5>
+            @if (category.CountCategoryProducts == 0)
+            {
+                <h5 class="text-center mt-2 text-danger ">▪</h5>
+            }
+            else
+            {
+                <h5 class="text-center mt-2 text-success ">▪</h5>
+            }
+            <h5 class="text-center mt-2 text-white ">▪ ▪</h5>
 
-</div>
+        </div>
     }
 
 </form>

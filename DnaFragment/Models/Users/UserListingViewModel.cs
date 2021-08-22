@@ -12,11 +12,13 @@
         
         public bool IsAdministrator { get; init; }
         
-        public bool IsMechanic { get; init; }
+        public bool IsSuperUser { get; init; }
         
         public int NumberMessages { get; set; }
         
-        public int NumberQuestions { get; set; }    
+        public int NumberQuestions { get; set; }
+        
+        public int LRPoints { get; init; }    
                   
     }
 }

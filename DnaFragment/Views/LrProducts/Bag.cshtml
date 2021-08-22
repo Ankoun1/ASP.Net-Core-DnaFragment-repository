@@ -3,9 +3,17 @@
 @{ ViewBag.Title = "Shop♡"; }
 
 <hr class="bg-primary w-75">
+ <div class="alert alert-secondary mx-auto w-50 small ">
+        <strong>За вашите поръчки използваме услугите на Speedy с включена цена 3.90 лв.</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
+    </div>
+    <div class="alert alert-secondary mx-auto w-50 small ">
+        <strong>За поръчки над 5 артикула печелите отстъпка от крайната цена.</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
+    </div>
+    <div class="alert alert-secondary mx-auto w-50 small ">
+        <strong>При баланс 60лв. печелите 1 Lr point.</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
+    </div>
 <hr class="bg-primary w-50">
-<hr class="bg-primary w-25">
-
+<h2 class="text-center mt-2">@ViewBag.Title</h2>
 @if (Model.Products != null)
 {
 <h1 class="text-center mt-2 text-white">▪</h1> 
@@ -21,65 +29,53 @@ else
             <!--Video source-->
             <video class="video-fluid w-100" autoplay loop muted>
                 <source src="https://mdbootstrap.com/img/video/animation-intro.mp4" type="video/mp4" />
-
             </video>
             <div class="mask rgba-purple-slight"></div>
         </div>
-    </div>
-    <h2 class="text-center mt-2">@ViewBag.Title</h2>
-    <hr class="bg-primary w-25">
-    <hr class="bg-primary w-50">
-    <div class="alert alert-secondary mx-auto w-75 small ">
-        <strong>За вашите поръчки използваме услугите на Speedy с включена цена 3.90 лв.</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
-    </div>
-    <div class="alert alert-secondary mx-auto w-75 small ">
-        <strong>За поръчки над 5 артикула печелите различен процент отстъпка от крайната цена.</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
-    </div>
-    <div class="alert alert-secondary mx-auto w-75 small ">
-        <strong>При всеки закупен продукт печелите 1 Lr point.</strong><button type="button" class="close text-white" data-dismiss="alert">&times;</button>
-    </div>
-    <hr class="bg-primary w-75">
-
-    @if (Model.Products == null)
+    </div>  
+          
+    @if(!Model.Products.Any())
     {
-<h3 class="text-center">No products found by the given criteria!</h3>}
-<div class="form-group mx-auto w-75 ">
+        <h4 class="text-center">No products found by the given criteria!</h4>
+    }
+<div class="form-group mx-auto w-100 ">
     <ul class="list-group list-group-flush ">
         <li class="list-group-item text-xl-center text-white bg-primary">TOTAL: @Model.Amount lv.</li>
+        <li class="list-group-item text-xl-center text-white bg-primary">- @Model.PercentageDiscount %</li>
     </ul>    
-    @if (Model.Products != null && Model.ProductsCountIsNotEmpty)
+    @if (Model.Products.Any() && Model.ProductsCountIsNotEmpty)
     {
     <button class="btn btn-outline-primary small w-100" asp-controller="LrProducts" asp-action="BagsInformation">Complete the Order</button>
-    }
-    else
-    {
-    <h1 class="text-center mt-2 text-white">▪▪▪</h1>
-    }
+    }   
 </div>
+   @if (Model.Products.Any())
+    { 
+     <h1 class="text-center mt-2 text-success">_</h1>
     <div class="form-group mx-auto w-25">      
         <input asp-for="ProductsCount" type="text" class="form-control mx-auto w-50" placeholder="" id="productsCount-input " aria-label="Example text with two button addons">
         <div class="form-group mx-auto w-50">
            @foreach (var product in Model.Products)
            {
-                if (product.Bought)
-                {
+               if (product.Bought)
+               {
                     <p1 class="text-success text-center ">▪</p1>
-                }
-                else
-                {
+               }
+               else
+               {
                     <p1 class="text-white text-center ">▪</p1>
-                }
+               }
            }
         </div>
     </div>
-    
-    <div class="row justify-content-center ">
+    }
+   
+  <div class="row justify-content-center ">
  @if (Model.Products != null)
  {
 
     @foreach (var product in Model.Products)
     {
-        
+
         <div class=" col-md-4 ">
             <div class="form-group card mb-3 ">
         
@@ -97,7 +93,7 @@ else
             </div>
         </div>
     }
-  }
+ }
 
     </div>
 </form>
